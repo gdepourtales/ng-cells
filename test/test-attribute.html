@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html ng-app="ngcTableDirectiveTest">
+<head>
+    <title>Test Template</title>
+    <link href="../dist/ng-cells-0.1.0.css" rel="stylesheet" type="text/css">
+    <link href="test.css" rel="stylesheet" type="text/css">
+
+    <script src="../lib/angular-1.2.6.js"></script>
+    <script src="../dist/ng-cells-0.1.0.js"></script>
+    <script src="test.js"></script>
+
+</head>
+<body>
+    <div ng-controller="TestCtrl">
+        <div ngc-table
+                style="min-width: 1300px"
+                data="data"
+                left-column-number="3" left-column-widths="'40px'"
+                center-column-number="20" center-column-widths="'40px'"
+                right-column-number="6" right-column-widths="['40px', '35px', '40px', '45px', '50px', '55px']"
+                header-row-number="2" header-row-heights="['30px', '15px']"
+                row-number='12' row-heights="['41px', '14px']"
+                footer-row-number="3" footer-row-heights="'24px'" show-footer="true">
+
+            <div ngc-range top="0" bottom="197" left="0" right="194" format-fn="cellFormatRH" ></div>
+
+        </div>
+
+    </div>
+</body>
+</html>

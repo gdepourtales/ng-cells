@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html ng-app="ngcTableDirectiveTest">
+<head>
+    <title>Color Palette Test</title>
+    <link href="../css/table.css" rel="stylesheet" type="text/css">
+    <link href="test.css" rel="stylesheet" type="text/css">
+
+    <script src="../lib/angular-1.2.6.js"></script>
+    <script src="../dist/ng-cells-0.1.0.js"></script>
+    <script src="ranges-test2.js"></script>
+
+    <style>
+        .ngc.table {
+            min-width: 1350px;
+        }
+        .cell {
+            text-align: center;
+            vertical-align: middle;
+        }
+    </style>
+
+</head>
+<body>
+    <div ng-controller="TestCtrl">
+        <ngc-table
+                data="data"
+                show-filter="false"
+                left-column-number="4" left-column-widths="'40px'"
+                center-column-number="20" center-column-widths="'40px'"
+                right-column-number="4" right-column-widths="'40px'"
+                header-row-number="3" header-row-heights="'40px'"
+                row-number="12" row-heights="'24px'"
+                footer-row-number="3" footer-row-heights="'40px'" show-footer="true">
+
+            <ngc-range top="0" bottom="197" left="0" right="194" format-fn="cellFormat" style-fn="styleFn"></ngc-range>
+
+
+        </ngc-table>
+
+    </div>
+</body>
+</html>

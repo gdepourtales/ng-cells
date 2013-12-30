@@ -1,0 +1,315 @@
+<div class="ngc table">
+    <div ng-transclude style="display: hidden"></div>
+
+    <!-- Column names -->
+    <div class="ngc clear"></div>
+    <div class="ngc table_part column-names" ng-show="{{showColumnNames}}">
+        <div class="ngc columns left" >
+            <div class="ngc row" >
+                <div ng-repeat="column in $$leftRowHeadersColumns"
+                     class="ngc cell bottom {{column.class}}"
+                     style="{{column.style}}">
+                    <div class="ngc row-header-content"></div>
+                </div>
+                <div ng-repeat="column in $$leftFixedColumns"
+                     class="{{$$leftColumnNames[$index].class}} ngc cell column-name {{column.class}}"
+                     style="{{$$leftColumnNames[$index].style}}; {{column.style}}">
+                    <div class="ngc column-name-content">{{$$leftColumnNames[$index].value}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="ngc columns center">
+            <div class="ngc row">
+                <div ng-repeat="column in $$variableCenterColumns"
+                     class="{{$$centerColumnNames[$index].class}} ngc cell column {{column.class}}"
+                     style="{{$$centerColumnNames[$index].style}}; {{column.style}}">
+                    <div class="ngc column-name-content">{{$$centerColumnNames[$index].value}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="ngc columns right">
+            <div class="ngc row">
+                <div ng-repeat="column in $$rightFixedColumns"
+                     class="{{$$rightColumnNames[$index].class}} ngc cell column {{column.class}}"
+                     style="{{$$rightColumnNames[$index].style}}; {{column.style}}">
+                    <div class="ngc column-name-content">{{$$rightColumnNames[$index].value}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADERS -->
+    <div class="ngc clear"></div>
+    <div class="ngc table_part headers" ng-show="{{showHeader}}">
+        <div class="ngc row header" ng-repeat="row in $$headerRows">
+            <div class="ngc columns left" >
+                <div class="ngc header">
+                    <div ng-repeat="column in $$leftRowHeadersColumns"
+                         class="{{$$topLeftRowHeadersData[$parent.$index][$index].class}} ngc cell header {{column.class}}"
+                         style="{{$$topLeftRowHeadersData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
+                        <div class="ngc row-header-content">{{$$topLeftRowHeadersData[$parent.$index][$index].value}}</div>
+                    </div>
+
+                    <div ng-repeat="column in $$leftFixedColumns"
+                         ng-click="$$dispatchEvent('click', $event, $$topLeftData[$parent.$index][$index])"
+                         ng-dblclick="$$dispatchEvent('dblclick', $event, $$topLeftData[$parent.$index][$index])"
+                         ng-keydown="$$dispatchEvent('keydown', $event, $$topLeftData[$parent.$index][$index])"
+                         ng-keypress="$$dispatchEvent('keypress', $event, $$topLeftData[$parent.$index][$index])"
+                         ng-keyup="$$dispatchEvent('keyup', $event, $$topLeftData[$parent.$index][$index])"
+                         ng-mousedown="$$dispatchEvent('mousedown', $event, $$topLeftData[$parent.$index][$index])"
+                         ng-mouseleave="$$dispatchEvent('mouseleave', $event, $$topLeftData[$parent.$index][$index])"
+                         ng-mouseenter="$$dispatchEvent('mouseenter', $event, $$topLeftData[$parent.$index][$index])"
+                         ng-mousemove="$$dispatchEvent('mousemove', $event, $$topLeftData[$parent.$index][$index])"
+                         ng-mouseover="$$dispatchEvent('mouseover', $event, $$topLeftData[$parent.$index][$index])"
+                         ng-mouseup="$$dispatchEvent('mouseup', $event, $$topLeftData[$parent.$index][$index])"
+                         class="{{$$topLeftData[$parent.$index][$index].class}} ngc cell header {{column.class}}"
+                         style="{{$$topLeftData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
+                        <div class="ngc cell-content">{{$$topLeftData[$parent.$index][$index].value}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="ngc columns center">
+                <div class="ngc header">
+                    <div ng-repeat="column in $$variableCenterColumns"
+                         ng-click="$$dispatchEvent('click', $event, $$topCenterData[$parent.$index][$index])"
+                         ng-dblclick="$$dispatchEvent('dblclick', $event, $$topCenterData[$parent.$index][$index])"
+                         ng-keydown="$$dispatchEvent('keydown', $event, $$topCenterData[$parent.$index][$index])"
+                         ng-keypress="$$dispatchEvent('keypress', $event, $$topCenterData[$parent.$index][$index])"
+                         ng-keyup="$$dispatchEvent('keyup', $event, $$topCenterData[$parent.$index][$index])"
+                         ng-mousedown="$$dispatchEvent('mousedown', $event, $$topCenterData[$parent.$index][$index])"
+                         ng-mouseleave="$$dispatchEvent('mouseleave', $event, $$topCenterData[$parent.$index][$index])"
+                         ng-mouseenter="$$dispatchEvent('mouseenter', $event, $$topCenterData[$parent.$index][$index])"
+                         ng-mousemove="$$dispatchEvent('mousemove', $event, $$topCenterData[$parent.$index][$index])"
+                         ng-mouseover="$$dispatchEvent('mouseover', $event, $$topCenterData[$parent.$index][$index])"
+                         ng-mouseup="$$dispatchEvent('mouseup', $event, $$topCenterData[$parent.$index][$index])"
+                         class="{{$$topCenterData[$parent.$index][$index].class}} ngc cell header {{column.class}}"
+                         style="{{$$topCenterData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
+                        <div class="ngc cell-content">{{$$topCenterData[$parent.$index][$index].value}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="ngc columns right">
+                <div class="ngc header">
+                    <div ng-repeat="column in $$rightFixedColumns"
+                         ng-click="$$dispatchEvent('click', $event, $$topRightData[$parent.$index][$index])"
+                         ng-dblclick="$$dispatchEvent('dblclick', $event, $$topRightData[$parent.$index][$index])"
+                         ng-keydown="$$dispatchEvent('keydown', $event, $$topRightData[$parent.$index][$index])"
+                         ng-keypress="$$dispatchEvent('keypress', $event, $$topRightData[$parent.$index][$index])"
+                         ng-keyup="$$dispatchEvent('keyup', $event, $$topRightData[$parent.$index][$index])"
+                         ng-mousedown="$$dispatchEvent('mousedown', $event, $$topRightData[$parent.$index][$index])"
+                         ng-mouseleave="$$dispatchEvent('mouseleave', $event, $$topRightData[$parent.$index][$index])"
+                         ng-mouseenter="$$dispatchEvent('mouseenter', $event, $$topRightData[$parent.$index][$index])"
+                         ng-mousemove="$$dispatchEvent('mousemove', $event, $$topRightData[$parent.$index][$index])"
+                         ng-mouseover="$$dispatchEvent('mouseover', $event, $$topRightData[$parent.$index][$index])"
+                         ng-mouseup="$$dispatchEvent('mouseup', $event, $$topRightData[$parent.$index][$index])"
+                         class="{{$$topRightData[$parent.$index][$index].class}} ngc cell header {{column.class}}"
+                         style="{{$$topRightData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
+                        <div class="ngc cell-content">{{$$topRightData[$parent.$index][$index].value}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ngc clear"></div>
+
+    </div>
+    <!-- FILTERS -->
+    <div class="ngc clear"></div>
+
+    <div class="ngc table_part filters" ng-show="{{showFilter}}">
+        <div class="ngc columns left" >
+            <div class="ngc row filter" >
+                <div ng-repeat="column in $$leftRowHeadersColumns"
+                     class="ngc cell header {{column.class}}"
+                     style="{{row.height}}; {{column.style}}">
+                    <div class="ngc row-header-content"></div>
+                </div>
+
+                <div ng-repeat="column in $$leftFixedColumns"
+                     class="ngc cell filter {{column.class}}"
+                     style="{{column.style}}">
+                    <div class="ngc cell-content"></div>
+                </div>
+            </div>
+        </div>
+        <div class="ngc columns center">
+            <div class="ngc row filter">
+                <div ng-repeat="column in $$variableCenterColumns"
+                     class="ngc cell filter {{column.class}}"
+                     style="{{column.style}}">
+                    <div class="ngc cell-content"></div>
+                </div>
+            </div>
+        </div>
+        <div class="ngc columns right">
+            <div class="ngc row filter">
+                <div ng-repeat="column in $$rightFixedColumns"
+                     class="ngc cell filter {{column.class}}"
+                     style="{{column.style}}">
+                    <div class="ngc cell-content"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MIDDLE -->
+    <div class="ngc clear"></div>
+    <div class="ngc table_part middle">
+        <div class="ngc row-wrapper" style="float: left">
+            <div class="ngc row data" ng-repeat="row in $$rows">
+                <div class="ngc columns left">
+                    <div ng-repeat="column in $$leftRowHeadersColumns"
+                         class="{{$$middleLeftRowHeadersData[$parent.$index][$index].class}} ngc cell header {{column.class}}"
+                         style="{{$$middleLeftRowHeadersData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
+                        <div class="ngc row-header-content">{{$$middleLeftRowHeadersData[$parent.$index][$index].value}}</div>
+                    </div>
+
+                    <div ng-repeat="column in $$leftFixedColumns"
+                         ng-click="$$dispatchEvent('click', $event, $$middleLeftData[$parent.$index][$index])"
+                         ng-dblclick="$$dispatchEvent('dblclick', $event, $$middleLeftData[$parent.$index][$index])"
+                         ng-keydown="$$dispatchEvent('keydown', $event, $$middleLeftData[$parent.$index][$index])"
+                         ng-keypress="$$dispatchEvent('keypress', $event, $$middleLeftData[$parent.$index][$index])"
+                         ng-keyup="$$dispatchEvent('keyup', $event, $$middleLeftData[$parent.$index][$index])"
+                         ng-mousedown="$$dispatchEvent('mousedown', $event, $$middleLeftData[$parent.$index][$index])"
+                         ng-mouseleave="$$dispatchEvent('mouseleave', $event, $$middleLeftData[$parent.$index][$index])"
+                         ng-mouseenter="$$dispatchEvent('mouseenter', $event, $$middleLeftData[$parent.$index][$index])"
+                         ng-mousemove="$$dispatchEvent('mousemove', $event, $$middleLeftData[$parent.$index][$index])"
+                         ng-mouseover="$$dispatchEvent('mouseover', $event, $$middleLeftData[$parent.$index][$index])"
+                         ng-mouseup="$$dispatchEvent('mouseup', $event, $$middleLeftData[$parent.$index][$index])"
+                         class="{{$$middleLeftData[$parent.$index][$index].class}} ngc cell data {{column.class}}"
+                         style="{{$$middleLeftData[$parent.$index][$index].style}} ; {{row.height}}; {{column.style}}">
+                        <div class="ngc cell-content">{{$$middleLeftData[$parent.$index][$index].value}}</div>
+                    </div>
+                </div>
+                <div class="ngc columns center">
+                    <div ng-repeat="column in $$variableCenterColumns"
+                         ng-click="$$dispatchEvent('click', $event, $$middleCenterData[$parent.$index][$index])"
+                         ng-dblclick="$$dispatchEvent('dblclick', $event, $$middleCenterData[$parent.$index][$index])"
+                         ng-keydown="$$dispatchEvent('keydown', $event, $$middleCenterData[$parent.$index][$index])"
+                         ng-keypress="$$dispatchEvent('keypress', $event, $$middleCenterData[$parent.$index][$index])"
+                         ng-keyup="$$dispatchEvent('keyup', $event, $$middleCenterData[$parent.$index][$index])"
+                         ng-mousedown="$$dispatchEvent('mousedown', $event, $$middleCenterData[$parent.$index][$index])"
+                         ng-mouseleave="$$dispatchEvent('mouseleave', $event, $$middleCenterData[$parent.$index][$index])"
+                         ng-mouseenter="$$dispatchEvent('mouseenter', $event, $$middleCenterData[$parent.$index][$index])"
+                         ng-mousemove="$$dispatchEvent('mousemove', $event, $$middleCenterData[$parent.$index][$index])"
+                         ng-mouseover="$$dispatchEvent('mouseover', $event, $$middleCenterData[$parent.$index][$index])"
+                         ng-mouseup="$$dispatchEvent('mouseup', $event, $$middleCenterData[$parent.$index][$index])"
+                         class="{{$$middleCenterData[$parent.$index][$index].class}} ngc cell data {{column.class}}"
+                         style="{{$$middleCenterData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
+                        <div class="ngc cell-content">{{$$middleCenterData[$parent.$index][$index].value}}</div>
+                    </div>
+                </div>
+                <div class="ngc columns right">
+                    <div ng-repeat="column in $$rightFixedColumns"
+                         ng-click="$$dispatchEvent('click', $event, $$middleRightData[$parent.$index][$index])"
+                         ng-dblclick="$$dispatchEvent('dblclick', $event, $$middleRightData[$parent.$index][$index])"
+                         ng-keydown="$$dispatchEvent('keydown', $event, $$middleRightData[$parent.$index][$index])"
+                         ng-keypress="$$dispatchEvent('keypress', $event, $$middleRightData[$parent.$index][$index])"
+                         ng-keyup="$$dispatchEvent('keyup', $event, $$middleRightData[$parent.$index][$index])"
+                         ng-mousedown="$$dispatchEvent('mousedown', $event, $$middleRightData[$parent.$index][$index])"
+                         ng-mouseleave="$$dispatchEvent('mouseleave', $event, $$middleRightData[$parent.$index][$index])"
+                         ng-mouseenter="$$dispatchEvent('mouseenter', $event, $$middleRightData[$parent.$index][$index])"
+                         ng-mousemove="$$dispatchEvent('mousemove', $event, $$middleRightData[$parent.$index][$index])"
+                         ng-mouseover="$$dispatchEvent('mouseover', $event, $$middleRightData[$parent.$index][$index])"
+                         ng-mouseup="$$dispatchEvent('mouseup', $event, $$middleRightData[$parent.$index][$index])"
+                         class="{{$$middleRightData[$parent.$index][$index].class}} ngc cell data {{column.class}}"
+                         style="{{$$middleRightData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
+                        <div class="ngc cell-content">{{$$middleRightData[$parent.$index][$index].value}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ngc columns middle scroll-wrapper vertical">
+            <div ngc-scrollbar vertical></div>
+        </div>
+    </div>
+
+
+    <!-- BOTTOM -->
+    <div class="ngc clear"></div>
+    <div class="ngc table_part footer" ng-show="{{showFooter}}">
+        <div class="ngc row footer" ng-repeat="row in $$footerRows">
+            <div class="ngc columns left">
+                <div ng-repeat="column in $$leftRowHeadersColumns"
+                     class="{{$$bottomLeftRowHeadersData[$parent.$index][$index].class}} ngc cell header {{column.class}}"
+                     style="{{$$bottomLeftRowHeadersData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
+                    <div class="ngc row-header-content">{{$$bottomLeftRowHeadersData[$parent.$index][$index].value}}</div>
+                </div>
+
+                <div ng-repeat="column in $$leftFixedColumns"
+                     ng-click="$$dispatchEvent('click', $event, $$bottomLeftData[$parent.$index][$index])"
+                     ng-dblclick="$$dispatchEvent('dblclick', $event, $$bottomLeftData[$parent.$index][$index])"
+                     ng-keydown="$$dispatchEvent('keydown', $event, $$bottomLeftData[$parent.$index][$index])"
+                     ng-keypress="$$dispatchEvent('keypress', $event, $$bottomLeftData[$parent.$index][$index])"
+                     ng-keyup="$$dispatchEvent('keyup', $event, $$bottomLeftData[$parent.$index][$index])"
+                     ng-mousedown="$$dispatchEvent('mousedown', $event, $$bottomLeftData[$parent.$index][$index])"
+                     ng-mouseleave="$$dispatchEvent('mouseleave', $event, $$bottomLeftData[$parent.$index][$index])"
+                     ng-mouseenter="$$dispatchEvent('mouseenter', $event, $$bottomLeftData[$parent.$index][$index])"
+                     ng-mousemove="$$dispatchEvent('mousemove', $event, $$bottomLeftData[$parent.$index][$index])"
+                     ng-mouseover="$$dispatchEvent('mouseover', $event, $$bottomLeftData[$parent.$index][$index])"
+                     ng-mouseup="$$dispatchEvent('mouseup', $event, $$bottomLeftData[$parent.$index][$index])"
+                     class="{{$$bottomLeftData[$parent.$index][$index].class}} ngc cell footer {{column.class}}"
+                     style="{{$$bottomLeftData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
+                    <div class="ngc cell-content">{{$$bottomLeftData[$parent.$index][$index].value}}</div>
+                </div>
+            </div>
+            <div class="ngc columns center">
+                <div ng-repeat="column in $$variableCenterColumns"
+                     ng-click="$$dispatchEvent('click', $event, $$bottomCenterData[$parent.$index][$index])"
+                     ng-dblclick="$$dispatchEvent('dblclick', $event, $$bottomCenterData[$parent.$index][$index])"
+                     ng-keydown="$$dispatchEvent('keydown', $event, $$bottomCenterData[$parent.$index][$index])"
+                     ng-keypress="$$dispatchEvent('keypress', $event, $$bottomCenterData[$parent.$index][$index])"
+                     ng-keyup="$$dispatchEvent('keyup', $event, $$bottomCenterData[$parent.$index][$index])"
+                     ng-mousedown="$$dispatchEvent('mousedown', $event, $$bottomCenterData[$parent.$index][$index])"
+                     ng-mouseleave="$$dispatchEvent('mouseleave', $event, $$bottomCenterData[$parent.$index][$index])"
+                     ng-mouseenter="$$dispatchEvent('mouseenter', $event, $$bottomCenterData[$parent.$index][$index])"
+                     ng-mousemove="$$dispatchEvent('mousemove', $event, $$bottomCenterData[$parent.$index][$index])"
+                     ng-mouseover="$$dispatchEvent('mouseover', $event, $$bottomCenterData[$parent.$index][$index])"
+                     ng-mouseup="$$dispatchEvent('mouseup', $event, $$bottomCenterData[$parent.$index][$index])"
+                     class="{{$$bottomCenterData[$parent.$index][$index].class}} ngc cell footer {{column.class}}"
+                     style="{{$$bottomCenterData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
+                    <div class="ngc cell-content">{{$$bottomCenterData[$parent.$index][$index].value}}</div>
+                </div>
+            </div>
+            <div class="ngc columns right">
+                <div ng-repeat="column in $$rightFixedColumns"
+                     ng-click="$$dispatchEvent('click', $event, $$bottomRightData[$parent.$index][$index])"
+                     ng-dblclick="$$dispatchEvent('dblclick', $event, $$bottomRightData[$parent.$index][$index])"
+                     ng-keydown="$$dispatchEvent('keydown', $event, $$bottomRightData[$parent.$index][$index])"
+                     ng-keypress="$$dispatchEvent('keypress', $event, $$bottomRightData[$parent.$index][$index])"
+                     ng-keyup="$$dispatchEvent('keyup', $event, $$bottomRightData[$parent.$index][$index])"
+                     ng-mousedown="$$dispatchEvent('mousedown', $event, $$bottomRightData[$parent.$index][$index])"
+                     ng-mouseleave="$$dispatchEvent('mouseleave', $event, $$bottomRightData[$parent.$index][$index])"
+                     ng-mouseenter="$$dispatchEvent('mouseenter', $event, $$bottomRightData[$parent.$index][$index])"
+                     ng-mousemove="$$dispatchEvent('mousemove', $event, $$bottomRightData[$parent.$index][$index])"
+                     ng-mouseover="$$dispatchEvent('mouseover', $event, $$bottomRightData[$parent.$index][$index])"
+                     ng-mouseup="$$dispatchEvent('mouseup', $event, $$bottomRightData[$parent.$index][$index])"
+                     class="{{$$bottomRightData[$parent.$index][$index].class}} ngc cell footer {{column.class}}"
+                     style="{{$$bottomRightData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
+                    <div class="ngc cell-content">{{$$bottomRightData[$parent.$index][$index].value}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HSCROLL -->
+    <div class="ngc clear"></div>
+
+    <div class="ngc table_part bottom">
+        <div class="ngc columns left">
+            <div ng-repeat="column in $$leftRowHeadersColumns" class="ngc cell bottom {{column.class}}" style="{{column.style}}">
+                <div class="ngc row-header-content"></div>
+            </div>
+            <div ng-repeat="column in $$leftFixedColumns" class="ngc cell bottom {{column.class}}" style="{{column.style}}"></div>
+        </div>
+        <div class="ngc columns center scroll-wrapper horizontal {{column.class}}" >
+            <div ng-repeat="column in $$variableCenterColumns" class="ngc cell bottom {{column.class}}" style="{{column.style}}"></div>
+            <div ngc-scrollbar horizontal></div>
+        </div>
+        <div class="ngc columns right">
+            <div ng-repeat="column in $$rightFixedColumns" class="ngc cell bottom {{column.class}}" style="{{column.style}}"></div>
+        </div>
+    </div>
+
+    <div class="ngc clear"></div>
+
+</div>

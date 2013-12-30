@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html ng-app="ngcTableDirectiveTest">
+<head>
+    <title>Row/Column Headers Test</title>
+    <link href="../dist/ng-cells-0.1.0.css" rel="stylesheet" type="text/css">
+    <link href="test.css" rel="stylesheet" type="text/css">
+
+    <script src="../lib/angular-1.2.6.js"></script>
+    <script src="../dist/ng-cells-0.1.0.js"></script>
+
+    <script src="headers-test.js"></script>
+
+</head>
+<body>
+    <div ng-controller="TestCtrl">
+        <h1>Without column/row headers</h1>
+        <ngc-table
+                style="min-width: 1260px;"
+                data="data"
+                show-column-names="false" show-row-numbers="false"
+                show-filter="false"
+                left-column-number="3" left-column-widths="'40px'"
+                center-column-number="20" center-column-widths="'40px'"
+                right-column-number="6" right-column-widths="['40px', '35px', '40px', '45px', '50px', '55px']"
+                header-row-number="2" header-row-heights="'40px'"
+                row-number="12" row-heights="['41px', '14px']"
+                footer-row-number="3" footer-row-heights="'40px'" show-footer="true">
+
+
+        </ngc-table>
+        <hr/>
+        <h1>With column/row headers</h1>
+
+        <ngc-table
+                style="min-width: 1300px;"
+                data="data"
+                left-column-number="3" left-column-widths="'40px'"
+                center-column-number="20" center-column-widths="'40px'"
+                right-column-number="6" right-column-widths="['40px', '35px', '40px', '45px', '50px', '55px']"
+                header-row-number="2" header-row-heights="['30px', '15px']"
+                row-number='12' row-heights="['41px', '14px']"
+                footer-row-number="3" footer-row-heights="'24px'" show-footer="true">
+
+
+        </ngc-table>
+
+    </div>
+</body>
+</html>

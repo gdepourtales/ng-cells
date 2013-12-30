@@ -1,0 +1,101 @@
+* {
+    font-family: Helvetica,serif;
+}
+
+.table {
+    /*min-width: 1350px;*/
+}
+
+.cell {
+    font-size: 10px;
+    border: 1px solid white;
+}
+
+.cell.header {
+    background-color: crimson;
+    color: whitesmoke;
+}
+
+.columns.left .cell.header {
+    background-color: #b22222;
+}
+
+.columns.right .cell.header {
+    background-color: #880000;
+}
+
+.columns.left .cell.header.row-number {
+    background-color: white;
+    color: #000000;
+}
+
+.row-header-content {
+    padding: 2px;
+}
+
+.cell-content {
+    padding: 2px;
+}
+
+.cell.filter {
+    background-color: cadetblue;
+    color: black;
+}
+
+.cell.data {
+    background-color: beige;
+    color: black;
+}
+
+.columns.left .cell.data {
+    background-color: #e0f2be;
+    color: black;
+}
+
+.columns.right .cell.data {
+    background-color: lavender;
+    color: black;
+}
+
+
+.cell.footer {
+    background-color: #0040D0;
+    color: #ffffff;
+}
+
+.columns.left .cell.footer {
+    background-color: #0099F0;
+    color: #ffffff;
+}
+
+.columns.right .cell.footer {
+    background-color: #004490;
+    color: #ffffff;
+}
+
+.row.filter {
+    height: 20px;
+}
+
+
+.center-column {
+    width:35px;
+}
+
+.ngc.columns.left div.cell:last-child {
+    border-right: 2px dotted darkred;
+}
+
+.ngc.columns.right div.cell:first-child {
+    border-left: 2px dotted darkred;
+}
+
+.ngc.table_part.headers div.ngc.row.header:last-child div.cell,
+.ngc.table_part.middle div.ngc.row.data:last-child div.cell {
+    border-bottom: 2px dotted darkred;
+}
+
+.ngc.table_part.middle div.ngc.row.data:first-child div.cell {
+    border-top: 2px dotted darkred;
+}
+

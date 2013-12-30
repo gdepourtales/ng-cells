@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html ng-app="ngcTableDirectiveTest">
+<head>
+    <title>Mouse events Test</title>
+    <link href="../css/table.css" rel="stylesheet" type="text/css">
+    <link href="test.css" rel="stylesheet" type="text/css">
+
+    <script src="../lib/angular-1.2.6.js"></script>
+    <!--
+    <script src="../generated/template.js"></script>
+    <script src="../src/table.js"></script>
+    -->
+    <script src="../dist/ng-cells-0.1.0.js"></script>
+    <script src="mouse-events-test.js"></script>
+
+    <style>
+        .ngc.table { min-width: 1350px;}
+
+        .cell {text-align: center; vertical-align: middle; }
+
+        .click,
+        .click.cell  {background-color: #0040D0; color: #ffffff;}
+
+        .dblclick, .dblclick.cell  {background-color: #19469D; color: #ffffff;}
+        .mousedown, .mousedown.cell  {background-color: #0d3349; color: #ffffff;}
+        .mouseenter, .mouseenter.cell  {background-color: #cc0000; color: #ffffff;}
+        .mouseleave, .mouseleave.cell  {background-color: #770000; color: #ffffff;}
+        .mousemove, .mousemove.cell  {background-color: #440000; color: #ffffff;}
+        .mouseover, .mouseover.cell  {background-color: #B00040; color: #ffffff;}
+        .mouseup, .mouseup.cell  {background-color: brown; color: #ffffff;}
+        .keydown, .keydown.cell  {background-color: green; color: #ffffff;}
+
+    </style>
+
+</head>
+<body>
+    <div ng-controller="TestCtrl">
+
+        <div ng-repeat="event in events" class="{{event}}">
+            '{{event}}' cell value: {{eventsValue[event]}}, '{{event}}' cell data: {{eventsData[event]}} on {{eventsTarget[event]}}
+        </div>
+
+
+        <hr/>
+
+        <ngc-table
+                style="min-width: 1230px;"
+                data="data"
+                show-filter="false"
+                left-column-number="4" left-column-widths="'40px'"
+                center-column-number="20" center-column-widths="'40px'"
+                right-column-number="4" right-column-widths="'40px'"
+                header-row-number="3" header-row-heights="'24px'"
+                row-number="12" row-heights="'24px'"
+                footer-row-number="3" footer-row-heights="'24px'" show-footer="true">
+
+            <ngc-range top="0" bottom="197" left="0" right="194" format-fn="cellFormat"></ngc-range>
+
+            <!-- top left -->
+            <ngc-range top="0" bottom="3" left="0" right="4" click-fn="clickFn" class="'click'" ></ngc-range>
+            <!-- top center -->
+            <ngc-range top="0" bottom="3" left="4" right="38" dblclick-fn="dblclickFn" class="'dblclick'"></ngc-range>
+            <!-- top right -->
+            <ngc-range top="0" bottom="3" left="38" right="42" mousedown-fn="mousedownFn" class="'mousedown'"></ngc-range>
+
+            <!-- middle left I -->
+            <ngc-range top="3" bottom="10" left="0" right="4" mouseenter-fn="mouseenterFn" class="'mouseenter'"></ngc-range>
+            <!-- middle center I -->
+            <ngc-range top="3" bottom="10" left="4" right="38" mouseleave-fn="mouseleaveFn" class="'mouseleave'" ></ngc-range>
+            <!-- middle right I -->
+            <ngc-range top="3" bottom="10" left="38" right="42" mousemove-fn="mousemoveFn" class="'mousemove'" ></ngc-range>
+
+            <!-- middle left II -->
+            <ngc-range top="10" bottom="20" left="0" right="4" mouseover-fn="mouseoverFn" class="'mouseover'"></ngc-range>
+            <!-- middle center II -->
+            <ngc-range top="10" bottom="20" left="4" right="38" mouseup-fn="mouseupFn" class="'mouseup'"></ngc-range>
+            <!-- middle right II -->
+            <ngc-range top="10" bottom="20" left="38" right="42" keydown-fn="keydownFn" class="'keydown'"></ngc-range>
+
+            <!-- bottom left -->
+            <ngc-range top="38" bottom="42" left="0" right="4" click-fn="modifyInternals" keyup-fn="keyupFn" ></ngc-range>
+            <!-- bottom center -->
+            <ngc-range top="38" bottom="42" left="4" right="38"></ngc-range>
+            <!-- bottom right -->
+            <ngc-range top="38" bottom="42" left="38" right="42"></ngc-range>
+
+
+        </ngc-table>
+
+    </div>
+</body>
+</html>
