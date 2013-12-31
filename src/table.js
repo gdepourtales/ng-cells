@@ -15,7 +15,7 @@
  */
 
 angular.module('ngcTableDirective', ['ngc-template'])
-    .directive('ngcTable', ["$templateCache", '$timeout', function($templateCache, $timeout) {
+    .directive('ngcTable', ['$templateCache', '$timeout', function($templateCache, $timeout) {
 
 
         /**
@@ -105,7 +105,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
                      * Middle left row headers data
                      * @type {Array}
                      */
-                    scope.$$middleLeftRowHeadersData = []
+                    scope.$$middleLeftRowHeadersData = [];
                     /**
                      * Bottom left row headers data
                      * @type {Array}
@@ -513,7 +513,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
                     scope.$$setCenterColumnsData(scope.footerRowNumber, scope.$$bottomCenterData, footerStartRow);
                     scope.$$setLeftAndRightColumnsData(scope.footerRowNumber, scope.$$bottomLeftRowHeadersData, scope.$$bottomLeftData, scope.$$bottomRightData, footerStartRow);
 
-                    $timeout(function(){
+                    $timeout(function() {
                         iElement.css('min-width', iElement[0].offsetWidth);
                     });
                 }
@@ -641,7 +641,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
             }
         };
     })
-    .directive('ngcScrollbar', function() {
+    .directive('ngcScrollbar', ['$timeout', function($timeout) {
         /* Internal directive for virtual horizontal and vertical scrollbars management */
         return {
             require:"^ngcTable",
@@ -652,7 +652,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
             compile: function(tElement, tAttrs) {
                 return {
                    pre: function postLink(scope, iElement /*, iAttrs */) {
-                       var ratio;
+                       var ratio = 1.0;
                        if (angular.isDefined(tAttrs['horizontal'])) {
                            // The horizontal ratio is the total data column length minus the left columns minus the right
                            // columns divided by the number of visible center columns
@@ -676,7 +676,6 @@ angular.module('ngcTableDirective', ['ngc-template'])
                            // after $apply force the redraw of DIVs
                            scope.$$verticalScrollbarWrapperElement = iElement.parent()[0];
                        }
-
                    },
                     post: function postLink(scope, iElement /*, iAttrs*/) {
 
@@ -716,11 +715,26 @@ angular.module('ngcTableDirective', ['ngc-template'])
                             scope.$$verticalScrollbarWrapperElement.scrollTop = verticalScrollPos;
                             scope.$$horizontalScrollbarWrapperElement.scrollLeft = horizontalScrollPos;
                         });
+
+                        /*
+                         Firefox does not handle correctly divs with 100% height in a div of 100% height
+                         The timeout calculates the min-height after the actual rendering
+                         */
+                        $timeout(function() {
+                            if (iElement.hasClass("vscrollbar")) {
+                                var ratio = (scope.data.length - scope.headerRowNumber - scope.footerRowNumber) / scope.rowNumber;
+                                var elem = angular.element(scope.$$verticalScrollbarWrapperElement);
+                                var height = elem.parent()[0].offsetHeight;
+                                elem.css('height', height + 'px');
+                                iElement.css('height', (height * ratio) + 'px')
+                            }
+                        });
+
                     }
                 };
             }
 
         };
-    })
+    }])
 ;
 
