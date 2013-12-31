@@ -319,14 +319,14 @@ angular.module('ngcTableDirective', ['ngc-template'])
                      * Default style function for the cells. Returns an empty string
                      * @returns {string}
                      */
-                    function defaultStyleFn() {return '';}
+                    function defaultStyleFn(/*data, row, col*/) {return '';}
 
                     /**
                      * Default format function for the cells content. Returns the raw data
                      * @param data
                      * @returns {*}
                      */
-                    function defaultFormatFn(data) {return angular.isDefined(data) ? data : '';}
+                    function defaultFormatFn(data /*, row, col*/) {return angular.isDefined(data) ? data : '';}
 
 
                     /**
