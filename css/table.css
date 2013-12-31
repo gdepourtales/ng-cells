@@ -1,11 +1,11 @@
 
 table.ngc {
     border-collapse: collapse;
-    border-spacing: 0px;
+    border-spacing: 0;
     table-layout: fixed;
 }
 
-.ngc.columns.middle.scroll-wrapper {
+.ngc.vertical.scroll-wrapper {
     height: 100%;
     overflow-x:hidden;
     overflow-y:scroll;
@@ -15,7 +15,7 @@ table.ngc {
     width:1px;
 }
 
-.ngc.columns.center.scroll-wrapper {
+.ngc.horizontal.scroll-wrapper {
     height:1em;
     overflow-x:scroll;
     overflow-y:hidden;
