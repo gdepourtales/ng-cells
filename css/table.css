@@ -1,70 +1,12 @@
-.ngc.table-wrapper {
-    position: relative;
-}
 
-.ngc.table {
-    display: block;
-    position: relative;
-}
-
-
-.ngc.clear {
-    clear: both;
-    display: block;
-    overflow: hidden;
-    visibility: hidden;
-    width: 0;
-    height: 0;
-}
-
-.ngc.table_part {
-    float: left;
-    height: 100%;
-}
-
-.ngc.columns {
-    float: left;
-    display: block;
-    height: 100%;
-}
-
-
-.ngc.cell {
-    float: left;
-    height:100%;
-    min-width: 10px;
-    min-height: 10px;
-}
-
-.ngc.column-name {
-    height: 12px;
-}
-
-.column-name-content {
-    text-align: center;
-    font-size: 10px;
-}
-
-.row-header-content {
-    text-align: right;
-    font-size: 10px;
-    min-width: 24px;
-}
-
-.ngc.cell.bottom {
-    float: left;
-    height:1em;
-
-}
-
-
-.ngc.table_part.middle {
-    display: table;
+table.ngc {
+    border-collapse: collapse;
+    border-spacing: 0px;
+    table-layout: fixed;
 }
 
 .ngc.columns.middle.scroll-wrapper {
     height: 100%;
-    display: inline-block;
     overflow-x:hidden;
     overflow-y:scroll;
 }
@@ -74,13 +16,11 @@
 }
 
 .ngc.columns.center.scroll-wrapper {
-    height:1.01em;
+    height:1em;
     overflow-x:scroll;
     overflow-y:hidden;
-    display: table-cell;
-    padding: 0;
-    margin: 0;
     position: relative;
+    width: 100%;
 }
 
 .ngc.hscrollbar {

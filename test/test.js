@@ -2,9 +2,9 @@ angular.module('ngcTableDirectiveTest', ['ngcTableDirective'])
     .controller('TestCtrl', function($scope) {
         $scope.data = [];
 
-        for (var row = 0; row < 200; row++) {
+        for (var row = 0; row < 1000; row++) {
            var rowContent = [];
-           for (var col = 0; col < 200; col++) {
+           for (var col = 0; col < 1000; col++) {
                 rowContent.push(row * col + col);
            }
             $scope.data.push(rowContent);

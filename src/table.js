@@ -218,7 +218,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
                      */
                     if (scope.showRowNumbers) {
                         scope.$$leftRowHeadersColumns.push({
-                            class: 'row-number',
+                            clazz: 'row-number',
                             rowNumberColumn: true
                         });
                     }
@@ -388,7 +388,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
                                 /* Register the format function */
                                 if (angular.isFunction(range.formatFn)) formatFn = range['formatFn'];
                                 /* Register the CSS class */
-                                if (angular.isString(range.class)) clazz = range.class;
+                                if (angular.isString(range.clazz)) clazz = range.clazz;
                                 /* Register the CSS style declaration */
                                 if (angular.isString(range.styleFn)) styleFn = range['styleFn'];
 
@@ -402,7 +402,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
                         return {
                             data: data,
                             value: formatFn(data, row, col),
-                            class: clazz,
+                            clazz: clazz,
                             style: styleFn(data, row, col),
                             eventCallbacks: eventCallbacks,
                             enclosingRanges: enclosingRanges
@@ -566,6 +566,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
             replace:true,
             transclude:true,
             template: $templateCache.get('table.tpl.html'),
+            /*template: $templateCache.get('table.tpl.html') ,*/
             compile: compile,
             controller:controllerDecl
         };
@@ -587,7 +588,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
                 /* Format function for the cells enclosed in the range */
                 formatFn: '=?',
                 /* CSS class to be added to the cells */
-                class: '=?',
+                clazz: '=?',
                 /* CSS style additional declaration to be added to the cell */
                 styleFn: '=?',
                 /* Callback for the 'click' event */
@@ -624,7 +625,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
                     left: scope.left,
                     right: scope.right,
                     formatFn: scope.formatFn,
-                    class: scope.class,
+                    clazz: scope.clazz,
                     styleFn: scope.styleFn,
                     click: scope.clickFn,
                     dblclick: scope.dblclickFn,
@@ -647,7 +648,6 @@ angular.module('ngcTableDirective', ['ngc-template'])
             require:"^ngcTable",
             restrict:'A',
             replace:true,
-            scope:false,
             template:'<div class="ngc"></div>',
             compile: function(tElement, tAttrs) {
                 return {
@@ -674,7 +674,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
                            if (ratio <= 100) iElement.parent().css('display', 'none');
                            // Save the reference to the element in order to manage scroll position
                            // after $apply force the redraw of DIVs
-                           scope.$$verticalScrollbarWrapperElement = iElement.parent()[0];
+                           scope.$parent.$parent.$$verticalScrollbarWrapperElement = iElement.parent()[0];
                        }
                    },
                     post: function postLink(scope, iElement /*, iAttrs*/) {
