@@ -2,21 +2,27 @@ angular.module('ngcTableDirectiveTest', ['ngcTableDirective'])
     .controller('TestCtrl', function($scope) {
         $scope.data = [];
 
-        for (var row = 0; row < 42; row++) {
-           var rowContent = [];
-           for (var col = 0; col < 42; col++) {
+        for (var row = 0; row < 40; row++) {
+            var rowContent = [];
+            for (var col = 0; col < 40; col++) {
                 rowContent.push(row * col + col);
-           }
+            }
             $scope.data.push(rowContent);
         }
 
         $scope.events = [
             'click', 'dblclick',
-            'keydown', 'keypress', 'keyup',
             'mousedown', 'mouseenter', 'mouseleave', 'mousemove', 'mouseover', 'mouseup'
         ];
 
-        $scope.eventsTarget = {};
+        angular.forEach($scope.events, function(eventName) {
+            $scope[eventName + 'Format'] = function(cellData, row, col) {
+                return eventName;
+            };
+        });
+
+
+            $scope.eventsTarget = {};
         $scope.eventsData = {};
         $scope.eventsValue = {};
 
