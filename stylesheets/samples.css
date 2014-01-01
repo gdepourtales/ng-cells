@@ -1,0 +1,92 @@
+
+
+table.ngc {
+    border: none;
+}
+
+table.ngc td {
+    border: 1px solid transparent;
+}
+
+.ngc.cell {
+    font-size: 11px;
+    text-align: center;
+    padding: 2px;
+}
+
+.scroll-wrapper.vertical {
+    vertical-align: top;
+}
+
+.cell-content {
+    padding: 2px;
+}
+
+
+.cell.left.header {
+    background-color: #b22222;
+    color: whitesmoke;
+}
+
+.cell.center.header {
+    background-color: crimson;
+    color: whitesmoke;
+}
+
+
+.cell.right.header {
+    background-color: #880000;
+    color: whitesmoke;
+}
+
+
+.cell.left.middle {
+    background-color: beige;
+    color: black;
+}
+
+.cell.center.middle {
+    background-color: #e0f2be;
+    color: black;
+}
+
+.cell.right.middle {
+    background-color: lavender;
+    color: black;
+}
+
+
+.cell.left.footer {
+    background-color: #0040D0;
+    color: #ffffff;
+}
+
+.cell.center.footer {
+    background-color: #0099F0;
+    color: #ffffff;
+}
+
+.cell.right.footer {
+    background-color: #004490;
+    color: #ffffff;
+}
+
+
+
+.ngc.columns.left div.cell:last-child {
+    border-right: 2px dotted darkred;
+}
+
+.ngc.columns.right div.cell:first-child {
+    border-left: 2px dotted darkred;
+}
+
+.ngc.table_part.headers div.ngc.row.header:last-child div.cell,
+.ngc.table_part.middle div.ngc.row.data:last-child div.cell {
+    border-bottom: 2px dotted darkred;
+}
+
+.ngc.table_part.middle div.ngc.row.data:first-child div.cell {
+    border-top: 2px dotted darkred;
+}
+

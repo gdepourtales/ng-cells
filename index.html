@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="ngcTableDirectiveTest">
 
   <head>
     <meta charset='utf-8' />
@@ -7,6 +7,12 @@
     <meta name="description" content="Ng-cells : " />
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="dist/ng-cells-0.1.1.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/samples.css">
+
+      <script src="javascripts/angular-1.2.6.js"></script>
+      <script src="dist/ng-cells-0.1.1.min.js"></script>
+      <script src="javascripts/samples.js"></script>
 
     <title>Ng-cells</title>
   </head>
@@ -34,6 +40,9 @@
         <h1>
 <a name="ng-cells" class="anchor" href="#ng-cells"><span class="octicon octicon-link"></span></a>ng-cells</h1>
 
+
+
+
 <p>AngularJS Table directive</p>
 
 <p>This directive draws a table of data with different features. It has no dependency other than angularjs. it has been
@@ -41,6 +50,28 @@ tested on Google Chrome, Safari, Opera and Firefox and Internet Explorer 10 (8+ 
 
 <p>Tu use this directive, just add the ngcTableDirective as dependency. The template is handle as an external HTML file
 and integrated during the build process in the <code>ngc-template</code> module. The template is registered in the angularjs template cache with the key <code>ngc.table.tpl.html</code></p>
+
+<div ng-controller="TestCtrl">
+    <div ngc-table
+         data="data"
+         left-column-number="3" left-column-widths="'30px'"
+         center-column-number="10" center-column-widths="['40px']"
+         right-column-number="2" right-column-widths="['40px']"
+         header-row-number="2" header-row-heights="['15px', '15px']"
+         row-number='15' row-heights="['15px', '15px']"
+         footer-row-number="3" footer-row-heights="'15px'">
+    </div>
+</div>
+
+<h1>
+    <a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Examples</h1>
+
+<ul>
+    <li><a href="custom-data.html">Custom data</a></li>
+    <li><a href="color-palette.html">Color palette</a></li>
+
+</ul>
+
 
 <h1>
 <a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h1>
@@ -77,6 +108,7 @@ and integrated during the build process in the <code>ngc-template</code> module.
 
 <p>When the data matrix vertical dimension than the total number of rows, the area between header and footer is scrollable.
 The behaviour is identical for the number of columns, the area between the left and right columns becomes scrollable.</p>
+
 
 <p>Minimal example to display a table with one million cells (1000 x 1000 data matrix) with default settings and no styling :</p>
 
