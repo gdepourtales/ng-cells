@@ -3,9 +3,10 @@
 
     <table class="ngc">
         <!-- Column Names -->
-        <tr class="ngc row column-names" ng-show="{{showColumnNames}}">
+        <tr class="ngc row column-names" ng-show="{{showColumnNames}}"  ng-class="{first: $first, last: $last}">
             <!-- Cells for row headers columns -->
             <td ng-repeat="column in $$leftRowHeadersColumns"
+                ng-class="{first: $first, last: $last}"
                 class="ngc row-header column-name cell {{column.clazz}}"
                 style="{{column.style}}">
                 <div class="ngc cell-content" style="{{column.style}}"></div>
@@ -13,6 +14,7 @@
 
             <!-- Cells for left fixed columns -->
             <td ng-repeat="column in $$leftFixedColumns"
+                ng-class="{first: $first, last: $last}"
                 class="ngc left column-name cell {{$$leftColumnNames[$index].clazz}} {{column.clazz}}"
                 style="{{$$leftColumnNames[$index].style}}; {{column.style}}">
                 <div class="ngc cell-content" style="{{column.style}}">{{$$leftColumnNames[$index].value}}</div>
@@ -20,6 +22,7 @@
 
             <!-- Cells for middle variable columns -->
             <td ng-repeat="column in $$variableCenterColumns"
+                ng-class="{first: $first, last: $last}"
                 class="ngc center column-name cell {{$$centerColumnNames[$index].clazz}} {{column.clazz}}"
                 style="{{$$centerColumnNames[$index].style}}; {{column.style}}">
                 <div class="ngc cell-content" style="{{column.style}}">{{$$centerColumnNames[$index].value}}</div>
@@ -27,6 +30,7 @@
 
             <!-- Cells for right fixed columns -->
             <td ng-repeat="column in $$rightFixedColumns"
+                ng-class="{first: $first, last: $last}"
                 class="ngc right column-name cell {{$$rightColumnNames[$index].clazz}} {{column.clazz}}"
                 style="{{$$rightColumnNames[$index].style}}; {{column.style}}">
                 <div class="ngc cell-content" style="{{column.style}}">{{$$rightColumnNames[$index].value}}</div>
@@ -39,6 +43,7 @@
         <tr class="ngc row header"  ng-show="{{showHeader}}" ng-repeat="row in $$headerRows" ng-class="{first: $first, last: $last}">
             <!-- Cells for row headers columns -->
             <td ng-repeat="column in $$leftRowHeadersColumns"
+                ng-class="{first: $first, last: $last}"
                  class="ngc row-header header cell {{$$topLeftRowHeadersData[$parent.$index][$index].clazz}} {{column.clazz}}"
                  style="{{$$topLeftRowHeadersData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
                 <div class="ngc cell-content" style="{{row.height}}; {{column.style}}">{{$$topLeftRowHeadersData[$parent.$index][$index].value}}</div>
@@ -109,6 +114,7 @@
         <tr class="ngc row middle" ng-repeat="row in $$rows" ng-class="{first: $first, last: $last}">
             <!-- Cells for row headers columns -->
             <td ng-repeat="column in $$leftRowHeadersColumns"
+                ng-class="{first: $first, last: $last}"
                 class="ngc row-header middle cell {{$$middleLeftRowHeadersData[$parent.$index][$index].clazz}} {{column.clazz}}"
                 style="{{$$middleLeftRowHeadersData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
                 <div class="ngc cell-content" style="{{row.height}}; {{column.style}}">{{$$middleLeftRowHeadersData[$parent.$index][$index].value}}</div>
@@ -181,6 +187,7 @@
         <tr class="ngc row footer" ng-repeat="row in $$footerRows" ng-class="{first: $first, last: $last}">
             <!-- Cells for row headers columns -->
             <td ng-repeat="column in $$leftRowHeadersColumns"
+                ng-class="{first: $first, last: $last}"
                 class="ngc row-header footer cell {{$$bottomLeftRowHeadersData[$parent.$index][$index].clazz}} {{column.clazz}}"
                 style="{{$$bottomLeftRowHeadersData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
                 <div class="ngc cell-content" style="{{row.height}}; {{column.style}}">{{$$bottomLeftRowHeadersData[$parent.$index][$index].value}}</div>
