@@ -176,7 +176,7 @@
                 style="{{$$middleRightData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
                 <div class="ngc cell-content" style="{{row.height}}; {{column.style}}">{{$$middleRightData[$parent.$index][$index].value}}</div>
             </td>
-            <td ng-if="$first" rowspan="{{$$rows.length}}">
+            <td class="ngc scroll-wrapper-cell" ng-if="$first" rowspan="{{$$rows.length}}">
                 <div class="ngc scroll-wrapper vertical">
                     <div ngc-scrollbar vertical></div>
                 </div>

@@ -31,3 +31,7 @@ table.ngc {
     height:1px;
     position: absolute;
 }
+
+.ngc.scroll-wrapper-cell {
+    vertical-align: middle;
+}
