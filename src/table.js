@@ -542,15 +542,15 @@ angular.module('ngcTableDirective', ['ngc-template'])
 
                 /* Number of left fixed columns. By default 1 */
                 leftColumnNumber: '=?',
-                /* Widths of the fixed left columns. No default (min-width:10px) */
+                /* Widths of the fixed left columns. */
                 leftColumnWidths: '=?',
                 /* Number of center variable columns. By default 10 */
                 centerColumnNumber: '=',
-                /* Widths of the center variable columns. No default (min-width:10px) */
+                /* Widths of the center variable columns. */
                 centerColumnWidths: '=?',
                 /* Number of right fixed columns. By default 1 */
                 rightColumnNumber: '=?',
-                /* Widths of the fixed right columns. No default (min-width:10px) */
+                /* Widths of the fixed right columns. */
                 rightColumnWidths: '=?',
 
                 /* Number of rows in the header. By default 1 */
