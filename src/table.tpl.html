@@ -8,28 +8,28 @@
             <td ng-repeat="column in $$leftRowHeadersColumns"
                 class="ngc row-header column-name cell {{column.clazz}}"
                 style="{{column.style}}">
-                <div class="ngc cell-content"></div>
+                <div class="ngc cell-content" style="{{column.style}}"></div>
             </td>
 
             <!-- Cells for left fixed columns -->
             <td ng-repeat="column in $$leftFixedColumns"
                 class="ngc left column-name cell {{$$leftColumnNames[$index].clazz}} {{column.clazz}}"
                 style="{{$$leftColumnNames[$index].style}}; {{column.style}}">
-                <div class="ngc cell-content">{{$$leftColumnNames[$index].value}}</div>
+                <div class="ngc cell-content" style="{{column.style}}">{{$$leftColumnNames[$index].value}}</div>
             </td>
 
             <!-- Cells for middle variable columns -->
             <td ng-repeat="column in $$variableCenterColumns"
                 class="ngc center column-name cell {{$$centerColumnNames[$index].clazz}} {{column.clazz}}"
                 style="{{$$centerColumnNames[$index].style}}; {{column.style}}">
-                <div class="ngc cell-content">{{$$centerColumnNames[$index].value}}</div>
+                <div class="ngc cell-content" style="{{column.style}}">{{$$centerColumnNames[$index].value}}</div>
             </td>
 
             <!-- Cells for right fixed columns -->
             <td ng-repeat="column in $$rightFixedColumns"
                 class="ngc right column-name cell {{$$rightColumnNames[$index].clazz}} {{column.clazz}}"
                 style="{{$$rightColumnNames[$index].style}}; {{column.style}}">
-                <div class="ngc cell-content">{{$$rightColumnNames[$index].value}}</div>
+                <div class="ngc cell-content" style="{{column.style}}">{{$$rightColumnNames[$index].value}}</div>
             </td>
             <!-- Placeholder for vertical scroll -->
             <td></td>
@@ -41,7 +41,7 @@
             <td ng-repeat="column in $$leftRowHeadersColumns"
                  class="ngc row-header header cell {{$$topLeftRowHeadersData[$parent.$index][$index].clazz}} {{column.clazz}}"
                  style="{{$$topLeftRowHeadersData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
-                <div class="ngc cell-content">{{$$topLeftRowHeadersData[$parent.$index][$index].value}}</div>
+                <div class="ngc cell-content" style="{{row.height}}; {{column.style}}">{{$$topLeftRowHeadersData[$parent.$index][$index].value}}</div>
             </td>
 
             <!-- Cells for left fixed columns -->
@@ -59,7 +59,7 @@
                 ng-mouseup="$$dispatchEvent('mouseup', $event, $$topLeftData[$parent.$index][$index])"
                 class="ngc left header cell {{$$topLeftData[$parent.$index][$index].clazz}} {{column.clazz}}"
                 style="{{$$topLeftData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
-                <div class="ngc cell-content">{{$$topLeftData[$parent.$index][$index].value}}</div>
+                <div class="ngc cell-content" style="{{row.height}}; {{column.style}}">{{$$topLeftData[$parent.$index][$index].value}}</div>
             </td>
 
             <!-- Cells for middle variable columns -->
@@ -77,7 +77,7 @@
                 ng-mouseup="$$dispatchEvent('mouseup', $event, $$topCenterData[$parent.$index][$index])"
                 class="ngc center header cell {{$$topCenterData[$parent.$index][$index].clazz}} {{column.clazz}}"
                 style="{{$$topCenterData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
-                <div class="ngc cell-content">{{$$topCenterData[$parent.$index][$index].value}}</div>
+                <div class="ngc cell-content" style="{{row.height}}; {{column.style}}">{{$$topCenterData[$parent.$index][$index].value}}</div>
             </td>
 
             <!-- Cells for right fixed columns -->
@@ -95,7 +95,7 @@
                 ng-mouseup="$$dispatchEvent('mouseup', $event, $$topRightData[$parent.$index][$index])"
                 class="ngc right header cell {{$$topRightData[$parent.$index][$index].clazz}} {{column.clazz}}"
                 style="{{$$topRightData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
-                <div class="ngc cell-content">{{$$topRightData[$parent.$index][$index].value}}</div>
+                <div class="ngc cell-content" style="{{row.height}}; {{column.style}}">{{$$topRightData[$parent.$index][$index].value}}</div>
             </td>
 
             <!-- Placeholder for vertical scroll -->
@@ -108,7 +108,7 @@
             <td ng-repeat="column in $$leftRowHeadersColumns"
                 class="ngc row-header middle cell {{$$middleLeftRowHeadersData[$parent.$index][$index].clazz}} {{column.clazz}}"
                 style="{{$$middleLeftRowHeadersData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
-                <div class="ngc cell-content">{{$$middleLeftRowHeadersData[$parent.$index][$index].value}}</div>
+                <div class="ngc cell-content" style="{{row.height}}; {{column.style}}">{{$$middleLeftRowHeadersData[$parent.$index][$index].value}}</div>
             </td>
 
             <!-- Cells for left fixed columns -->
@@ -126,7 +126,7 @@
                 ng-mouseup="$$dispatchEvent('mouseup', $event, $$middleLeftData[$parent.$index][$index])"
                 class="ngc left middle cell {{$$middleLeftData[$parent.$index][$index].clazz}} {{column.clazz}}"
                 style="{{$$middleLeftData[$parent.$index][$index].style}} ; {{row.height}}; {{column.style}}">
-                <div class="ngc cell-content">{{$$middleLeftData[$parent.$index][$index].value}}</div>
+                <div class="ngc cell-content" style="{{row.height}}; {{column.style}}">{{$$middleLeftData[$parent.$index][$index].value}}</div>
             </td>
 
             <!-- Cells for middle variable columns -->
@@ -144,7 +144,7 @@
                 ng-mouseup="$$dispatchEvent('mouseup', $event, $$middleCenterData[$parent.$index][$index])"
                 class="ngc center cell middle {{$$middleCenterData[$parent.$index][$index].clazz}} {{column.clazz}}"
                 style="{{$$middleCenterData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
-                <div class="ngc cell-content">{{$$middleCenterData[$parent.$index][$index].value}}</div>
+                <div class="ngc cell-content" style="{{row.height}}; {{column.style}}">{{$$middleCenterData[$parent.$index][$index].value}}</div>
             </td>
 
             <!-- Cells for right fixed columns -->
@@ -162,7 +162,7 @@
                 ng-mouseup="$$dispatchEvent('mouseup', $event, $$middleRightData[$parent.$index][$index])"
                 class="ngc right cell middle {{$$middleRightData[$parent.$index][$index].clazz}} {{column.clazz}}"
                 style="{{$$middleRightData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
-                <div class="ngc cell-content">{{$$middleRightData[$parent.$index][$index].value}}</div>
+                <div class="ngc cell-content" style="{{row.height}}; {{column.style}}">{{$$middleRightData[$parent.$index][$index].value}}</div>
             </td>
             <td ng-if="$first" rowspan="{{$$rows.length}}">
                 <div class="ngc scroll-wrapper vertical">
@@ -177,7 +177,7 @@
             <td ng-repeat="column in $$leftRowHeadersColumns"
                 class="ngc row-header footer cell {{$$bottomLeftRowHeadersData[$parent.$index][$index].clazz}} {{column.clazz}}"
                 style="{{$$bottomLeftRowHeadersData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
-                <div class="ngc cell-content">{{$$bottomLeftRowHeadersData[$parent.$index][$index].value}}</div>
+                <div class="ngc cell-content" style="{{row.height}}; {{column.style}}">{{$$bottomLeftRowHeadersData[$parent.$index][$index].value}}</div>
             </td>
 
             <!-- Cells for left fixed columns -->
@@ -195,7 +195,7 @@
                  ng-mouseup="$$dispatchEvent('mouseup', $event, $$bottomLeftData[$parent.$index][$index])"
                  class="ngc left footer cell {{$$bottomLeftData[$parent.$index][$index].clazz}} {{column.clazz}}"
                  style="{{$$bottomLeftData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
-                <div class="ngc cell-content">{{$$bottomLeftData[$parent.$index][$index].value}}</div>
+                <div class="ngc cell-content" style="{{row.height}}; {{column.style}}">{{$$bottomLeftData[$parent.$index][$index].value}}</div>
             </td>
 
             <!-- Cells for middle variable columns -->
@@ -213,7 +213,7 @@
                 ng-mouseup="$$dispatchEvent('mouseup', $event, $$bottomCenterData[$parent.$index][$index])"
                 class="ngc center footer cell {{$$bottomCenterData[$parent.$index][$index].clazz}} {{column.clazz}}"
                 style="{{$$bottomCenterData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
-                <div class="ngc cell-content">{{$$bottomCenterData[$parent.$index][$index].value}}</div>
+                <div class="ngc cell-content" style="{{row.height}}; {{column.style}}">{{$$bottomCenterData[$parent.$index][$index].value}}</div>
             </td>
 
             <!-- Cells for right fixed columns -->
@@ -231,7 +231,7 @@
                 ng-mouseup="$$dispatchEvent('mouseup', $event, $$bottomRightData[$parent.$index][$index])"
                 class="ngc right footer cell {{$$bottomRightData[$parent.$index][$index].clazz}} {{column.clazz}}"
                 style="{{$$bottomRightData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
-                <div class="ngc cell-content">{{$$bottomRightData[$parent.$index][$index].value}}</div>
+                <div class="ngc cell-content" style="{{row.height}}; {{column.style}}">{{$$bottomRightData[$parent.$index][$index].value}}</div>
             </td>
 
             <!-- Placeholder for vertical scroll -->
