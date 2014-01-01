@@ -582,13 +582,13 @@ angular.module('ngcTableDirective', ['ngc-template'])
             restrict:'AE',
             scope:{
                 /* Top position of the range in data space */
-                top: '=?',
+                top: '=',
                 /* Bottom position of the range in data space */
-                bottom: '=?',
+                bottom: '=',
                 /* Left position of the range in data space */
-                left: '=?',
+                left: '=',
                 /* Right position of the range in data space */
-                right: '=?',
+                right: '=',
                 /* Format function for the cells enclosed in the range */
                 formatFn: '=?',
                 /* CSS class to be added to the cells */
