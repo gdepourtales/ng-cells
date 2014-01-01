@@ -390,7 +390,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
                                 /* Register the CSS class */
                                 if (angular.isString(range.clazz)) clazz = range.clazz;
                                 /* Register the CSS style declaration */
-                                if (angular.isString(range.styleFn)) styleFn = range['styleFn'];
+                                if (angular.isFunction(range.styleFn)) styleFn = range['styleFn'];
 
                                 /* Register available event callbacks */
                                 angular.forEach(events, function(event) {
