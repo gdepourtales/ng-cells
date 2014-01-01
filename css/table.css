@@ -11,12 +11,16 @@ table.ngc {
     overflow-y:scroll;
 }
 
+.ngc.scrollbar.cell {
+    background: none;
+}
+
 .ngc.vscrollbar {
     width:1px;
 }
 
 .ngc.horizontal.scroll-wrapper {
-    height:1em;
+    height:14px;
     overflow-x:scroll;
     overflow-y:hidden;
     position: relative;

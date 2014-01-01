@@ -239,15 +239,15 @@
         </tr>
 
         <!-- Horizontal scroll -->
-        <tr class="ngc row">
+        <tr class="ngc row scrollbar">
             <!-- Cells for row headers columns -->
             <td ng-repeat="column in $$leftRowHeadersColumns"
-                class="ngc cell {{column.clazz}}"
+                class="ngc hscrollbar cell {{column.clazz}}"
                 style="{{column.style}}">
                 <!--<div class="ngc row-header-content"></div>-->
             </td>
             <!-- Cells for left fixed columns -->
-            <td ng-repeat="column in $$leftFixedColumns" class="ngc cell {{column.clazz}}" style="{{column.style}}">
+            <td ng-repeat="column in $$leftFixedColumns" class="ngc scrollbar cell {{column.clazz}}" style="{{column.style}}">
                 <!--<div class="ngc cell-content"></div>-->
             </td>
 
@@ -260,7 +260,7 @@
 
             <!-- Cells for right fixed columns -->
             <td ng-repeat="column in $$rightFixedColumns"
-                class="{{$$middleRightData[$parent.$index][$index].clazz}} ngc cell {{column.clazz}}"
+                class="ngc scrollbar cell {{$$middleRightData[$parent.$index][$index].clazz}} {{column.clazz}}"
                 style="{{column.style}}">
                 <!--<div class="ngc cell-content"></div>-->
             </td>
