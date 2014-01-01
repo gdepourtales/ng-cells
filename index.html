@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Ng-cells : " />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Ng-cells</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/gdepourtales/ng-cells">View on GitHub</a>
+
+          <h1 id="project_title">Ng-cells</h1>
+          <h2 id="project_tagline"></h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/gdepourtales/ng-cells/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/gdepourtales/ng-cells/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="ng-cells" class="anchor" href="#ng-cells"><span class="octicon octicon-link"></span></a>ng-cells</h1>
+
+<p>AngularJS Table directive</p>
+
+<p>This directive draws a table of data with different features. It has no dependency other than angularjs. it has been
+tested on Google Chrome, Safari, Opera and Firefox and Internet Explorer 10 (8+ in developer mode)</p>
+
+<p>Tu use this directive, just add the ngcTableDirective as dependency. The template is handle as an external HTML file
+and integrated during the build process in the <code>ngc-template</code> module. The template is registered in the angularjs template cache with the key <code>ngc.table.tpl.html</code></p>
+
+<h1>
+<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h1>
+
+<ul>
+<li>Automatic column and row references like in popular spreadsheets</li>
+<li>Any number of fixed left and right columns</li>
+<li>Any number of fixed header and footer rows</li>
+<li>No table redraw : Supports big data sets without impacting display speed</li>
+<li>Scrolls on full rows and columns</li>
+<li>Data ranges with custom CSS class, format and styling functions and event callbacks</li>
+<li>Table elements CSS classes for easy theming</li>
+</ul><h1>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h1>
+
+<h2>
+<a name="table" class="anchor" href="#table"><span class="octicon octicon-link"></span></a>Table</h2>
+
+<p>The directive displays a grid of cells organized as the following principles :</p>
+
+<pre><code>--------------------------------
+| |      COLUMN LETTERS        |
+--------------------------------
+| |      | HEADER ROWS |       |
+|-|------|---------------------|
+|R|      |             |       |
+|O| LEFT |   CENTER    | RIGHT |
+|W| COLS |    COLS     | COLS  |
+|#|      |             |       |
+|-|------|-------------|-------|
+| |      | FOOTER ROWS |       |
+--------------------------------
+</code></pre>
+
+<p>When the data matrix vertical dimension than the total number of rows, the area between header and footer is scrollable.
+The behaviour is identical for the number of columns, the area between the left and right columns becomes scrollable.</p>
+
+<p>Minimal example to display a table with one million cells (1000 x 1000 data matrix) with default settings and no styling :</p>
+
+<div class="highlight highlight-html"><pre><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">ng-app=</span><span class="s">"ngcTableDirectiveTest"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;title&gt;</span>Test Template<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"../dist/ng-cells-0.1.1.css"</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">type=</span><span class="s">"text/css"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"../lib/angular-1.2.6.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"../dist/ng-cells-0.1.1.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script&gt;</span>
+        <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">'ngcTableDirectiveTest'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'ngcTableDirective'</span><span class="p">])</span>
+                <span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s1">'TestCtrl'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">$scope</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="p">[];</span>
+
+                    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">row</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">row</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="p">;</span> <span class="nx">row</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="kd">var</span> <span class="nx">rowContent</span> <span class="o">=</span> <span class="p">[];</span>
+                        <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">col</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">col</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="p">;</span> <span class="nx">col</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                            <span class="nx">rowContent</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">row</span> <span class="o">*</span> <span class="nx">col</span> <span class="o">+</span> <span class="nx">col</span><span class="p">);</span>
+                        <span class="p">}</span>
+                        <span class="nx">$scope</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">rowContent</span><span class="p">);</span>
+                    <span class="p">}</span>
+
+                <span class="p">});</span>
+
+    <span class="nt">&lt;/script&gt;</span>
+
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">ng-controller=</span><span class="s">"TestCtrl"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">ngc-table</span> <span class="na">data=</span><span class="s">"data"</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+
+<p>The data must be given as a two dimensional array (ie <code>array[][]</code>). If your data is a complex object, you can define a custom data
+function to extract the data value. For example, the following html snippet will use the below javascript function to get the value</p>
+
+<div class="highlight highlight-html"><pre><span class="nt">&lt;div</span> <span class="na">ngc-table</span> <span class="na">data=</span><span class="s">"data"</span> <span class="na">custom-data-value-fn=</span><span class="s">"customDataFn"</span><span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+
+<div class="highlight highlight-js"><pre><span class="nx">$scope</span><span class="p">.</span><span class="nx">customDataFn</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">row</span><span class="p">,</span> <span class="nx">col</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">data</span><span class="p">[</span><span class="mi">1000</span> <span class="o">-</span> <span class="nx">row</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="mi">1000</span> <span class="o">-</span> <span class="nx">col</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>The table settings like number of columns and rows in each table part can be specified with different attributes which
+names should be self-explanatory. Please see the reference below. For example:</p>
+
+<div class="highlight highlight-html"><pre><span class="nt">&lt;ngc-table</span>
+        <span class="na">data=</span><span class="s">"data"</span>
+        <span class="na">left-column-number=</span><span class="s">"5"</span> <span class="na">left-column-widths=</span><span class="s">"'30px'"</span>
+        <span class="na">center-column-number=</span><span class="s">"10"</span> <span class="na">center-column-widths=</span><span class="s">"['40px', '60px', '40px']"</span>
+        <span class="na">right-column-number=</span><span class="s">"5"</span> <span class="na">right-column-widths=</span><span class="s">"['60px', '40px', '60px', '40px', '60px']"</span>
+        <span class="na">header-row-number=</span><span class="s">"2"</span> <span class="na">header-row-heights=</span><span class="s">"['30px', '15px']"</span>
+        <span class="na">row-number=</span><span class="s">'15'</span> <span class="na">row-heights=</span><span class="s">"['41px', '14px']"</span>
+        <span class="na">footer-row-number=</span><span class="s">"3"</span> <span class="na">footer-row-heights=</span><span class="s">"'24px'"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/ngc-table&gt;</span>
+</pre></div>
+
+<h2>
+<a name="cell-ranges" class="anchor" href="#cell-ranges"><span class="octicon octicon-link"></span></a>Cell Ranges</h2>
+
+<p>Ranges</p>
+
+<p>Ranges let specify custom behaviour for data ranges. The range is defined by the area limits and holds custom
+CSS classes, format and styling functions and event callbacks. Ranges are specified in the data matrix range, thus they
+are not related to cells.</p>
+
+<p>To add custom ranges, use the declarative ranges definitions such as this example :</p>
+
+<div class="highlight highlight-html"><pre> <span class="nt">&lt;ngc-table</span> <span class="na">data=</span><span class="s">"data"</span><span class="nt">&gt;</span>
+     <span class="nt">&lt;ngc-range</span> <span class="na">top=</span><span class="s">"0"</span> <span class="na">bottom=</span><span class="s">"1000"</span> <span class="na">left=</span><span class="s">"0"</span> <span class="na">right=</span><span class="s">"5"</span> <span class="na">format-fn=</span><span class="s">"cellFormatRange1"</span><span class="nt">&gt;&lt;/ngc-range&gt;</span>
+     <span class="nt">&lt;ngc-range</span> <span class="na">top=</span><span class="s">"3"</span> <span class="na">bottom=</span><span class="s">"8"</span> <span class="na">left=</span><span class="s">"3"</span> <span class="na">right=</span><span class="s">"998"</span> <span class="na">format-fn=</span><span class="s">"cellFormatRange2"</span><span class="nt">&gt;&lt;/ngc-range&gt;</span>
+     <span class="nt">&lt;ngc-range</span> <span class="na">top=</span><span class="s">"10"</span> <span class="na">bottom=</span><span class="s">"12"</span> <span class="na">left=</span><span class="s">"6"</span> <span class="na">right=</span><span class="s">"15"</span> <span class="na">format-fn=</span><span class="s">"cellFormatRange3"</span><span class="nt">&gt;&lt;/ngc-range&gt;</span>
+     <span class="nt">&lt;ngc-range</span> <span class="na">top=</span><span class="s">"13"</span> <span class="na">bottom=</span><span class="s">"30"</span> <span class="na">left=</span><span class="s">"3"</span> <span class="na">right=</span><span class="s">"998"</span> <span class="na">format-fn=</span><span class="s">"cellFormatRange4"</span><span class="nt">&gt;&lt;/ngc-range&gt;</span>
+     <span class="nt">&lt;ngc-range</span> <span class="na">top=</span><span class="s">"990"</span> <span class="na">bottom=</span><span class="s">"998"</span> <span class="na">left=</span><span class="s">"3"</span> <span class="na">right=</span><span class="s">"998"</span><span class="nt">&gt;&lt;/ngc-range&gt;</span>
+ <span class="nt">&lt;/ngc-table&gt;</span>
+</pre></div>
+
+<p>Ranges can overlap but only one class, event function, format function etc is activated on a single cell. The order of
+precedence is the same as the order of the range declarations. The callback receives the cell and the cellData.</p>
+
+<p>Here an example of <code>mousemove</code> event handling :</p>
+
+<div class="highlight highlight-html"><pre><span class="nt">&lt;ngc-range</span> <span class="na">top=</span><span class="s">"0"</span> <span class="na">bottom=</span><span class="s">"5"</span> <span class="na">left=</span><span class="s">"0"</span> <span class="na">right=</span><span class="s">"5"</span> <span class="na">click-fn=</span><span class="s">"clickFn"</span>  <span class="nt">&gt;&lt;/ngc-range&gt;</span>
+</pre></div>
+
+<div class="highlight highlight-js"><pre><span class="nx">$scope</span><span class="p">.</span><span class="nx">clickFn</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">cellData</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">cellData</span><span class="p">.</span><span class="nx">row</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">cellData</span><span class="p">.</span><span class="nx">col</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">cellData</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">cellData</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+<h2>
+<a name="css-classes" class="anchor" href="#css-classes"><span class="octicon octicon-link"></span></a>CSS Classes</h2>
+
+<p>In addition to ranges custom classes, the table embeds CSS classes to identify each part of the table. For example, to
+set the pen color and the background color of all cells of the right header part, use the following CSS statement in your stylesheet. If you have other elements that clash you can add an additional <code>ngc</code> class to make it more specific.</p>
+
+<div class="highlight highlight-css"><pre><span class="nc">.cell.right.header</span> <span class="p">{</span>
+    <span class="k">background-color</span><span class="o">:</span> <span class="m">#880000</span><span class="p">;</span>
+    <span class="k">color</span><span class="o">:</span> <span class="nb">whitesmoke</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<h1>
+<a name="directive-reference" class="anchor" href="#directive-reference"><span class="octicon octicon-link"></span></a>Directive Reference</h1>
+
+<h2>
+<a name="table-1" class="anchor" href="#table-1"><span class="octicon octicon-link"></span></a>Table</h2>
+
+<ul>
+<li>
+<code>data</code> The 2D data matrix. The matrix can be of any dimension. By default, the displayed data is the data raw value</li>
+<li>
+<code>custom-data-value-fn</code> A custom function to extract the data value from the data source. The provided function should
+have the form <code>function(data, row, col)</code>. Please remember that the initial data matrix IS required in order to define the data dimensions.</li>
+<li>
+<code>show-column-names</code> A flag to set the visibility of the column letters. By default <code>true</code>
+</li>
+<li>
+<code>show-row-numbers</code> A flag to set the visibility of the row numbers. By default <code>true</code>
+</li>
+<li>
+<code>show-header</code> A flag to set the visibility of the header part. By default <code>true</code>. If <code>false</code>, the value of <code>header-row-number</code> is ignored</li>
+<li>
+<code>show-footer</code> A flag to set the visibility of the footer part. By default <code>true</code>. If <code>false</code>, the value of <code>footer-row-number</code> is ignored</li>
+<li>
+<code>left-column-number</code> The number of fixed columns on the left part of the table. By default <code>1</code>
+</li>
+<li>
+<code>left-column-widths</code> The CSS width of the left fixed columns, expressed with unit (eg <code>'40px'</code>).  No default. The value can be a single string value or an array of
+string values. If the value is a single string, the same width is applied to all columns. If the value is an array, each column gets the width in arrays order (if the array's length is smaller than the number columns, the last width is used for the remaining columns).</li>
+<li>
+<code>center-column-number</code> The number of columns on the center part of the table. By default <code>10</code>
+</li>
+<li>
+<code>center-column-widths</code> The width of the center columns. See <code>left-column-widths</code> for value specification</li>
+<li>
+<code>right-column-number</code> The number of fixed columns on the right part of the table. By default <code>1</code>
+</li>
+<li>
+<code>right-column-widths</code> The width of the right fixed columns. See <code>left-column-widths</code> for value specification</li>
+<li>
+<code>header-row-number</code> The number of rows in the header section of the table</li>
+<li>
+<code>header-row-heights</code> The height of the header rows. See <code>left-column-widths</code> for value specification (except that the array values obviously relate to rows and not columns)</li>
+<li>
+<code>row-number</code> The number of rows in the middle section of the table</li>
+<li>
+<code>row-heights</code> The height of the middle rows. See <code>header-row-heights</code> for value specification</li>
+<li>
+<code>footer-row-number</code> The number of rows in the footer section of the table</li>
+<li>
+<code>footer-row-heights</code> The height of the footer rows. See <code>header-row-heights</code> for value specification</li>
+</ul><h2>
+<a name="range" class="anchor" href="#range"><span class="octicon octicon-link"></span></a>Range</h2>
+
+<ul>
+<li>
+<code>top</code> The top row (inclusive) limit of this range</li>
+<li>
+<code>bottom</code> The bottom (non-inclusive) row limit of this range</li>
+<li>
+<code>left</code> The left (inclusive) column limit of this range</li>
+<li>
+<code>right</code> The right (non-inclusive) column limit of this range</li>
+<li>
+<code>format-fn</code> A custom format function. This can be used to customize the output format of the data value. The function
+must be of the form <code>function(value, row, col)</code> where <code>value</code> is the value of the source data at the position <code>[row][col]</code>
+</li>
+<li>
+<code>clazz</code> Class(es) to add to the cells enclosed by the range</li>
+<li>
+<code>style-fn</code> A custom style format function to be applied to the cells. Use it to apply sophisticated styling to the table. The function must be of the form <code>function(value, row, col)</code> where <code>value</code> is the value of the source data at the position <code>[row][col]</code>
+</li>
+<li>
+<code>&lt;event&gt;-fn</code> Custom event callbacks. The event can be any of <code>click</code>, <code>dblclick</code>, <code>mousedown</code>, <code>mouseenter</code>, <code>mouseleave</code>
+<code>mousemove</code>, <code>mouseover</code>, <code>mouseup</code> event types. The callback must be of the form <code>function(event, cellData)</code> where
+<code>event</code> is the initial Javascript event and the <code>cellData</code> an object with the following attributes :
+** <code>row</code> The row of the data value in original data space (not table space)
+** <code>col</code> The column of the data value in original data space (not table space)
+** <code>data</code> The original data value located at row and column
+** <code>value</code> The value of the cell as displayed
+** <code>clazz</code> The classes of the cell
+** <code>style</code> The style declaration of the cell
+** <code>eventCallbacks</code> An object with all registered callbacks identified the event type
+** <code>enclosingRanges</code> An array of all ranges that enclose the current cell</li>
+</ul><h2>
+<a name="css-reference" class="anchor" href="#css-reference"><span class="octicon octicon-link"></span></a>CSS Reference</h2>
+
+<p>Here's a list of the classes which can be used to select cells according to the table parts they belong to</p>
+
+<h3>
+<a name="column-names" class="anchor" href="#column-names"><span class="octicon octicon-link"></span></a>Column names</h3>
+
+<ul>
+<li>row : <code>column-names row</code>
+</li>
+<li>Row # column : <code>row-header column-name cell</code>
+</li>
+<li>Left columns : <code>left column-name cell</code>
+</li>
+<li>Center columns : <code>center column-name cell</code>
+</li>
+<li>Right columns : <code>right column-name cell</code>
+</li>
+</ul><h3>
+<a name="header-section" class="anchor" href="#header-section"><span class="octicon octicon-link"></span></a>Header section</h3>
+
+<ul>
+<li>Rows : <code>header row</code>
+</li>
+<li>Row # : <code>row-header header cell</code>
+</li>
+<li>Left columns : <code>left header cell</code>
+</li>
+<li>Center columns : <code>center header cell</code>
+</li>
+<li>Right columns : <code>right header cell</code>
+</li>
+</ul><h3>
+<a name="middle-section" class="anchor" href="#middle-section"><span class="octicon octicon-link"></span></a>Middle section</h3>
+
+<ul>
+<li>Rows : <code>middle row</code>
+</li>
+<li>Row # : <code>row-header middle cell</code>
+</li>
+<li>Left columns : <code>left middle cell</code>
+</li>
+<li>Center columns : <code>center middle cell</code>
+</li>
+<li>Right columns : <code>right middle cell</code>
+</li>
+</ul><h3>
+<a name="footer-section" class="anchor" href="#footer-section"><span class="octicon octicon-link"></span></a>Footer section</h3>
+
+<ul>
+<li>Rows : <code>footer row</code>
+</li>
+<li>Row # : <code>row-header footer cell</code>
+</li>
+<li>Left columns : <code>left footer cell</code>
+</li>
+<li>Center columns : <code>center footer cell</code>
+</li>
+<li>Right columns : <code>right footer cell</code>
+</li>
+</ul><p>All element class declarations also have the <code>ngc</code> class. First and last rows of each section have the resp. <code>first</code> and
+<code>last</code> classes. Same for cells in each row and section.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Ng-cells maintained by <a href="https://github.com/gdepourtales">gdepourtales</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
