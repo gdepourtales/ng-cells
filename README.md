@@ -18,6 +18,7 @@ and integrated during the build process in the `ngc-template` module. The templa
 * Scrolls on full rows and columns
 * Data ranges with custom CSS class, format and styling functions and event callbacks
 * Table elements CSS classes for easy theming
+* No dependency except AngularJS
 
 #Usage
 
