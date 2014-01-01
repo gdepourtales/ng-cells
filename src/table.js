@@ -239,6 +239,8 @@ angular.module('ngcTableDirective', ['ngc-template'])
                     Initialize the headers rows. By default one is added if no parameter is given
                      */
                     var nHeaderRows = angular.isNumber(scope.headerRowNumber) ? scope.headerRowNumber : 1;
+                    nHeaderRows = scope.showHeader ? nHeaderRows : 0;
+
                     for (i = 0; i < nHeaderRows; i++) {
                         var headerRowDef = {
                             index: i,
@@ -287,6 +289,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
                      Initialize the footer rows. By default 1 is added if no parameter is given
                      */
                     var nFooterRows = angular.isDefined(scope.footerRowNumber) ? scope.footerRowNumber : 1;
+                    nFooterRows = scope.showFooter ? nFooterRows : 0;
                     for (i = 0; i < nFooterRows; i++) {
                         var footerRowDef = {
                             index: i,
