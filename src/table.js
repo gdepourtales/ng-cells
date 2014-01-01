@@ -62,7 +62,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
                         if (angular.isNumber(n)) {
                             for (var i = 0; i < n; i++) {
                                 array.push({
-                                    style: $$getStyleDecl('width', widths, i)
+                                    style: $$getStyleDecl('width', widths, i) + ';' + $$getStyleDecl('max-width', widths, i)
                                 });
                             }
                         }
@@ -242,7 +242,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
                     for (i = 0; i < nHeaderRows; i++) {
                         var headerRowDef = {
                             index: i,
-                            height: $$getStyleDecl('height', scope.headerRowHeights, i)
+                            height: $$getStyleDecl('height', scope.headerRowHeights, i) + ';' + $$getStyleDecl('max-height', scope.headerRowHeights, i)
                         };
                         scope.$$headerRows.push(headerRowDef);
                     }
@@ -267,7 +267,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
                     for (i = 0; i < nRows; i++) {
                         var rowDef = {
                             index: i,
-                            height: $$getStyleDecl('height', scope.rowHeights, i)
+                            height: $$getStyleDecl('height', scope.rowHeights, i) + ';' + $$getStyleDecl('max-height', scope.rowHeights, i)
                         };
                         scope.$$rows.push(rowDef);
                     }
@@ -290,7 +290,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
                     for (i = 0; i < nFooterRows; i++) {
                         var footerRowDef = {
                             index: i,
-                            height: $$getStyleDecl('height', scope.footerRowHeights, i)
+                            height: $$getStyleDecl('height', scope.footerRowHeights, i) + ';' + $$getStyleDecl('max-height', scope.footerRowHeights, i)
                         };
                         scope.$$footerRows.push(footerRowDef);
                     }
@@ -406,7 +406,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
                             style: styleFn(data, row, col),
                             eventCallbacks: eventCallbacks,
                             enclosingRanges: enclosingRanges
-                        }
+                        };
                     }
 
                     /**
