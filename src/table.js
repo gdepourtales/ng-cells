@@ -79,21 +79,21 @@ angular.module('ngcTableDirective', ['ngc-template'])
                      */
                     scope.$$leftFixedColumns = [];
                     /* Create the columns based on directive parameters */
-                    $$createColumns(scope.leftColumnNumber, scope.$$leftFixedColumns, scope.leftColumnWidths);
+                    $$createColumns(scope.leftColumnNumber || 1, scope.$$leftFixedColumns, scope.leftColumnWidths);
                     /**
                      * Variable center column definitions
                      * @type {Array}
                      */
                     scope.$$variableCenterColumns = [];
                     /* Create the columns based on directive parameters */
-                    $$createColumns(scope.centerColumnNumber, scope.$$variableCenterColumns, scope.centerColumnWidths);
+                    $$createColumns(scope.centerColumnNumber || 10, scope.$$variableCenterColumns, scope.centerColumnWidths);
                     /**
                      * Right fixed columns definitions
                      * @type {Array}
                      */
                     scope.$$rightFixedColumns = [];
                     /* Create the columns based on directive parameters */
-                    $$createColumns(scope.rightColumnNumber, scope.$$rightFixedColumns, scope.rightColumnWidths);
+                    $$createColumns(scope.rightColumnNumber || 1, scope.$$rightFixedColumns, scope.rightColumnWidths);
 
                     /* Headers and tools */
                     /**
@@ -265,7 +265,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
                     /*
                      Initialize the rows. By default 10 are added if no parameter is given
                      */
-                    var nRows = angular.isDefined(scope.rowNumber) ? scope.rowNumber : 10;
+                    var nRows = angular.isNumber(scope.rowNumber) ? scope.rowNumber : 10;
                     for (i = 0; i < nRows; i++) {
                         var rowDef = {
                             index: i,
@@ -288,7 +288,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
                     /*
                      Initialize the footer rows. By default 1 is added if no parameter is given
                      */
-                    var nFooterRows = angular.isDefined(scope.footerRowNumber) ? scope.footerRowNumber : 1;
+                    var nFooterRows = angular.isNumber(scope.footerRowNumber) ? scope.footerRowNumber : 1;
                     nFooterRows = scope.showFooter ? nFooterRows : 0;
 
                     for (i = 0; i < nFooterRows; i++) {
@@ -554,7 +554,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
                 /* Heights of the header rows (array or single value). No default (min-height:10px) */
                 headerRowHeights:"=?",
                 /* Number of rows in the middle. By default 10 */
-                rowNumber:"=",
+                rowNumber:"=?",
                 /* Heights of the middle rows (array or single value). No default (min-height:10px) */
                 rowHeights:"=?",
                 /* Number of rows in the footer. By default 1 */
@@ -668,7 +668,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
                        if (angular.isDefined(tAttrs['vertical'])) {
                            // The vertical ratio is the number of data rows minus headers and footers divided by the the number
                            // of visible middle rows
-                           ratio = (scope.data.length - scope.headerRowNumber - scope.footerRowNumber) / scope.rowNumber * 100;
+                           ratio = (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length) / scope.$$rows.length * 100;
                            iElement.addClass('vscrollbar');
                            iElement.css('height', ratio + '%');
                            if (ratio <= 100) iElement.parent().css('display', 'none');
@@ -722,7 +722,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
                          */
                         $timeout(function() {
                             if (iElement.hasClass("vscrollbar")) {
-                                var ratio = (scope.data.length - scope.headerRowNumber - scope.footerRowNumber) / scope.rowNumber;
+                                var ratio = (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length) / scope.$$rows.length;
                                 var elem = angular.element(scope.$$verticalScrollbarWrapperElement);
                                 var height = elem.parent()[0].offsetHeight;
                                 elem.css('height', height + 'px');
