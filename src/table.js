@@ -135,8 +135,8 @@ angular.module('ngcTableDirective', ['ngc-template'])
                     if (angular.isFunction(scope['customDataValueFn'])) {
                         scope.$$getDataValue = scope['customDataValueFn'];
                     } else {
-                        scope.$$getDataValue = function(row, col) {
-                            return angular.isArray(this.data[row]) ? this.data[row][col] : undefined;
+                        scope.$$getDataValue = function(data, row, col) {
+                            return angular.isArray(data[row]) ? data[row][col] : undefined;
                         };
                     }
 
@@ -371,7 +371,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
                         /* The data format function */
                         var formatFn = defaultFormatFn;
                         /* The data value */
-                        var data = scope.$$getDataValue(row, col);
+                        var data = scope.$$getDataValue(scope.data, row, col);
                         /* The cell event callbacks */
                         var eventCallbacks = {};
                         /* The ranges which contains this cell */

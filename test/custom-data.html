@@ -20,8 +20,8 @@
                         $scope.data.push(rowContent);
                     }
 
-                    $scope.customDataFn = function(row, col) {
-                        return this.data[n - row - 1][n - col - 1];
+                    $scope.customDataFn = function(data, row, col) {
+                        return data[n - row - 1][n - col - 1];
                     }
 
                 });
