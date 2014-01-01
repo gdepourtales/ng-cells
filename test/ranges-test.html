@@ -1,23 +1,60 @@
 <!DOCTYPE html>
 <html ng-app="ngcTableDirectiveTest">
 <head>
-    <title>Ranges Test</title>
+    <title>Ranges and formats Test</title>
     <link href="../dist/ng-cells-0.1.1.css" rel="stylesheet" type="text/css">
-    <link href="test.css" rel="stylesheet" type="text/css">
 
     <script src="../lib/angular-1.2.6.js"></script>
     <script src="../dist/ng-cells-0.1.1.js"></script>
     <script src="test.js"></script>
 
     <style>
-        .cell.test-range1 {
-            background-color: red;
-            color: #ffffff;
+        * {
+            font-family: Helvetica, serif;
         }
 
+        table {
+            font-size: 10px;
+        }
+
+        .cell {
+            background-color: lightgrey;
+            border: 1px solid #ffffff;
+        }
+
+        .cell.center.first,
+        .cell.right.first {
+            border-left: 2px solid darkblue;
+        }
+
+        tr.header.last .cell,
+        tr.middle.last .cell {
+            border-bottom: 2px solid darkblue;
+        }
+
+         .cell.test-range1 {
+             background-color: red;
+             color: #ffffff;
+             text-align: center;
+         }
+
         .cell.test-range2 {
-            background-color: green;
+            background-color: #ffff00;
+            color: #000000;
+            text-align: center;
+        }
+
+         .cell.test-range3 {
+             background-color: green;
+             color: #ffffff;
+             text-align: center;
+
+         }
+
+        .cell.test-range4 {
+            background-color: blue;
             color: #ffffff;
+            text-align: center;
         }
 
     </style>
@@ -27,16 +64,18 @@
     <div ng-controller="TestCtrl">
         <ngc-table
                 data="data"
-                left-column-number="3" left-column-widths="'40px'"
-                center-column-number="20" center-column-widths="'40px'"
-                right-column-number="6" right-column-widths="['40px', '35px', '40px', '45px', '50px', '55px']"
-                header-row-number="2" header-row-heights="['30px', '15px']"
-                row-number='12' row-heights="['41px', '14px']"
-                footer-row-number="3" footer-row-heights="'24px'" show-footer="true">
+                left-column-number="5" left-column-widths="['40px']"
+                center-column-number="10" center-column-widths="'60px'"
+                right-column-number="5" right-column-widths="['60px', '60px', '60px', '45px', '50px', '55px']"
+                header-row-number="5" header-row-heights="['30px', '15px']"
+                row-number='10' row-heights="['14px']"
+                footer-row-number="5" footer-row-heights="'24px'" show-footer="true">
 
-            <ngc-range top="0" bottom="200" left="0" right="3" format-fn="cellFormatRH"></ngc-range>
-            <ngc-range top="4" bottom="10" left="10" right="100" format-fn="cellFormatFn1" class="'test-range1'"></ngc-range>
-            <ngc-range top="15" bottom="30" left="100" right="150" format-fn="cellFormatFn2" class="'test-range2'"></ngc-range>
+            <ngc-range top="0" bottom="1000" left="0" right="5" format-fn="cellFormatRH"></ngc-range>
+            <ngc-range top="3" bottom="8" left="3" right="998" format-fn="cellFormatFn1" clazz="'test-range1'"></ngc-range>
+            <ngc-range top="10" bottom="12" left="6" right="15" format-fn="cellFormatFn1" clazz="'test-range2'"></ngc-range>
+            <ngc-range top="13" bottom="30" left="3" right="998" format-fn="cellFormatFn2" clazz="'test-range3'"></ngc-range>
+            <ngc-range top="990" bottom="998" left="3" right="998" clazz="'test-range4'"></ngc-range>
 
         </ngc-table>
 
