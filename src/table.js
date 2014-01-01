@@ -404,6 +404,8 @@ angular.module('ngcTableDirective', ['ngc-template'])
                         });
 
                         return {
+                            row: row,
+                            col: col,
                             data: data,
                             value: formatFn(data, row, col),
                             clazz: clazz,
