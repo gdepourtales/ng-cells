@@ -566,8 +566,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
             restrict:'AE',
             replace:true,
             transclude:true,
-            template: $templateCache.get('table.tpl.html'),
-            /*template: $templateCache.get('table.tpl.html') ,*/
+            template: $templateCache.get('ngc.table.tpl.html'),
             compile: compile,
             controller:controllerDecl
         };
