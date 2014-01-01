@@ -132,8 +132,8 @@ angular.module('ngcTableDirective', ['ngc-template'])
                     /*
                     Register the data function
                      */
-                    if (angular.isFunction(scope['customDataFn'])) {
-                        scope.$$getDataValue = scope['customDataFn'];
+                    if (angular.isFunction(scope['customDataValueFn'])) {
+                        scope.$$getDataValue = scope['customDataValueFn'];
                     } else {
                         scope.$$getDataValue = function(row, col) {
                             return angular.isArray(this.data[row]) ? this.data[row][col] : undefined;
@@ -524,7 +524,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
         return {
             scope: {
                 /* Custom data function */
-                customDataFn:'=?',
+                customDataValueFn:'=?',
                 /* Data to display */
                 data:'=',
                 /* Flag to show/hide the column names. By default true */
