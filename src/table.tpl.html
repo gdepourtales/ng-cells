@@ -36,7 +36,7 @@
         </tr>
 
         <!-- Headers -->
-        <tr class="ngc row header"  ng-show="{{showHeader}}" ng-repeat="row in $$headerRows">
+        <tr class="ngc row header"  ng-show="{{showHeader}}" ng-repeat="row in $$headerRows" ng-class="{first: $first, last: $last}">
             <!-- Cells for row headers columns -->
             <td ng-repeat="column in $$leftRowHeadersColumns"
                  class="ngc row-header header cell {{$$topLeftRowHeadersData[$parent.$index][$index].clazz}} {{column.clazz}}"
@@ -57,6 +57,7 @@
                 ng-mousemove="$$dispatchEvent('mousemove', $event, $$topLeftData[$parent.$index][$index])"
                 ng-mouseover="$$dispatchEvent('mouseover', $event, $$topLeftData[$parent.$index][$index])"
                 ng-mouseup="$$dispatchEvent('mouseup', $event, $$topLeftData[$parent.$index][$index])"
+                ng-class="{first: $first, last: $last}"
                 class="ngc left header cell {{$$topLeftData[$parent.$index][$index].clazz}} {{column.clazz}}"
                 style="{{$$topLeftData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
                 <div class="ngc cell-content" style="{{row.height}}; {{column.style}}">{{$$topLeftData[$parent.$index][$index].value}}</div>
@@ -75,6 +76,7 @@
                 ng-mousemove="$$dispatchEvent('mousemove', $event, $$topCenterData[$parent.$index][$index])"
                 ng-mouseover="$$dispatchEvent('mouseover', $event, $$topCenterData[$parent.$index][$index])"
                 ng-mouseup="$$dispatchEvent('mouseup', $event, $$topCenterData[$parent.$index][$index])"
+                ng-class="{first: $first, last: $last}"
                 class="ngc center header cell {{$$topCenterData[$parent.$index][$index].clazz}} {{column.clazz}}"
                 style="{{$$topCenterData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
                 <div class="ngc cell-content" style="{{row.height}}; {{column.style}}">{{$$topCenterData[$parent.$index][$index].value}}</div>
@@ -93,6 +95,7 @@
                 ng-mousemove="$$dispatchEvent('mousemove', $event, $$topRightData[$parent.$index][$index])"
                 ng-mouseover="$$dispatchEvent('mouseover', $event, $$topRightData[$parent.$index][$index])"
                 ng-mouseup="$$dispatchEvent('mouseup', $event, $$topRightData[$parent.$index][$index])"
+                ng-class="{first: $first, last: $last}"
                 class="ngc right header cell {{$$topRightData[$parent.$index][$index].clazz}} {{column.clazz}}"
                 style="{{$$topRightData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
                 <div class="ngc cell-content" style="{{row.height}}; {{column.style}}">{{$$topRightData[$parent.$index][$index].value}}</div>
@@ -103,7 +106,7 @@
         </tr>
 
         <!-- Middle -->
-        <tr class="ngc row middle" ng-repeat="row in $$rows">
+        <tr class="ngc row middle" ng-repeat="row in $$rows" ng-class="{first: $first, last: $last}">
             <!-- Cells for row headers columns -->
             <td ng-repeat="column in $$leftRowHeadersColumns"
                 class="ngc row-header middle cell {{$$middleLeftRowHeadersData[$parent.$index][$index].clazz}} {{column.clazz}}"
@@ -124,6 +127,7 @@
                 ng-mousemove="$$dispatchEvent('mousemove', $event, $$middleLeftData[$parent.$index][$index])"
                 ng-mouseover="$$dispatchEvent('mouseover', $event, $$middleLeftData[$parent.$index][$index])"
                 ng-mouseup="$$dispatchEvent('mouseup', $event, $$middleLeftData[$parent.$index][$index])"
+                ng-class="{first: $first, last: $last}"
                 class="ngc left middle cell {{$$middleLeftData[$parent.$index][$index].clazz}} {{column.clazz}}"
                 style="{{$$middleLeftData[$parent.$index][$index].style}} ; {{row.height}}; {{column.style}}">
                 <div class="ngc cell-content" style="{{row.height}}; {{column.style}}">{{$$middleLeftData[$parent.$index][$index].value}}</div>
@@ -142,6 +146,7 @@
                 ng-mousemove="$$dispatchEvent('mousemove', $event, $$middleCenterData[$parent.$index][$index])"
                 ng-mouseover="$$dispatchEvent('mouseover', $event, $$middleCenterData[$parent.$index][$index])"
                 ng-mouseup="$$dispatchEvent('mouseup', $event, $$middleCenterData[$parent.$index][$index])"
+                ng-class="{first: $first, last: $last}"
                 class="ngc center cell middle {{$$middleCenterData[$parent.$index][$index].clazz}} {{column.clazz}}"
                 style="{{$$middleCenterData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
                 <div class="ngc cell-content" style="{{row.height}}; {{column.style}}">{{$$middleCenterData[$parent.$index][$index].value}}</div>
@@ -160,6 +165,7 @@
                 ng-mousemove="$$dispatchEvent('mousemove', $event, $$middleRightData[$parent.$index][$index])"
                 ng-mouseover="$$dispatchEvent('mouseover', $event, $$middleRightData[$parent.$index][$index])"
                 ng-mouseup="$$dispatchEvent('mouseup', $event, $$middleRightData[$parent.$index][$index])"
+                ng-class="{first: $first, last: $last}"
                 class="ngc right cell middle {{$$middleRightData[$parent.$index][$index].clazz}} {{column.clazz}}"
                 style="{{$$middleRightData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
                 <div class="ngc cell-content" style="{{row.height}}; {{column.style}}">{{$$middleRightData[$parent.$index][$index].value}}</div>
@@ -172,7 +178,7 @@
         </tr>
 
         <!-- Bottom -->
-        <tr class="ngc row footer" ng-repeat="row in $$footerRows">
+        <tr class="ngc row footer" ng-repeat="row in $$footerRows" ng-class="{first: $first, last: $last}">
             <!-- Cells for row headers columns -->
             <td ng-repeat="column in $$leftRowHeadersColumns"
                 class="ngc row-header footer cell {{$$bottomLeftRowHeadersData[$parent.$index][$index].clazz}} {{column.clazz}}"
@@ -193,6 +199,7 @@
                  ng-mousemove="$$dispatchEvent('mousemove', $event, $$bottomLeftData[$parent.$index][$index])"
                  ng-mouseover="$$dispatchEvent('mouseover', $event, $$bottomLeftData[$parent.$index][$index])"
                  ng-mouseup="$$dispatchEvent('mouseup', $event, $$bottomLeftData[$parent.$index][$index])"
+                 ng-class="{first: $first, last: $last}"
                  class="ngc left footer cell {{$$bottomLeftData[$parent.$index][$index].clazz}} {{column.clazz}}"
                  style="{{$$bottomLeftData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
                 <div class="ngc cell-content" style="{{row.height}}; {{column.style}}">{{$$bottomLeftData[$parent.$index][$index].value}}</div>
@@ -211,6 +218,7 @@
                 ng-mousemove="$$dispatchEvent('mousemove', $event, $$bottomCenterData[$parent.$index][$index])"
                 ng-mouseover="$$dispatchEvent('mouseover', $event, $$bottomCenterData[$parent.$index][$index])"
                 ng-mouseup="$$dispatchEvent('mouseup', $event, $$bottomCenterData[$parent.$index][$index])"
+                ng-class="{first: $first, last: $last}"
                 class="ngc center footer cell {{$$bottomCenterData[$parent.$index][$index].clazz}} {{column.clazz}}"
                 style="{{$$bottomCenterData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
                 <div class="ngc cell-content" style="{{row.height}}; {{column.style}}">{{$$bottomCenterData[$parent.$index][$index].value}}</div>
@@ -229,6 +237,7 @@
                 ng-mousemove="$$dispatchEvent('mousemove', $event, $$bottomRightData[$parent.$index][$index])"
                 ng-mouseover="$$dispatchEvent('mouseover', $event, $$bottomRightData[$parent.$index][$index])"
                 ng-mouseup="$$dispatchEvent('mouseup', $event, $$bottomRightData[$parent.$index][$index])"
+                ng-class="{first: $first, last: $last}"
                 class="ngc right footer cell {{$$bottomRightData[$parent.$index][$index].clazz}} {{column.clazz}}"
                 style="{{$$bottomRightData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
                 <div class="ngc cell-content" style="{{row.height}}; {{column.style}}">{{$$bottomRightData[$parent.$index][$index].value}}</div>
