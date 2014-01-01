@@ -290,6 +290,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
                      */
                     var nFooterRows = angular.isDefined(scope.footerRowNumber) ? scope.footerRowNumber : 1;
                     nFooterRows = scope.showFooter ? nFooterRows : 0;
+
                     for (i = 0; i < nFooterRows; i++) {
                         var footerRowDef = {
                             index: i,
@@ -300,7 +301,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
                 },
 
 
-                post: function postLink(scope, iElement /*, iAttrs, controller*/) {
+                post: function postLink(scope /*, iElement , iAttrs, controller*/) {
 
                     /**
                      * Returns a letter combination for an index
@@ -516,9 +517,6 @@ angular.module('ngcTableDirective', ['ngc-template'])
                     scope.$$setCenterColumnsData(scope.footerRowNumber, scope.$$bottomCenterData, footerStartRow);
                     scope.$$setLeftAndRightColumnsData(scope.footerRowNumber, scope.$$bottomLeftRowHeadersData, scope.$$bottomLeftData, scope.$$bottomRightData, footerStartRow);
 
-                    $timeout(function() {
-                        iElement.css('min-width', iElement[0].offsetWidth);
-                    });
                 }
             }
         }
@@ -706,9 +704,9 @@ angular.module('ngcTableDirective', ['ngc-template'])
                             if (e.currentTarget !== null && angular.element(e.target).hasClass("vertical")) {
                                 scrollRatio = e.target.scrollTop / (e.target.scrollHeight);
 
-                                scope.$$scrollPosition.top = Math.round(scrollRatio * (scope.data.length - scope.headerRowNumber - scope.footerRowNumber));
-                                scope.$$setCenterColumnsData(scope.rowNumber, scope.$$middleCenterData, scope.headerRowNumber + scope.$$scrollPosition.top);
-                                scope.$$setLeftAndRightColumnsData(scope.rowNumber, scope.$$middleLeftRowHeadersData, scope.$$middleLeftData, scope.$$middleRightData, scope.headerRowNumber + scope.$$scrollPosition.top);
+                                scope.$$scrollPosition.top = Math.round(scrollRatio * (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length));
+                                scope.$$setCenterColumnsData(scope.$$rows.length, scope.$$middleCenterData, scope.$$headerRows.length + scope.$$scrollPosition.top);
+                                scope.$$setLeftAndRightColumnsData(scope.$$rows.length, scope.$$middleLeftRowHeadersData, scope.$$middleLeftData, scope.$$middleRightData, scope.$$headerRows.length + scope.$$scrollPosition.top);
                             }
 
                             scope.$apply();
