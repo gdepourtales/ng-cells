@@ -504,18 +504,18 @@ angular.module('ngcTableDirective', ['ngc-template'])
                     };
 
                     /* Initialize the header parts */
-                    scope.$$setCenterColumnsData(scope.headerRowNumber, scope.$$topCenterData, 0);
-                    scope.$$setLeftAndRightColumnsData(scope.headerRowNumber, scope.$$topLeftRowHeadersData, scope.$$topLeftData, scope.$$topRightData, 0);
+                    scope.$$setCenterColumnsData(scope.$$headerRows.length, scope.$$topCenterData, 0);
+                    scope.$$setLeftAndRightColumnsData(scope.$$headerRows.length, scope.$$topLeftRowHeadersData, scope.$$topLeftData, scope.$$topRightData, 0);
 
                     /* Initiaize the variable middle parts */
-                    scope.$$setCenterColumnsData(scope.rowNumber, scope.$$middleCenterData, scope.headerRowNumber);
-                    scope.$$setLeftAndRightColumnsData(scope.rowNumber, scope.$$middleLeftRowHeadersData, scope.$$middleLeftData, scope.$$middleRightData, scope.headerRowNumber);
+                    scope.$$setCenterColumnsData(scope.$$rows.length, scope.$$middleCenterData, scope.$$headerRows.length);
+                    scope.$$setLeftAndRightColumnsData(scope.$$rows.length, scope.$$middleLeftRowHeadersData, scope.$$middleLeftData, scope.$$middleRightData, scope.$$headerRows.length);
 
                     /* Initialize the fixed footer parts */
                     /* The footer start row should be either the total data rows minus the footer height or the number of header rows + the number of rows */
-                    var footerStartRow = Math.max(scope.data.length - scope.footerRowNumber, scope.headerRowNumber + scope.rowNumber);
-                    scope.$$setCenterColumnsData(scope.footerRowNumber, scope.$$bottomCenterData, footerStartRow);
-                    scope.$$setLeftAndRightColumnsData(scope.footerRowNumber, scope.$$bottomLeftRowHeadersData, scope.$$bottomLeftData, scope.$$bottomRightData, footerStartRow);
+                    var footerStartRow = Math.max(scope.data.length - scope.$$footerRows.length, scope.$$headerRows.length + scope.$$rows.length);
+                    scope.$$setCenterColumnsData(scope.$$footerRows.length, scope.$$bottomCenterData, footerStartRow);
+                    scope.$$setLeftAndRightColumnsData(scope.$$footerRows.length, scope.$$bottomLeftRowHeadersData, scope.$$bottomLeftData, scope.$$bottomRightData, footerStartRow);
 
                 }
             }
@@ -694,10 +694,10 @@ angular.module('ngcTableDirective', ['ngc-template'])
                                 scrollRatio = e.target.scrollLeft / (e.target.scrollWidth);
                                 scope.$$scrollPosition.left = Math.round(scrollRatio * (scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length));
 
-                                var footerStartRow = Math.max(scope.data.length - scope.footerRowNumber, scope.headerRowNumber + scope.rowNumber);
-                                scope.$$setCenterColumnsData(scope.headerRowNumber, scope.$$topCenterData, 0);
-                                scope.$$setCenterColumnsData(scope.rowNumber, scope.$$middleCenterData, scope.headerRowNumber + scope.$$scrollPosition.top);
-                                scope.$$setCenterColumnsData(scope.footerRowNumber, scope.$$bottomCenterData, footerStartRow);
+                                var footerStartRow = Math.max(scope.data.length - scope.$$footerRows.length, scope.$$headerRows.length + scope.$$rows.length);
+                                scope.$$setCenterColumnsData(scope.$$headerRows.length, scope.$$topCenterData, 0);
+                                scope.$$setCenterColumnsData(scope.$$rows.length, scope.$$middleCenterData, scope.$$headerRows.length + scope.$$scrollPosition.top);
+                                scope.$$setCenterColumnsData(scope.$$footerRows.length, scope.$$bottomCenterData, footerStartRow);
 
                             } else
                             // Detect if vertical according to the class
