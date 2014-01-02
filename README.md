@@ -17,6 +17,7 @@ and integrated during the build process in the `ngc-template` module. The templa
 * No table redraw : Supports big data sets without impacting display speed
 * Scrolls on full rows and columns
 * Data ranges with custom CSS class, format and styling functions and event callbacks
+* Append custom sanitized or trusted HTML elements in cells (v0.2.0)
 * Table elements CSS classes for easy theming
 * No dependency except AngularJS
 
@@ -194,7 +195,15 @@ string values. If the value is a single string, the same width is applied to all
 * `format-fn` A custom format function. This can be used to customize the output format of the data value. The function
 must be of the form `function(value, row, col)` where `value` is the value of the source data at the position `[row][col]`
 * `clazz` Class(es) to add to the cells enclosed by the range
-* `style-fn` A custom style format function to be applied to the cells. Use it to apply sophisticated styling to the table. The function must be of the form `function(value, row, col)` where `value` is the value of the source data at the position `[row][col]`
+* `custom-html-fn` A custom function to insert custom HTML in the cells. The returned HTML is sanitized by AngularJS before
+being injected. Please use the `custom-trusted-html-fn` function if you want to bypass the sanitizer parser. The function
+must be of the form `function(value, row, col)` where `value` is the value of the source data at the position `[row][col]`
+The function must return a string containing the HTML
+* `custom-trusted-html-fn` A custom function to insert custom HTML in the cells. The returned HTML is not processed by the
+AngularJS sanitizer. For security reason, it is better to use the `custom-html-fn`. The function has the same form as
+`custom-html-fn`
+* `style-fn` A custom style format function to be applied to the cells. Use it to apply sophisticated styling to the table.
+The function must be of the form `function(value, row, col)` where `value` is the value of the source data at the position `[row][col]`
 * `<event>-fn` Custom event callbacks. The event can be any of `click`, `dblclick`, `mousedown`, `mouseenter`, `mouseleave`
 `mousemove`, `mouseover`, `mouseup` event types. The callback must be of the form `function(event, cellData)` where
 `event` is the initial Javascript event and the `cellData` an object with the following attributes :
