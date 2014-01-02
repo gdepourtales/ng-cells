@@ -48,5 +48,18 @@ angular.module('ngcTableDirectiveTest', ['ngcTableDirective'])
         $scope.customDataFn = function(data, row, col) {
             return data[1000 - row - 1][1000 - col - 1];
         }
+
+
+        /*
+        Works for v0.2.0
+         */
+
+        $scope.customTrustedHTMLFn = function(value, row, col) {
+            return '<input style="width:30px" type="text"  value="' + value + '">';
+        };
+
+        $scope.customHTMLFn = function(value, row, col) {
+            return '<input style="width:30px" type="text"  value="' + value + '"><span>Sanitized HTML</span>';
+        };
     });
 
