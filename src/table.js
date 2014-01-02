@@ -14,8 +14,8 @@
  limitations under the License.
  */
 
-angular.module('ngcTableDirective', ['ngc-template'])
-    .directive('ngcTable', ['$templateCache', '$timeout', function($templateCache, $timeout) {
+angular.module('ngcTableDirective', ['ngc-template', 'ngSanitize'])
+    .directive('ngcTable', ['$templateCache', '$sce', function($templateCache, $sce) {
 
 
         /**
@@ -332,6 +332,13 @@ angular.module('ngcTableDirective', ['ngc-template'])
                      */
                     function defaultFormatFn(data /*, row, col*/) {return angular.isDefined(data) ? data : '';}
 
+                    /**
+                     * Default html content function
+                     * @param data
+                     * @returns {*}
+                     */
+                    function defaultHtmlFn(data /*, row, col*/) {return angular.isDefined(data) ? String(data) : '';}
+
 
                     /**
                      * Event dispatcher function. Calls the registered event callback
@@ -356,6 +363,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
                     };
 
 
+
                     /**
                      * Return the cell data object given the row the column and the scope
                      * @param scope The scope
@@ -372,6 +380,11 @@ angular.module('ngcTableDirective', ['ngc-template'])
                         var formatFn = defaultFormatFn;
                         /* The data value */
                         var data = scope.$$getDataValue(scope.data, row, col);
+                        /* The custom append function */
+                        var customHtmlFn = defaultHtmlFn;
+                        /* The custom append function */
+                        var customTrustedHtmlFn = undefined;
+
                         /* The cell event callbacks */
                         var eventCallbacks = {};
                         /* The ranges which contains this cell */
@@ -395,6 +408,8 @@ angular.module('ngcTableDirective', ['ngc-template'])
                                 if (angular.isString(range.clazz)) clazz = range.clazz;
                                 /* Register the CSS style declaration */
                                 if (angular.isFunction(range.styleFn)) styleFn = range['styleFn'];
+                                if (angular.isFunction(range.customHtmlFn)) customHtmlFn = range['customHtmlFn'];
+                                if (angular.isFunction(range.customTrustedHtmlFn)) customTrustedHtmlFn = range['customTrustedHtmlFn'];
 
                                 /* Register available event callbacks */
                                 angular.forEach(events, function(event) {
@@ -411,7 +426,8 @@ angular.module('ngcTableDirective', ['ngc-template'])
                             clazz: clazz,
                             style: styleFn(data, row, col),
                             eventCallbacks: eventCallbacks,
-                            enclosingRanges: enclosingRanges
+                            enclosingRanges: enclosingRanges,
+                            customHTML:  (angular.isDefined(customTrustedHtmlFn)) ? $sce.trustAsHtml(customTrustedHtmlFn(data, row, col)) : customHtmlFn(data, row, col)
                         };
                     }
 
@@ -591,6 +607,10 @@ angular.module('ngcTableDirective', ['ngc-template'])
                 right: '=',
                 /* Format function for the cells enclosed in the range */
                 formatFn: '=?',
+                /* Function to insert custom sanitized HTML in the range */
+                customHtmlFn: '=?',
+                /* Function to insert custom trusted HTML in the range */
+                customTrustedHtmlFn: '=?',
                 /* CSS class to be added to the cells */
                 clazz: '=?',
                 /* CSS style additional declaration to be added to the cell */
@@ -631,6 +651,8 @@ angular.module('ngcTableDirective', ['ngc-template'])
                     formatFn: scope.formatFn,
                     clazz: scope.clazz,
                     styleFn: scope.styleFn,
+                    customHtmlFn: scope.customHtmlFn,
+                    customTrustedHtmlFn: scope.customTrustedHtmlFn,
                     click: scope.clickFn,
                     dblclick: scope.dblclickFn,
                     keydown: scope.keydownFn,

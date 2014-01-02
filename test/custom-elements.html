@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html ng-app="ngcTableDirectiveTest">
+<head>
+    <title>Custom elements Test</title>
+    <link href="../dist/ng-cells-0.2.0.css" rel="stylesheet" type="text/css">
+    <link href="test.css" rel="stylesheet" type="text/css">
+
+    <script src="../lib/angular-1.2.6.js"></script>
+    <script src="../lib/angular-sanitize-1.2.6.js"></script>
+    <script src="../dist/ng-cells-0.2.0.js"></script>
+    <script src="custom-elements.js"></script>
+
+    <style>
+        .ngc.table {
+            min-width: 1350px;
+        }
+        .cell {
+            text-align: center;
+            vertical-align: middle;
+        }
+    </style>
+
+</head>
+<body>
+    <div ng-controller="TestCtrl">
+        <ngc-table
+                data="data"
+                show-filter="false"
+                left-column-number="2" left-column-widths="'40px'"
+                center-column-number="10" center-column-widths="'44px'"
+                right-column-number="2" right-column-widths="'40px'"
+                header-row-number="3" header-row-heights="'20px'"
+                row-number="12" row-heights="'24px'"
+                footer-row-number="2" footer-row-heights="'20px'" show-footer="true">
+
+            <ngc-range top="0" bottom="10" left="0" right="6" format-fn="cellFormat" custom-trusted-html-fn="customTrustedHTMLFn"></ngc-range>
+            <ngc-range top="10" bottom="20" left="6" right="20" format-fn="cellFormat" custom-html-fn="customHTMLFn"></ngc-range>
+
+
+        </ngc-table>
+
+    </div>
+</body>
+</html>
