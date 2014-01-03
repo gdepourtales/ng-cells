@@ -1,51 +1,56 @@
-angular.module('ngc-template', ['table.tpl.html']);
+angular.module('ngc-template', ['ngc.table.tpl.html']);
 
-angular.module("table.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("table.tpl.html",
+angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("ngc.table.tpl.html",
     "<div class=\"ngc table\">\n" +
     "    <div ng-transclude style=\"display: hidden\"></div>\n" +
     "\n" +
     "    <table class=\"ngc\">\n" +
     "        <!-- Column Names -->\n" +
-    "        <tr class=\"ngc table_part column-names\" ng-show=\"{{showColumnNames}}\">\n" +
+    "        <tr class=\"ngc row column-names\" ng-show=\"{{showColumnNames}}\"  ng-class=\"{first: $first, last: $last}\">\n" +
     "            <!-- Cells for row headers columns -->\n" +
     "            <td ng-repeat=\"column in $$leftRowHeadersColumns\"\n" +
-    "                class=\"ngc cell {{column.clazz}}\"\n" +
+    "                ng-class=\"{first: $first, last: $last}\"\n" +
+    "                class=\"ngc row-header column-name cell {{column.clazz}}\"\n" +
     "                style=\"{{column.style}}\">\n" +
-    "                <div class=\"ngc row-header-content\"></div>\n" +
+    "                <div class=\"ngc cell-content\" style=\"{{column.style}}\"></div>\n" +
     "            </td>\n" +
     "\n" +
     "            <!-- Cells for left fixed columns -->\n" +
     "            <td ng-repeat=\"column in $$leftFixedColumns\"\n" +
-    "                class=\"{{$$leftColumnNames[$index].clazz}} ngc cell column-name {{column.clazz}}\"\n" +
+    "                ng-class=\"{first: $first, last: $last}\"\n" +
+    "                class=\"ngc left column-name cell {{$$leftColumnNames[$index].clazz}} {{column.clazz}}\"\n" +
     "                style=\"{{$$leftColumnNames[$index].style}}; {{column.style}}\">\n" +
-    "                <div class=\"ngc column-name-content\">{{$$leftColumnNames[$index].value}}</div>\n" +
+    "                <div class=\"ngc cell-content\" style=\"{{column.style}}\">{{$$leftColumnNames[$index].value}}</div>\n" +
     "            </td>\n" +
     "\n" +
     "            <!-- Cells for middle variable columns -->\n" +
     "            <td ng-repeat=\"column in $$variableCenterColumns\"\n" +
-    "                class=\"{{$$centerColumnNames[$index].clazz}} ngc cell column {{column.clazz}}\"\n" +
+    "                ng-class=\"{first: $first, last: $last}\"\n" +
+    "                class=\"ngc center column-name cell {{$$centerColumnNames[$index].clazz}} {{column.clazz}}\"\n" +
     "                style=\"{{$$centerColumnNames[$index].style}}; {{column.style}}\">\n" +
-    "                <div class=\"ngc column-name-content\">{{$$centerColumnNames[$index].value}}</div>\n" +
+    "                <div class=\"ngc cell-content\" style=\"{{column.style}}\">{{$$centerColumnNames[$index].value}}</div>\n" +
     "            </td>\n" +
     "\n" +
     "            <!-- Cells for right fixed columns -->\n" +
     "            <td ng-repeat=\"column in $$rightFixedColumns\"\n" +
-    "                class=\"{{$$rightColumnNames[$index].clazz}} ngc cell column {{column.clazz}}\"\n" +
+    "                ng-class=\"{first: $first, last: $last}\"\n" +
+    "                class=\"ngc right column-name cell {{$$rightColumnNames[$index].clazz}} {{column.clazz}}\"\n" +
     "                style=\"{{$$rightColumnNames[$index].style}}; {{column.style}}\">\n" +
-    "                <div class=\"ngc column-name-content\">{{$$rightColumnNames[$index].value}}</div>\n" +
+    "                <div class=\"ngc cell-content\" style=\"{{column.style}}\">{{$$rightColumnNames[$index].value}}</div>\n" +
     "            </td>\n" +
     "            <!-- Placeholder for vertical scroll -->\n" +
     "            <td></td>\n" +
     "        </tr>\n" +
     "\n" +
     "        <!-- Headers -->\n" +
-    "        <tr class=\"ngc row header\"  ng-show=\"{{showHeader}}\" ng-repeat=\"row in $$headerRows\">\n" +
+    "        <tr class=\"ngc row header\"  ng-show=\"{{showHeader}}\" ng-repeat=\"row in $$headerRows\" ng-class=\"{first: $first, last: $last}\">\n" +
     "            <!-- Cells for row headers columns -->\n" +
     "            <td ng-repeat=\"column in $$leftRowHeadersColumns\"\n" +
-    "                 class=\"{{$$topLeftRowHeadersData[$parent.$index][$index].clazz}} ngc cell header {{column.clazz}}\"\n" +
+    "                ng-class=\"{first: $first, last: $last}\"\n" +
+    "                 class=\"ngc row-header header cell {{$$topLeftRowHeadersData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
     "                 style=\"{{$$topLeftRowHeadersData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
-    "                <div class=\"ngc row-header-content\">{{$$topLeftRowHeadersData[$parent.$index][$index].value}}</div>\n" +
+    "                <div class=\"ngc cell-content\" style=\"{{row.height}}; {{column.style}}\">{{$$topLeftRowHeadersData[$parent.$index][$index].value}}</div>\n" +
     "            </td>\n" +
     "\n" +
     "            <!-- Cells for left fixed columns -->\n" +
@@ -61,9 +66,10 @@ angular.module("table.tpl.html", []).run(["$templateCache", function($templateCa
     "                ng-mousemove=\"$$dispatchEvent('mousemove', $event, $$topLeftData[$parent.$index][$index])\"\n" +
     "                ng-mouseover=\"$$dispatchEvent('mouseover', $event, $$topLeftData[$parent.$index][$index])\"\n" +
     "                ng-mouseup=\"$$dispatchEvent('mouseup', $event, $$topLeftData[$parent.$index][$index])\"\n" +
-    "                class=\"{{$$topLeftData[$parent.$index][$index].clazz}} ngc cell header {{column.clazz}}\"\n" +
+    "                ng-class=\"{first: $first, last: $last}\"\n" +
+    "                class=\"ngc left header cell {{$$topLeftData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
     "                style=\"{{$$topLeftData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
-    "                <div class=\"ngc cell-content\">{{$$topLeftData[$parent.$index][$index].value}}</div>\n" +
+    "                <div class=\"ngc cell-content\" style=\"{{row.height}}; {{column.style}}\">{{$$topLeftData[$parent.$index][$index].value}}</div>\n" +
     "            </td>\n" +
     "\n" +
     "            <!-- Cells for middle variable columns -->\n" +
@@ -79,9 +85,10 @@ angular.module("table.tpl.html", []).run(["$templateCache", function($templateCa
     "                ng-mousemove=\"$$dispatchEvent('mousemove', $event, $$topCenterData[$parent.$index][$index])\"\n" +
     "                ng-mouseover=\"$$dispatchEvent('mouseover', $event, $$topCenterData[$parent.$index][$index])\"\n" +
     "                ng-mouseup=\"$$dispatchEvent('mouseup', $event, $$topCenterData[$parent.$index][$index])\"\n" +
-    "                class=\"{{$$topCenterData[$parent.$index][$index].clazz}} ngc cell header {{column.clazz}}\"\n" +
+    "                ng-class=\"{first: $first, last: $last}\"\n" +
+    "                class=\"ngc center header cell {{$$topCenterData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
     "                style=\"{{$$topCenterData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
-    "                <div class=\"ngc cell-content\">{{$$topCenterData[$parent.$index][$index].value}}</div>\n" +
+    "                <div class=\"ngc cell-content\" style=\"{{row.height}}; {{column.style}}\">{{$$topCenterData[$parent.$index][$index].value}}</div>\n" +
     "            </td>\n" +
     "\n" +
     "            <!-- Cells for right fixed columns -->\n" +
@@ -97,9 +104,10 @@ angular.module("table.tpl.html", []).run(["$templateCache", function($templateCa
     "                ng-mousemove=\"$$dispatchEvent('mousemove', $event, $$topRightData[$parent.$index][$index])\"\n" +
     "                ng-mouseover=\"$$dispatchEvent('mouseover', $event, $$topRightData[$parent.$index][$index])\"\n" +
     "                ng-mouseup=\"$$dispatchEvent('mouseup', $event, $$topRightData[$parent.$index][$index])\"\n" +
-    "                class=\"{{$$topRightData[$parent.$index][$index].clazz}} ngc cell header {{column.clazz}}\"\n" +
+    "                ng-class=\"{first: $first, last: $last}\"\n" +
+    "                class=\"ngc right header cell {{$$topRightData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
     "                style=\"{{$$topRightData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
-    "                <div class=\"ngc cell-content\">{{$$topRightData[$parent.$index][$index].value}}</div>\n" +
+    "                <div class=\"ngc cell-content\" style=\"{{row.height}}; {{column.style}}\">{{$$topRightData[$parent.$index][$index].value}}</div>\n" +
     "            </td>\n" +
     "\n" +
     "            <!-- Placeholder for vertical scroll -->\n" +
@@ -107,12 +115,13 @@ angular.module("table.tpl.html", []).run(["$templateCache", function($templateCa
     "        </tr>\n" +
     "\n" +
     "        <!-- Middle -->\n" +
-    "        <tr class=\"ngc row data\" ng-repeat=\"row in $$rows\">\n" +
+    "        <tr class=\"ngc row middle\" ng-repeat=\"row in $$rows\" ng-class=\"{first: $first, last: $last}\">\n" +
     "            <!-- Cells for row headers columns -->\n" +
     "            <td ng-repeat=\"column in $$leftRowHeadersColumns\"\n" +
-    "                class=\"{{$$middleLeftRowHeadersData[$parent.$index][$index].clazz}} ngc cell header {{column.clazz}}\"\n" +
+    "                ng-class=\"{first: $first, last: $last}\"\n" +
+    "                class=\"ngc row-header middle cell {{$$middleLeftRowHeadersData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
     "                style=\"{{$$middleLeftRowHeadersData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
-    "                <div class=\"ngc row-header-content\">{{$$middleLeftRowHeadersData[$parent.$index][$index].value}}</div>\n" +
+    "                <div class=\"ngc cell-content\" style=\"{{row.height}}; {{column.style}}\">{{$$middleLeftRowHeadersData[$parent.$index][$index].value}}</div>\n" +
     "            </td>\n" +
     "\n" +
     "            <!-- Cells for left fixed columns -->\n" +
@@ -128,9 +137,10 @@ angular.module("table.tpl.html", []).run(["$templateCache", function($templateCa
     "                ng-mousemove=\"$$dispatchEvent('mousemove', $event, $$middleLeftData[$parent.$index][$index])\"\n" +
     "                ng-mouseover=\"$$dispatchEvent('mouseover', $event, $$middleLeftData[$parent.$index][$index])\"\n" +
     "                ng-mouseup=\"$$dispatchEvent('mouseup', $event, $$middleLeftData[$parent.$index][$index])\"\n" +
-    "                class=\"{{$$middleLeftData[$parent.$index][$index].clazz}} ngc cell data {{column.clazz}}\"\n" +
+    "                ng-class=\"{first: $first, last: $last}\"\n" +
+    "                class=\"ngc left middle cell {{$$middleLeftData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
     "                style=\"{{$$middleLeftData[$parent.$index][$index].style}} ; {{row.height}}; {{column.style}}\">\n" +
-    "                <div class=\"ngc cell-content\">{{$$middleLeftData[$parent.$index][$index].value}}</div>\n" +
+    "                <div class=\"ngc cell-content\" style=\"{{row.height}}; {{column.style}}\">{{$$middleLeftData[$parent.$index][$index].value}}</div>\n" +
     "            </td>\n" +
     "\n" +
     "            <!-- Cells for middle variable columns -->\n" +
@@ -146,9 +156,10 @@ angular.module("table.tpl.html", []).run(["$templateCache", function($templateCa
     "                ng-mousemove=\"$$dispatchEvent('mousemove', $event, $$middleCenterData[$parent.$index][$index])\"\n" +
     "                ng-mouseover=\"$$dispatchEvent('mouseover', $event, $$middleCenterData[$parent.$index][$index])\"\n" +
     "                ng-mouseup=\"$$dispatchEvent('mouseup', $event, $$middleCenterData[$parent.$index][$index])\"\n" +
-    "                class=\"{{$$middleCenterData[$parent.$index][$index].clazz}} ngc cell data {{column.clazz}}\"\n" +
+    "                ng-class=\"{first: $first, last: $last}\"\n" +
+    "                class=\"ngc center cell middle {{$$middleCenterData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
     "                style=\"{{$$middleCenterData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
-    "                <div class=\"ngc cell-content\">{{$$middleCenterData[$parent.$index][$index].value}}</div>\n" +
+    "                <div class=\"ngc cell-content\" style=\"{{row.height}}; {{column.style}}\">{{$$middleCenterData[$parent.$index][$index].value}}</div>\n" +
     "            </td>\n" +
     "\n" +
     "            <!-- Cells for right fixed columns -->\n" +
@@ -164,24 +175,26 @@ angular.module("table.tpl.html", []).run(["$templateCache", function($templateCa
     "                ng-mousemove=\"$$dispatchEvent('mousemove', $event, $$middleRightData[$parent.$index][$index])\"\n" +
     "                ng-mouseover=\"$$dispatchEvent('mouseover', $event, $$middleRightData[$parent.$index][$index])\"\n" +
     "                ng-mouseup=\"$$dispatchEvent('mouseup', $event, $$middleRightData[$parent.$index][$index])\"\n" +
-    "                class=\"{{$$middleRightData[$parent.$index][$index].clazz}} ngc cell data {{column.clazz}}\"\n" +
+    "                ng-class=\"{first: $first, last: $last}\"\n" +
+    "                class=\"ngc right cell middle {{$$middleRightData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
     "                style=\"{{$$middleRightData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
-    "                <div class=\"ngc cell-content\">{{$$middleRightData[$parent.$index][$index].value}}</div>\n" +
+    "                <div class=\"ngc cell-content\" style=\"{{row.height}}; {{column.style}}\">{{$$middleRightData[$parent.$index][$index].value}}</div>\n" +
     "            </td>\n" +
-    "            <td ng-if=\"$first\" rowspan=\"{{$$rows.length}}\">\n" +
-    "                <div class=\"ngc columns middle scroll-wrapper vertical\">\n" +
+    "            <td class=\"ngc scroll-wrapper-cell\" ng-if=\"$first\" rowspan=\"{{$$rows.length}}\">\n" +
+    "                <div class=\"ngc scroll-wrapper vertical\">\n" +
     "                    <div ngc-scrollbar vertical></div>\n" +
     "                </div>\n" +
     "            </td>\n" +
     "        </tr>\n" +
     "\n" +
     "        <!-- Bottom -->\n" +
-    "        <tr class=\"ngc row footer\" ng-repeat=\"row in $$footerRows\">\n" +
+    "        <tr class=\"ngc row footer\" ng-repeat=\"row in $$footerRows\" ng-class=\"{first: $first, last: $last}\">\n" +
     "            <!-- Cells for row headers columns -->\n" +
     "            <td ng-repeat=\"column in $$leftRowHeadersColumns\"\n" +
-    "                class=\"{{$$bottomLeftRowHeadersData[$parent.$index][$index].clazz}} ngc cell header {{column.clazz}}\"\n" +
+    "                ng-class=\"{first: $first, last: $last}\"\n" +
+    "                class=\"ngc row-header footer cell {{$$bottomLeftRowHeadersData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
     "                style=\"{{$$bottomLeftRowHeadersData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
-    "                <div class=\"ngc row-header-content\">{{$$bottomLeftRowHeadersData[$parent.$index][$index].value}}</div>\n" +
+    "                <div class=\"ngc cell-content\" style=\"{{row.height}}; {{column.style}}\">{{$$bottomLeftRowHeadersData[$parent.$index][$index].value}}</div>\n" +
     "            </td>\n" +
     "\n" +
     "            <!-- Cells for left fixed columns -->\n" +
@@ -197,9 +210,10 @@ angular.module("table.tpl.html", []).run(["$templateCache", function($templateCa
     "                 ng-mousemove=\"$$dispatchEvent('mousemove', $event, $$bottomLeftData[$parent.$index][$index])\"\n" +
     "                 ng-mouseover=\"$$dispatchEvent('mouseover', $event, $$bottomLeftData[$parent.$index][$index])\"\n" +
     "                 ng-mouseup=\"$$dispatchEvent('mouseup', $event, $$bottomLeftData[$parent.$index][$index])\"\n" +
-    "                 class=\"{{$$bottomLeftData[$parent.$index][$index].clazz}} ngc cell footer {{column.clazz}}\"\n" +
+    "                 ng-class=\"{first: $first, last: $last}\"\n" +
+    "                 class=\"ngc left footer cell {{$$bottomLeftData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
     "                 style=\"{{$$bottomLeftData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
-    "                <div class=\"ngc cell-content\">{{$$bottomLeftData[$parent.$index][$index].value}}</div>\n" +
+    "                <div class=\"ngc cell-content\" style=\"{{row.height}}; {{column.style}}\">{{$$bottomLeftData[$parent.$index][$index].value}}</div>\n" +
     "            </td>\n" +
     "\n" +
     "            <!-- Cells for middle variable columns -->\n" +
@@ -215,9 +229,10 @@ angular.module("table.tpl.html", []).run(["$templateCache", function($templateCa
     "                ng-mousemove=\"$$dispatchEvent('mousemove', $event, $$bottomCenterData[$parent.$index][$index])\"\n" +
     "                ng-mouseover=\"$$dispatchEvent('mouseover', $event, $$bottomCenterData[$parent.$index][$index])\"\n" +
     "                ng-mouseup=\"$$dispatchEvent('mouseup', $event, $$bottomCenterData[$parent.$index][$index])\"\n" +
-    "                class=\"{{$$bottomCenterData[$parent.$index][$index].clazz}} ngc cell footer {{column.clazz}}\"\n" +
+    "                ng-class=\"{first: $first, last: $last}\"\n" +
+    "                class=\"ngc center footer cell {{$$bottomCenterData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
     "                style=\"{{$$bottomCenterData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
-    "                <div class=\"ngc cell-content\">{{$$bottomCenterData[$parent.$index][$index].value}}</div>\n" +
+    "                <div class=\"ngc cell-content\" style=\"{{row.height}}; {{column.style}}\">{{$$bottomCenterData[$parent.$index][$index].value}}</div>\n" +
     "            </td>\n" +
     "\n" +
     "            <!-- Cells for right fixed columns -->\n" +
@@ -233,9 +248,10 @@ angular.module("table.tpl.html", []).run(["$templateCache", function($templateCa
     "                ng-mousemove=\"$$dispatchEvent('mousemove', $event, $$bottomRightData[$parent.$index][$index])\"\n" +
     "                ng-mouseover=\"$$dispatchEvent('mouseover', $event, $$bottomRightData[$parent.$index][$index])\"\n" +
     "                ng-mouseup=\"$$dispatchEvent('mouseup', $event, $$bottomRightData[$parent.$index][$index])\"\n" +
-    "                class=\"{{$$bottomRightData[$parent.$index][$index].clazz}} ngc cell footer {{column.clazz}}\"\n" +
+    "                ng-class=\"{first: $first, last: $last}\"\n" +
+    "                class=\"ngc right footer cell {{$$bottomRightData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
     "                style=\"{{$$bottomRightData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
-    "                <div class=\"ngc cell-content\">{{$$bottomRightData[$parent.$index][$index].value}}</div>\n" +
+    "                <div class=\"ngc cell-content\" style=\"{{row.height}}; {{column.style}}\">{{$$bottomRightData[$parent.$index][$index].value}}</div>\n" +
     "            </td>\n" +
     "\n" +
     "            <!-- Placeholder for vertical scroll -->\n" +
@@ -243,30 +259,30 @@ angular.module("table.tpl.html", []).run(["$templateCache", function($templateCa
     "        </tr>\n" +
     "\n" +
     "        <!-- Horizontal scroll -->\n" +
-    "        <tr class=\"ngc row\">\n" +
+    "        <tr class=\"ngc row scrollbar\">\n" +
     "            <!-- Cells for row headers columns -->\n" +
     "            <td ng-repeat=\"column in $$leftRowHeadersColumns\"\n" +
-    "                class=\"ngc cell {{column.clazz}}\"\n" +
+    "                class=\"ngc hscrollbar cell {{column.clazz}}\"\n" +
     "                style=\"{{column.style}}\">\n" +
-    "                <div class=\"ngc row-header-content\"></div>\n" +
+    "                <!--<div class=\"ngc row-header-content\"></div>-->\n" +
     "            </td>\n" +
     "            <!-- Cells for left fixed columns -->\n" +
-    "            <td ng-repeat=\"column in $$leftFixedColumns\" class=\"ngc cell {{column.clazz}}\" style=\"{{column.style}}\">\n" +
-    "                <div class=\"ngc bottom-content\"></div>\n" +
+    "            <td ng-repeat=\"column in $$leftFixedColumns\" class=\"ngc scrollbar cell {{column.clazz}}\" style=\"{{column.style}}\">\n" +
+    "                <!--<div class=\"ngc cell-content\"></div>-->\n" +
     "            </td>\n" +
     "\n" +
     "            <!-- Cells for middle variable columns -->\n" +
-    "            <td colspan=\"{{$$variableCenterColumns.length}}\">\n" +
-    "                <div class=\"ngc columns center scroll-wrapper horizontal {{column.clazz}}\" >\n" +
+    "            <td class=\"ngc scroll-wrapper-cell\" colspan=\"{{$$variableCenterColumns.length}}\">\n" +
+    "                <div class=\"ngc scroll-wrapper horizontal {{column.clazz}}\" >\n" +
     "                    <div ngc-scrollbar horizontal></div>\n" +
     "                </div>\n" +
     "            </td>\n" +
     "\n" +
     "            <!-- Cells for right fixed columns -->\n" +
     "            <td ng-repeat=\"column in $$rightFixedColumns\"\n" +
-    "                class=\"{{$$middleRightData[$parent.$index][$index].clazz}} ngc cell {{column.clazz}}\"\n" +
+    "                class=\"ngc scrollbar cell {{$$middleRightData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
     "                style=\"{{column.style}}\">\n" +
-    "                <div class=\"ngc bottom-content\"></div>\n" +
+    "                <!--<div class=\"ngc cell-content\"></div>-->\n" +
     "            </td>\n" +
     "\n" +
     "            <!-- Placeholder for vertical scroll -->\n" +
@@ -341,7 +357,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
                         if (angular.isNumber(n)) {
                             for (var i = 0; i < n; i++) {
                                 array.push({
-                                    style: $$getStyleDecl('width', widths, i)
+                                    style: $$getStyleDecl('width', widths, i) + ';' + $$getStyleDecl('max-width', widths, i)
                                 });
                             }
                         }
@@ -358,21 +374,21 @@ angular.module('ngcTableDirective', ['ngc-template'])
                      */
                     scope.$$leftFixedColumns = [];
                     /* Create the columns based on directive parameters */
-                    $$createColumns(scope.leftColumnNumber, scope.$$leftFixedColumns, scope.leftColumnWidths);
+                    $$createColumns(scope.leftColumnNumber || 1, scope.$$leftFixedColumns, scope.leftColumnWidths);
                     /**
                      * Variable center column definitions
                      * @type {Array}
                      */
                     scope.$$variableCenterColumns = [];
                     /* Create the columns based on directive parameters */
-                    $$createColumns(scope.centerColumnNumber, scope.$$variableCenterColumns, scope.centerColumnWidths);
+                    $$createColumns(scope.centerColumnNumber || 10, scope.$$variableCenterColumns, scope.centerColumnWidths);
                     /**
                      * Right fixed columns definitions
                      * @type {Array}
                      */
                     scope.$$rightFixedColumns = [];
                     /* Create the columns based on directive parameters */
-                    $$createColumns(scope.rightColumnNumber, scope.$$rightFixedColumns, scope.rightColumnWidths);
+                    $$createColumns(scope.rightColumnNumber || 1, scope.$$rightFixedColumns, scope.rightColumnWidths);
 
                     /* Headers and tools */
                     /**
@@ -411,11 +427,11 @@ angular.module('ngcTableDirective', ['ngc-template'])
                     /*
                     Register the data function
                      */
-                    if (angular.isFunction(scope['dataFn'])) {
-                        scope.$$getDataValue = scope['dataFn'];
+                    if (angular.isFunction(scope['customDataValueFn'])) {
+                        scope.$$getDataValue = scope['customDataValueFn'];
                     } else {
-                        scope.$$getDataValue = function(row, col) {
-                            return angular.isArray(this.data[row]) ? this.data[row][col] : undefined;
+                        scope.$$getDataValue = function(data, row, col) {
+                            return angular.isArray(data[row]) ? data[row][col] : undefined;
                         };
                     }
 
@@ -518,10 +534,12 @@ angular.module('ngcTableDirective', ['ngc-template'])
                     Initialize the headers rows. By default one is added if no parameter is given
                      */
                     var nHeaderRows = angular.isNumber(scope.headerRowNumber) ? scope.headerRowNumber : 1;
+                    nHeaderRows = scope.showHeader ? nHeaderRows : 0;
+
                     for (i = 0; i < nHeaderRows; i++) {
                         var headerRowDef = {
                             index: i,
-                            height: $$getStyleDecl('height', scope.headerRowHeights, i)
+                            height: $$getStyleDecl('height', scope.headerRowHeights, i) + ';' + $$getStyleDecl('max-height', scope.headerRowHeights, i)
                         };
                         scope.$$headerRows.push(headerRowDef);
                     }
@@ -542,11 +560,11 @@ angular.module('ngcTableDirective', ['ngc-template'])
                     /*
                      Initialize the rows. By default 10 are added if no parameter is given
                      */
-                    var nRows = angular.isDefined(scope.rowNumber) ? scope.rowNumber : 10;
+                    var nRows = angular.isNumber(scope.rowNumber) ? scope.rowNumber : 10;
                     for (i = 0; i < nRows; i++) {
                         var rowDef = {
                             index: i,
-                            height: $$getStyleDecl('height', scope.rowHeights, i)
+                            height: $$getStyleDecl('height', scope.rowHeights, i) + ';' + $$getStyleDecl('max-height', scope.rowHeights, i)
                         };
                         scope.$$rows.push(rowDef);
                     }
@@ -565,18 +583,20 @@ angular.module('ngcTableDirective', ['ngc-template'])
                     /*
                      Initialize the footer rows. By default 1 is added if no parameter is given
                      */
-                    var nFooterRows = angular.isDefined(scope.footerRowNumber) ? scope.footerRowNumber : 1;
+                    var nFooterRows = angular.isNumber(scope.footerRowNumber) ? scope.footerRowNumber : 1;
+                    nFooterRows = scope.showFooter ? nFooterRows : 0;
+
                     for (i = 0; i < nFooterRows; i++) {
                         var footerRowDef = {
                             index: i,
-                            height: $$getStyleDecl('height', scope.footerRowHeights, i)
+                            height: $$getStyleDecl('height', scope.footerRowHeights, i) + ';' + $$getStyleDecl('max-height', scope.footerRowHeights, i)
                         };
                         scope.$$footerRows.push(footerRowDef);
                     }
                 },
 
 
-                post: function postLink(scope, iElement /*, iAttrs, controller*/) {
+                post: function postLink(scope /*, iElement , iAttrs, controller*/) {
 
                     /**
                      * Returns a letter combination for an index
@@ -598,14 +618,14 @@ angular.module('ngcTableDirective', ['ngc-template'])
                      * Default style function for the cells. Returns an empty string
                      * @returns {string}
                      */
-                    function defaultStyleFn() {return '';}
+                    function defaultStyleFn(/*data, row, col*/) {return '';}
 
                     /**
                      * Default format function for the cells content. Returns the raw data
                      * @param data
                      * @returns {*}
                      */
-                    function defaultFormatFn(data) {return angular.isDefined(data) ? data : '';}
+                    function defaultFormatFn(data /*, row, col*/) {return angular.isDefined(data) ? data : '';}
 
 
                     /**
@@ -646,7 +666,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
                         /* The data format function */
                         var formatFn = defaultFormatFn;
                         /* The data value */
-                        var data = scope.$$getDataValue(row, col);
+                        var data = scope.$$getDataValue(scope.data, row, col);
                         /* The cell event callbacks */
                         var eventCallbacks = {};
                         /* The ranges which contains this cell */
@@ -669,7 +689,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
                                 /* Register the CSS class */
                                 if (angular.isString(range.clazz)) clazz = range.clazz;
                                 /* Register the CSS style declaration */
-                                if (angular.isString(range.styleFn)) styleFn = range['styleFn'];
+                                if (angular.isFunction(range.styleFn)) styleFn = range['styleFn'];
 
                                 /* Register available event callbacks */
                                 angular.forEach(events, function(event) {
@@ -679,13 +699,15 @@ angular.module('ngcTableDirective', ['ngc-template'])
                         });
 
                         return {
+                            row: row,
+                            col: col,
                             data: data,
                             value: formatFn(data, row, col),
                             clazz: clazz,
                             style: styleFn(data, row, col),
                             eventCallbacks: eventCallbacks,
                             enclosingRanges: enclosingRanges
-                        }
+                        };
                     }
 
                     /**
@@ -779,28 +801,27 @@ angular.module('ngcTableDirective', ['ngc-template'])
                     };
 
                     /* Initialize the header parts */
-                    scope.$$setCenterColumnsData(scope.headerRowNumber, scope.$$topCenterData, 0);
-                    scope.$$setLeftAndRightColumnsData(scope.headerRowNumber, scope.$$topLeftRowHeadersData, scope.$$topLeftData, scope.$$topRightData, 0);
+                    scope.$$setCenterColumnsData(scope.$$headerRows.length, scope.$$topCenterData, 0);
+                    scope.$$setLeftAndRightColumnsData(scope.$$headerRows.length, scope.$$topLeftRowHeadersData, scope.$$topLeftData, scope.$$topRightData, 0);
 
                     /* Initiaize the variable middle parts */
-                    scope.$$setCenterColumnsData(scope.rowNumber, scope.$$middleCenterData, scope.headerRowNumber);
-                    scope.$$setLeftAndRightColumnsData(scope.rowNumber, scope.$$middleLeftRowHeadersData, scope.$$middleLeftData, scope.$$middleRightData, scope.headerRowNumber);
+                    scope.$$setCenterColumnsData(scope.$$rows.length, scope.$$middleCenterData, scope.$$headerRows.length);
+                    scope.$$setLeftAndRightColumnsData(scope.$$rows.length, scope.$$middleLeftRowHeadersData, scope.$$middleLeftData, scope.$$middleRightData, scope.$$headerRows.length);
 
                     /* Initialize the fixed footer parts */
                     /* The footer start row should be either the total data rows minus the footer height or the number of header rows + the number of rows */
-                    var footerStartRow = Math.max(scope.data.length - scope.footerRowNumber, scope.headerRowNumber + scope.rowNumber);
-                    scope.$$setCenterColumnsData(scope.footerRowNumber, scope.$$bottomCenterData, footerStartRow);
-                    scope.$$setLeftAndRightColumnsData(scope.footerRowNumber, scope.$$bottomLeftRowHeadersData, scope.$$bottomLeftData, scope.$$bottomRightData, footerStartRow);
+                    var footerStartRow = Math.max(scope.data.length - scope.$$footerRows.length, scope.$$headerRows.length + scope.$$rows.length);
+                    scope.$$setCenterColumnsData(scope.$$footerRows.length, scope.$$bottomCenterData, footerStartRow);
+                    scope.$$setLeftAndRightColumnsData(scope.$$footerRows.length, scope.$$bottomLeftRowHeadersData, scope.$$bottomLeftData, scope.$$bottomRightData, footerStartRow);
 
-                    $timeout(function() {
-                        iElement.css('min-width', iElement[0].offsetWidth);
-                    });
                 }
             }
         }
 
         return {
             scope: {
+                /* Custom data function */
+                customDataValueFn:'=?',
                 /* Data to display */
                 data:'=',
                 /* Flag to show/hide the column names. By default true */
@@ -816,15 +837,15 @@ angular.module('ngcTableDirective', ['ngc-template'])
 
                 /* Number of left fixed columns. By default 1 */
                 leftColumnNumber: '=?',
-                /* Widths of the fixed left columns. No default (min-width:10px) */
+                /* Widths of the fixed left columns. */
                 leftColumnWidths: '=?',
                 /* Number of center variable columns. By default 10 */
                 centerColumnNumber: '=',
-                /* Widths of the center variable columns. No default (min-width:10px) */
+                /* Widths of the center variable columns. */
                 centerColumnWidths: '=?',
                 /* Number of right fixed columns. By default 1 */
                 rightColumnNumber: '=?',
-                /* Widths of the fixed right columns. No default (min-width:10px) */
+                /* Widths of the fixed right columns. */
                 rightColumnWidths: '=?',
 
                 /* Number of rows in the header. By default 1 */
@@ -832,7 +853,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
                 /* Heights of the header rows (array or single value). No default (min-height:10px) */
                 headerRowHeights:"=?",
                 /* Number of rows in the middle. By default 10 */
-                rowNumber:"=",
+                rowNumber:"=?",
                 /* Heights of the middle rows (array or single value). No default (min-height:10px) */
                 rowHeights:"=?",
                 /* Number of rows in the footer. By default 1 */
@@ -844,8 +865,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
             restrict:'AE',
             replace:true,
             transclude:true,
-            template: $templateCache.get('table.tpl.html'),
-            /*template: $templateCache.get('table.tpl.html') ,*/
+            template: $templateCache.get('ngc.table.tpl.html'),
             compile: compile,
             controller:controllerDecl
         };
@@ -857,13 +877,13 @@ angular.module('ngcTableDirective', ['ngc-template'])
             restrict:'AE',
             scope:{
                 /* Top position of the range in data space */
-                top: '=?',
+                top: '=',
                 /* Bottom position of the range in data space */
-                bottom: '=?',
+                bottom: '=',
                 /* Left position of the range in data space */
-                left: '=?',
+                left: '=',
                 /* Right position of the range in data space */
-                right: '=?',
+                right: '=',
                 /* Format function for the cells enclosed in the range */
                 formatFn: '=?',
                 /* CSS class to be added to the cells */
@@ -947,7 +967,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
                        if (angular.isDefined(tAttrs['vertical'])) {
                            // The vertical ratio is the number of data rows minus headers and footers divided by the the number
                            // of visible middle rows
-                           ratio = (scope.data.length - scope.headerRowNumber - scope.footerRowNumber) / scope.rowNumber * 100;
+                           ratio = (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length) / scope.$$rows.length * 100;
                            iElement.addClass('vscrollbar');
                            iElement.css('height', ratio + '%');
                            if (ratio <= 100) iElement.parent().css('display', 'none');
@@ -972,19 +992,19 @@ angular.module('ngcTableDirective', ['ngc-template'])
                                 scrollRatio = e.target.scrollLeft / (e.target.scrollWidth);
                                 scope.$$scrollPosition.left = Math.round(scrollRatio * (scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length));
 
-                                var footerStartRow = Math.max(scope.data.length - scope.footerRowNumber, scope.headerRowNumber + scope.rowNumber);
-                                scope.$$setCenterColumnsData(scope.headerRowNumber, scope.$$topCenterData, 0);
-                                scope.$$setCenterColumnsData(scope.rowNumber, scope.$$middleCenterData, scope.headerRowNumber + scope.$$scrollPosition.top);
-                                scope.$$setCenterColumnsData(scope.footerRowNumber, scope.$$bottomCenterData, footerStartRow);
+                                var footerStartRow = Math.max(scope.data.length - scope.$$footerRows.length, scope.$$headerRows.length + scope.$$rows.length);
+                                scope.$$setCenterColumnsData(scope.$$headerRows.length, scope.$$topCenterData, 0);
+                                scope.$$setCenterColumnsData(scope.$$rows.length, scope.$$middleCenterData, scope.$$headerRows.length + scope.$$scrollPosition.top);
+                                scope.$$setCenterColumnsData(scope.$$footerRows.length, scope.$$bottomCenterData, footerStartRow);
 
                             } else
                             // Detect if vertical according to the class
                             if (e.currentTarget !== null && angular.element(e.target).hasClass("vertical")) {
                                 scrollRatio = e.target.scrollTop / (e.target.scrollHeight);
 
-                                scope.$$scrollPosition.top = Math.round(scrollRatio * (scope.data.length - scope.headerRowNumber - scope.footerRowNumber));
-                                scope.$$setCenterColumnsData(scope.rowNumber, scope.$$middleCenterData, scope.headerRowNumber + scope.$$scrollPosition.top);
-                                scope.$$setLeftAndRightColumnsData(scope.rowNumber, scope.$$middleLeftRowHeadersData, scope.$$middleLeftData, scope.$$middleRightData, scope.headerRowNumber + scope.$$scrollPosition.top);
+                                scope.$$scrollPosition.top = Math.round(scrollRatio * (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length));
+                                scope.$$setCenterColumnsData(scope.$$rows.length, scope.$$middleCenterData, scope.$$headerRows.length + scope.$$scrollPosition.top);
+                                scope.$$setLeftAndRightColumnsData(scope.$$rows.length, scope.$$middleLeftRowHeadersData, scope.$$middleLeftData, scope.$$middleRightData, scope.$$headerRows.length + scope.$$scrollPosition.top);
                             }
 
                             scope.$apply();
@@ -1001,7 +1021,7 @@ angular.module('ngcTableDirective', ['ngc-template'])
                          */
                         $timeout(function() {
                             if (iElement.hasClass("vscrollbar")) {
-                                var ratio = (scope.data.length - scope.headerRowNumber - scope.footerRowNumber) / scope.rowNumber;
+                                var ratio = (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length) / scope.$$rows.length;
                                 var elem = angular.element(scope.$$verticalScrollbarWrapperElement);
                                 var height = elem.parent()[0].offsetHeight;
                                 elem.css('height', height + 'px');
