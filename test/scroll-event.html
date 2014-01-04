@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html ng-app="ngcTableDirectiveTest">
+<head>
+    <title>Test Template</title>
+    <link href="../dist/ng-cells-0.3.0.css" rel="stylesheet" type="text/css">
+    <link href="test.css" rel="stylesheet" type="text/css">
+    <script src="../lib/angular-1.2.6.js"></script>
+    <script src="../lib/angular-sanitize-1.2.6.js"></script>
+    <script src="../dist/ng-cells-0.3.0.js"></script>
+    <script>
+        angular.module('ngcTableDirectiveTest', ['ngcTableDirective'])
+                .controller('TestCtrl', function($scope) {
+                    $scope.data = [];
+
+                    var n = 40;
+
+                    for (var row = 0; row < n; row++) {
+                        var rowContent = [];
+                        for (var col = 0; col < n; col++) {
+                            rowContent.push(row * col + col);
+                        }
+                        $scope.data.push(rowContent);
+                    }
+
+                    $scope.scrollPos = {top:0 , left: 0};
+
+                    $scope.customDataFn = function(data, row, col) {
+                        if (col == 39) {
+                            var sum = 0;
+                            var subArray = data[row].slice($scope.scrollPos.left, $scope.scrollPos.left + 3);
+                            angular.forEach(subArray, function(val) {sum += val;});
+
+                            return sum;
+                        }
+                        return data[row][col];
+                    };
+
+
+                    $scope.onScroll = function(event, scrollPosition) {
+                        $scope.scrollPos = scrollPosition;
+                    }
+
+                });
+    </script>
+
+</head>
+<body>
+<div ng-controller="TestCtrl">
+    <div>
+        Scroll Position : [{{scrollPos.top}}, {{scrollPos.left}}]
+    </div>
+
+    <div ngc-table data="data"
+         custom-data-value-fn="customDataFn"
+         scroll-fn="onScroll"
+         left-column-widths="'40px'"
+         center-column-widths="'40px'"
+         center-column-number="3"
+         right-column-widths="'40px'"
+        ></div>
+</div>
+</body>
+</html>

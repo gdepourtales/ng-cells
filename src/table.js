@@ -79,21 +79,21 @@ angular.module('ngcTableDirective', ['ngc-template', 'ngSanitize'])
                      */
                     scope.$$leftFixedColumns = [];
                     /* Create the columns based on directive parameters */
-                    $$createColumns(scope.leftColumnNumber || 1, scope.$$leftFixedColumns, scope.leftColumnWidths);
+                    $$createColumns(angular.isNumber(scope.leftColumnNumber) ? scope.leftColumnNumber : 1, scope.$$leftFixedColumns, scope.leftColumnWidths);
                     /**
                      * Variable center column definitions
                      * @type {Array}
                      */
                     scope.$$variableCenterColumns = [];
                     /* Create the columns based on directive parameters */
-                    $$createColumns(scope.centerColumnNumber || 10, scope.$$variableCenterColumns, scope.centerColumnWidths);
+                    $$createColumns(angular.isNumber(scope.centerColumnNumber) ? scope.centerColumnNumber : 10, scope.$$variableCenterColumns, scope.centerColumnWidths);
                     /**
                      * Right fixed columns definitions
                      * @type {Array}
                      */
                     scope.$$rightFixedColumns = [];
                     /* Create the columns based on directive parameters */
-                    $$createColumns(scope.rightColumnNumber || 1, scope.$$rightFixedColumns, scope.rightColumnWidths);
+                    $$createColumns(angular.isNumber(scope.rightColumnNumber) ? scope.rightColumnNumber : 1, scope.$$rightFixedColumns, scope.rightColumnWidths);
 
                     /* Headers and tools */
                     /**
@@ -298,6 +298,7 @@ angular.module('ngcTableDirective', ['ngc-template', 'ngSanitize'])
                         };
                         scope.$$footerRows.push(footerRowDef);
                     }
+
                 },
 
 
@@ -521,19 +522,34 @@ angular.module('ngcTableDirective', ['ngc-template', 'ngSanitize'])
                         }
                     };
 
-                    /* Initialize the header parts */
-                    scope.$$setCenterColumnsData(scope.$$headerRows.length, scope.$$topCenterData, 0);
-                    scope.$$setLeftAndRightColumnsData(scope.$$headerRows.length, scope.$$topLeftRowHeadersData, scope.$$topLeftData, scope.$$topRightData, 0);
+                    /**
+                     * Updates data in all table parts
+                     */
+                    scope.$$updateData = function() {
+                        /* Initialize the header parts */
+                        this.$$setCenterColumnsData(this.$$headerRows.length, this.$$topCenterData, 0);
+                        this.$$setLeftAndRightColumnsData(this.$$headerRows.length, this.$$topLeftRowHeadersData, this.$$topLeftData, this.$$topRightData, 0);
 
-                    /* Initiaize the variable middle parts */
-                    scope.$$setCenterColumnsData(scope.$$rows.length, scope.$$middleCenterData, scope.$$headerRows.length);
-                    scope.$$setLeftAndRightColumnsData(scope.$$rows.length, scope.$$middleLeftRowHeadersData, scope.$$middleLeftData, scope.$$middleRightData, scope.$$headerRows.length);
+                        /* Initiaize the variable middle parts */
+                        this.$$setCenterColumnsData(this.$$rows.length, this.$$middleCenterData, this.$$headerRows.length + this.$$scrollPosition.top);
+                        this.$$setLeftAndRightColumnsData(this.$$rows.length, this.$$middleLeftRowHeadersData, this.$$middleLeftData, this.$$middleRightData, this.$$headerRows.length + this.$$scrollPosition.top);
 
-                    /* Initialize the fixed footer parts */
-                    /* The footer start row should be either the total data rows minus the footer height or the number of header rows + the number of rows */
-                    var footerStartRow = Math.max(scope.data.length - scope.$$footerRows.length, scope.$$headerRows.length + scope.$$rows.length);
-                    scope.$$setCenterColumnsData(scope.$$footerRows.length, scope.$$bottomCenterData, footerStartRow);
-                    scope.$$setLeftAndRightColumnsData(scope.$$footerRows.length, scope.$$bottomLeftRowHeadersData, scope.$$bottomLeftData, scope.$$bottomRightData, footerStartRow);
+                        /* Initialize the fixed footer parts */
+                        /* The footer start row should be either the total data rows minus the footer height or the number of header rows + the number of rows */
+                        var footerStartRow = Math.max(this.data.length - this.$$footerRows.length, this.$$headerRows.length + this.$$rows.length);
+                        this.$$setCenterColumnsData(this.$$footerRows.length, this.$$bottomCenterData, footerStartRow);
+                        this.$$setLeftAndRightColumnsData(this.$$footerRows.length, this.$$bottomLeftRowHeadersData, this.$$bottomLeftData, this.$$bottomRightData, footerStartRow);
+                    }
+
+                    // Send an initial callback to set the scroll position on correct values if required
+
+                    if (angular.isFunction(scope.scrollFn)) scope.scrollFn(null, {
+                        top: scope.$$headerRows.length,
+                        left:scope.$$leftFixedColumns.length
+                    });
+
+                    // Initialize the data
+                    scope.$$updateData();
 
                 }
             }
@@ -570,17 +586,20 @@ angular.module('ngcTableDirective', ['ngc-template', 'ngSanitize'])
                 rightColumnWidths: '=?',
 
                 /* Number of rows in the header. By default 1 */
-                headerRowNumber:"=?",
+                headerRowNumber: '=?',
                 /* Heights of the header rows (array or single value). No default (min-height:10px) */
-                headerRowHeights:"=?",
+                headerRowHeights: '=?',
                 /* Number of rows in the middle. By default 10 */
-                rowNumber:"=?",
+                rowNumber: '=?',
                 /* Heights of the middle rows (array or single value). No default (min-height:10px) */
-                rowHeights:"=?",
+                rowHeights: '=?',
                 /* Number of rows in the footer. By default 1 */
-                footerRowNumber:"=?",
+                footerRowNumber: '=?',
                 /* Heights of the footer rows (array or single value). No default (min-height:10px) */
-                footerRowHeights:"=?"
+                footerRowHeights: '=?',
+
+                /* Scroll function to be called when a scroll event occurs */
+                scrollFn: '=?'
 
             },
             restrict:'AE',
@@ -719,20 +738,22 @@ angular.module('ngcTableDirective', ['ngc-template', 'ngSanitize'])
                                 scrollRatio = e.target.scrollLeft / (e.target.scrollWidth);
                                 scope.$$scrollPosition.left = Math.round(scrollRatio * (scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length));
 
-                                var footerStartRow = Math.max(scope.data.length - scope.$$footerRows.length, scope.$$headerRows.length + scope.$$rows.length);
-                                scope.$$setCenterColumnsData(scope.$$headerRows.length, scope.$$topCenterData, 0);
-                                scope.$$setCenterColumnsData(scope.$$rows.length, scope.$$middleCenterData, scope.$$headerRows.length + scope.$$scrollPosition.top);
-                                scope.$$setCenterColumnsData(scope.$$footerRows.length, scope.$$bottomCenterData, footerStartRow);
-
                             } else
                             // Detect if vertical according to the class
                             if (e.currentTarget !== null && angular.element(e.target).hasClass("vertical")) {
                                 scrollRatio = e.target.scrollTop / (e.target.scrollHeight);
-
                                 scope.$$scrollPosition.top = Math.round(scrollRatio * (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length));
-                                scope.$$setCenterColumnsData(scope.$$rows.length, scope.$$middleCenterData, scope.$$headerRows.length + scope.$$scrollPosition.top);
-                                scope.$$setLeftAndRightColumnsData(scope.$$rows.length, scope.$$middleLeftRowHeadersData, scope.$$middleLeftData, scope.$$middleRightData, scope.$$headerRows.length + scope.$$scrollPosition.top);
+                            } else {
+                                // If other scroll event do not process data redraw
+                                return;
                             }
+
+                            if (angular.isFunction(scope.scrollFn)) scope.scrollFn(e, {
+                                top: scope.$$scrollPosition.top +  scope.$$headerRows.length,
+                                left:scope.$$scrollPosition.left + scope.$$leftFixedColumns.length
+                            });
+
+                            scope.$$updateData();
 
                             scope.$apply();
                             // $apply redraws the divs so they reset their position
@@ -740,6 +761,7 @@ angular.module('ngcTableDirective', ['ngc-template', 'ngSanitize'])
                             // Reposition the elements with the saved position
                             scope.$$verticalScrollbarWrapperElement.scrollTop = verticalScrollPos;
                             scope.$$horizontalScrollbarWrapperElement.scrollLeft = horizontalScrollPos;
+
                         });
 
                         /*
