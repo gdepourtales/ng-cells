@@ -11,7 +11,7 @@ angular.module('ngcTableDirectiveTest', ['ngcTableDirective'])
         }
 
         $scope.cellFormatFn1 = function(value, row, col) {
-            return "<<" + value + ">>";
+            return "--" + value + "--";
         };
 
         $scope.cellFormatFn2 = function(value, row, col) {
