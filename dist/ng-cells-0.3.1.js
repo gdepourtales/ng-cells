@@ -643,7 +643,7 @@ angular.module('ngcTableDirective', ['ngc-template', 'ngSanitize'])
                      * @param data
                      * @returns {*}
                      */
-                    function defaultHtmlFn(data /*, row, col*/) {return angular.isDefined(data) ? String(data) : '';}
+                    function defaultHtmlFn(data, row, col, formattedValue) {return angular.isDefined(formattedValue) ? String(formattedValue) : '';}
 
 
                     /**
@@ -733,7 +733,7 @@ angular.module('ngcTableDirective', ['ngc-template', 'ngSanitize'])
                             style: styleFn(data, row, col),
                             eventCallbacks: eventCallbacks,
                             enclosingRanges: enclosingRanges,
-                            customHTML:  (angular.isDefined(customTrustedHtmlFn)) ? $sce.trustAsHtml(customTrustedHtmlFn(data, row, col)) : customHtmlFn(data, row, col)
+                            customHTML:  (angular.isDefined(customTrustedHtmlFn)) ? $sce.trustAsHtml(customTrustedHtmlFn(data, row, col, formatFn(data, row, col))) : customHtmlFn(data, row, col, formatFn(data, row, col))
                         };
                     }
 
