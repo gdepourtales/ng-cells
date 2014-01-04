@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Ng-cells : " />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="dist/ng-cells-0.3.1.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/samples.css">
+
+    <script src="javascripts/angular-1.2.6.js"></script>
+    <script src="javascripts/angular-sanitize-1.2.6.js"></script>
+    <script src="dist/ng-cells-0.3.1.min.js"></script>
+
+    <title>Ng-cells Scroll Event</title>
+
+    <script>
+        angular.module('ngcTableDirectiveTest', ['ngcTableDirective'])
+                .controller('TestCtrl', function($scope) {
+                    $scope.data = [];
+
+                    var n = 40;
+
+                    for (var row = 0; row < n; row++) {
+                        var rowContent = [];
+                        for (var col = 0; col < n; col++) {
+                            rowContent.push(row * col + col);
+                        }
+                        $scope.data.push(rowContent);
+                    }
+
+                    $scope.scrollPos = {top:0 , left: 0};
+
+                    $scope.customDataFn = function(data, row, col) {
+                        if (col == n - 1) {
+                            var sum = 0;
+                            var subArray = data[row].slice($scope.scrollPos.left, $scope.scrollPos.left + 3);
+                            angular.forEach(subArray, function(val) {sum += val;});
+
+                            return sum;
+                        }
+                        return data[row][col];
+                    };
+
+                    $scope.onScroll = function(event, scrollPosition) {
+                        $scope.scrollPos = scrollPosition;
+                    };
+
+                    $scope.resultFormatFn = function(data, row, col) {
+                        return "Sum: "  + data;
+                    };
+
+                });
+    </script>
+
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+    <header class="inner">
+        <a id="forkme_banner" href="https://github.com/gdepourtales/ng-cells">View on GitHub</a>
+
+        <h1 id="project_title">Ng-cells Scroll Event</h1>
+        <h2 id="project_tagline"></h2>
+
+        <section id="downloads">
+            <a class="zip_download_link" href="https://github.com/gdepourtales/ng-cells/zipball/master">Download this project as a .zip file</a>
+            <a class="tar_download_link" href="https://github.com/gdepourtales/ng-cells/tarball/master">Download this project as a tar.gz file</a>
+        </section>
+    </header>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
+    <section id="main_content" class="inner">
+
+<h1>
+    <a name="example" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Scroll events</h1>
+
+        <p>The values in the last column (AN) are constantly updated with the calculated sum of the visible center column values when scrolling. </p>
+
+<div ng-app="ngcTableDirectiveTest" ng-controller="TestCtrl">
+    <div>
+        Scroll Position : [{{scrollPos.top}}, {{scrollPos.left}}]
+    </div>
+
+    <div ngc-table data="data"
+         custom-data-value-fn="customDataFn"
+         scroll-fn="onScroll"
+         left-column-widths="'40px'"
+         center-column-widths="'60px'"
+         center-column-number="3"
+         right-column-widths="'80px'">
+        <div ngc-range="" top="0" bottom="40" left="39" right="40" format-fn="resultFormatFn"></div>
+
+         </div>
+</div>
+
+<h1><a name="directive" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Directive</h1>
+
+<pre><code>&lt;div ngc-table data="data"
+    custom-data-value-fn="customDataFn"
+    scroll-fn="onScroll"
+    left-column-widths="'40px'"
+    center-column-widths="'40px'"
+    center-column-number="3"
+    right-column-widths="'80px'">&lt;/div>
+</code></pre>
+
+<h1><a name="javascript" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Controller</h1>
+
+<p>The <code>onScroll</code> function callback is called a first time when the table is initialized, then each time
+a scroll event occurs. The function simply updates the <code>scrollPos</code> scope variable</p>
+
+<p>The <code>customData</code> is called each time a data must be rendered typically after a scroll event. In the example,
+the function return a custom sum of the values displayed in the center columns when displaying data on the last
+column. This demonstrates how it is possible to combine the scroll position and the scroll information</p>
+
+<p>Lastly, the <code>resultFormatFn</code> function formats the result before displaying the value</p>
+
+<pre><code>angular.module('ngcTableDirectiveTest', ['ngcTableDirective'])
+    .controller('TestCtrl', function($scope) {
+        $scope.data = [];
+
+        var n = 40;
+
+        for (var row = 0; row < n; row++) {
+            var rowContent = [];
+            for (var col = 0; col < n; col++) {
+                rowContent.push(row * col + col);
+            }
+            $scope.data.push(rowContent);
+        }
+
+        $scope.scrollPos = {top:0 , left: 0};
+
+        $scope.customDataFn = function(data, row, col) {
+            if (col == n - 1) {
+                var sum = 0;
+                var subArray = data[row].slice($scope.scrollPos.left, $scope.scrollPos.left + 3);
+                angular.forEach(subArray, function(val) {sum += val;});
+
+                return sum;
+            }
+            return data[row][col];
+        };
+
+
+        $scope.onScroll = function(event, scrollPosition) {
+            $scope.scrollPos = scrollPosition;
+        };
+
+        $scope.resultFormatFn = function(data, row, col) {
+            return "Sum: "  + data;
+        };
+
+    });
+</code></pre>
+
+    </section>
+</div>
+
+<!-- FOOTER  -->
+<div id="footer_wrap" class="outer">
+    <footer class="inner">
+        <p class="copyright">Ng-cells maintained by <a href="https://github.com/gdepourtales">gdepourtales</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+    </footer>
+</div>
+
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-46830282-1', 'gdepourtales.github.io');
+    ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>

@@ -70,6 +70,7 @@ and integrated during the build process in the <code>ngc-template</code> module.
     <li><a href="custom-data.html">Custom data</a> shows how to use a custom function to change the cell data values</li>
     <li><a href="color-palette.html">Color palette</a> shows how to customize each cell style</li>
     <li><a href="custom-elements.html">Custom elements</a> shows how to append custom sanitized and trusted HTML in the cells of a range</li>
+    <li><a href="scroll-event.html">Scroll events</a> shows how to combine scroll events and dynamic values</li>
 </ul>
 
 
@@ -82,6 +83,7 @@ and integrated during the build process in the <code>ngc-template</code> module.
 <li>Any number of fixed header and footer rows</li>
 <li>No table redraw : Supports big data sets without impacting display speed</li>
 <li>Scrolls on full rows and columns</li>
+<li>Custom scroll callback to track view changes</li>
 <li>Data ranges with custom CSS class, format and styling functions and event callbacks</li>
 <li>Append custom sanitized or trusted HTML elements in the cells</li>
 <li>Table elements CSS classes for easy theming</li>
@@ -233,6 +235,12 @@ set the pen color and the background color of all cells of the right header part
 <li>
 <code>custom-data-value-fn</code> A custom function to extract the data value from the data source. The provided function should
 have the form <code>function(data, row, col)</code>. Please remember that the initial data matrix IS required in order to define the data dimensions.</li>
+    <li>
+       <code>scroll-fn</code>A custom function called when horizontal or vertical scroll occurs. The provided function should have the form
+        <code>function(event, scrollPosition)</code> where event is the scroll event and scrollPosition is an object with <code>top</code> and <code>left</code> attributes. The
+        <code>top</code> and <code>left</code> attributes are the row and column of the data value displayed in the top left corner of the middle center area.
+        This function is called once when the table is firstly drawn to give the opportunity to store initial
+    </li>
 <li>
 <code>show-column-names</code> A flag to set the visibility of the column letters. By default <code>true</code>
 </li>
@@ -285,8 +293,8 @@ string values. If the value is a single string, the same width is applied to all
 <code>right</code> The right (non-inclusive) column limit of this range</li>
 <li>
 <code>format-fn</code> A custom format function. This can be used to customize the output format of the data value. The function
-must be of the form <code>function(value, row, col)</code> where <code>value</code> is the value of the source data at the position <code>[row][col]</code>
-</li>
+must be of the form <code>function(value, row, col, formattedValue)</code> where <code>value</code> is the value of the source data at the position <code>[row][col]</code>
+    and <code>formattedValue</code> contains the value after being formatted.</li>
 <li>
 <code>clazz</code> Class(es) to add to the cells enclosed by the range</li>
 <li>
