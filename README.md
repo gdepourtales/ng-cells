@@ -167,6 +167,10 @@ set the pen color and the background color of all cells of the right header part
 * `data` The 2D data matrix. The matrix can be of any dimension. By default, the displayed data is the data raw value
 * `custom-data-value-fn` A custom function to extract the data value from the data source. The provided function should
 have the form `function(data, row, col)`. Please remember that the initial data matrix IS required in order to define the data dimensions.
+* `scroll-fn`A custom function called when horizontal or vertical scroll occurs. The provided function should have the form
+`function(event, scrollPosition)` where event is the scroll event and scrollPosition is an object with `top` and `left` attributes. The
+`top` and `left` attributes are the row and column of the data value displayed in the top left corner of the middle center area.
+This function is called once when the table is firstly drawn to give the opportunity to store initial top left values.
 * `show-column-names` A flag to set the visibility of the column letters. By default `true`
 * `show-row-numbers` A flag to set the visibility of the row numbers. By default `true`
 * `show-header` A flag to set the visibility of the header part. By default `true`. If `false`, the value of `header-row-number` is ignored
