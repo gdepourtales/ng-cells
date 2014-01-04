@@ -201,8 +201,8 @@ must be of the form `function(value, row, col)` where `value` is the value of th
 * `clazz` Class(es) to add to the cells enclosed by the range
 * `custom-html-fn` A custom function to insert custom HTML in the cells. The returned HTML is sanitized by AngularJS before
 being injected. Please use the `custom-trusted-html-fn` function if you want to bypass the sanitizer parser. The function
-must be of the form `function(value, row, col)` where `value` is the value of the source data at the position `[row][col]`
-The function must return a string containing the HTML
+must be of the form `function(value, row, col, formattedValue)` where `value` is the value of the source data at the position `[row][col]`
+and formattedValue contains the value after being formatted. The function must return a string containing the HTML
 * `custom-trusted-html-fn` A custom function to insert custom HTML in the cells. The returned HTML is not processed by the
 AngularJS sanitizer. For security reason, it is better to use the `custom-html-fn`. The function has the same form as
 `custom-html-fn`
