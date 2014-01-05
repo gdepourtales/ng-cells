@@ -51,17 +51,6 @@ tested on Google Chrome, Safari, Opera and Firefox and Internet Explorer 10 (8+ 
 <p>Tu use this directive, just add the ngcTableDirective as dependency. The template is handle as an external HTML file
 and integrated during the build process in the <code>ngc-template</code> module. The template is registered in the angularjs template cache with the key <code>ngc.table.tpl.html</code></p>
 
-<div ng-controller="TestCtrl">
-    <div ngc-table
-         data="data"
-         left-column-number="3" left-column-widths="'30px'"
-         center-column-number="10" center-column-widths="['40px']"
-         right-column-number="2" right-column-widths="['40px']"
-         header-row-number="2" header-row-heights="['15px', '15px']"
-         row-number='15' row-heights="['15px', '15px']"
-         footer-row-number="3" footer-row-heights="'15px'">
-    </div>
-</div>
 
 <h1>
     <a name="examples" class="anchor" href="#examples"><span class="octicon octicon-link"></span></a>Examples</h1>
@@ -71,7 +60,27 @@ and integrated during the build process in the <code>ngc-template</code> module.
     <li><a href="color-palette.html">Color palette</a> shows how to customize each cell style</li>
     <li><a href="custom-elements.html">Custom elements</a> shows how to append custom sanitized and trusted HTML in the cells of a range</li>
     <li><a href="scroll-event.html">Scroll events</a> shows how to combine scroll events and dynamic values</li>
+    <li>Asynchronous data loading (with $timeout) and performance tests : <br/>
+        <a href="performance.html#?rows=5000&cols=1000">5k rows x 1k cols (5 mio cells)</a>, <br/>
+        <a href="performance.html#?rows=10000&cols=1000">10k rows x 1k cols (10 mio cells)</a>, <br/>
+        <a href="performance.html#?rows=20000&cols=1000">20k rows x 1k cols (20 mio cells)</a>, <br/>
+        <a href="performance.html#?rows=50000&cols=1000">50k rows x 1k cols (50 mio cells)</a>,  <br/>
+        <a href="performance.html#?rows=100000&cols=1000">100k rows x 1k cols (100 mio cells)</a>
+    </li>
 </ul>
+
+
+        <div ng-controller="TestCtrl">
+            <div ngc-table
+                 data="data"
+                 left-column-number="3" left-column-widths="'30px'"
+                 center-column-number="10" center-column-widths="['40px']"
+                 right-column-number="2" right-column-widths="['40px']"
+                 header-row-number="2" header-row-heights="['15px', '15px']"
+                 row-number='15' row-heights="['15px', '15px']"
+                 footer-row-number="3" footer-row-heights="'15px'">
+            </div>
+        </div>
 
 
 <h1>
