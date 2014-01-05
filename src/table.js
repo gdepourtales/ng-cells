@@ -30,7 +30,9 @@ angular.module('ngcTableDirective', ['ngc-template', 'ngSanitize'])
              */
             this.addRange = function(range) {
                 $scope.ranges.push(range);
-            }
+            };
+
+
         }];
 
 
@@ -483,8 +485,8 @@ angular.module('ngcTableDirective', ['ngc-template', 'ngSanitize'])
                         }
 
                         /* Update the column names on the right */
-
-                        var startColumnIndex = Math.max(this.data[0].length - this.$$rightFixedColumns.length, this.$$leftFixedColumns.length + this.$$variableCenterColumns.length);
+                        var rowLength =  angular.isDefined(this.data[0]) ? this.data[0].length : 0;
+                        var startColumnIndex = Math.max(rowLength - this.$$rightFixedColumns.length, this.$$leftFixedColumns.length + this.$$variableCenterColumns.length);
 
                         for (col = 0; col < this.$$rightFixedColumns.length; col++) {
                             this.$$rightColumnNames[col] = {
@@ -539,7 +541,7 @@ angular.module('ngcTableDirective', ['ngc-template', 'ngSanitize'])
                         var footerStartRow = Math.max(this.data.length - this.$$footerRows.length, this.$$headerRows.length + this.$$rows.length);
                         this.$$setCenterColumnsData(this.$$footerRows.length, this.$$bottomCenterData, footerStartRow);
                         this.$$setLeftAndRightColumnsData(this.$$footerRows.length, this.$$bottomLeftRowHeadersData, this.$$bottomLeftData, this.$$bottomRightData, footerStartRow);
-                    }
+                    };
 
                     // Send an initial callback to set the scroll position on correct values if required
 
@@ -551,6 +553,31 @@ angular.module('ngcTableDirective', ['ngc-template', 'ngSanitize'])
                     // Initialize the data
                     scope.$$updateData();
 
+                    scope.$watch(
+                        'data',
+                        function(newValue, oldValue) {
+                            if ( newValue !== oldValue ) {
+                                // Update the data
+                                scope.$$updateData();
+                                // Refresh the scrollbars
+                                var ratio = 100;
+                                // This should be factorized with the scrollbar directive
+                                if (angular.isDefined(scope.data)) {
+                                    ratio = (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length) / scope.$$rows.length * 100;
+                                    scope.$$verticalScrollbarElement.css('height', ratio + '%');
+                                    if (ratio <= 100) scope.$$verticalScrollbarElement.parent().css('display', 'none')
+                                    else scope.$$verticalScrollbarElement.parent().css('display', 'block');
+                                }
+                                if (angular.isDefined(scope.data[0])) {
+                                    ratio = (scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length) / scope.$$variableCenterColumns.length * 100;
+                                    scope.$$horizontalScrollbarElement.css('width', Math.ceil(ratio) + '%');
+                                    if (ratio <= 100) scope.$$horizontalScrollbarElement.parent().css('display', 'none')
+                                    else scope.$$horizontalScrollbarElement.parent().css('display', 'block');
+                                }
+
+                            }
+                        }
+                    );
                 }
             }
         }
@@ -695,30 +722,39 @@ angular.module('ngcTableDirective', ['ngc-template', 'ngSanitize'])
             replace:true,
             template:'<div class="ngc"></div>',
             compile: function(tElement, tAttrs) {
+
+
                 return {
                    pre: function postLink(scope, iElement /*, iAttrs */) {
-                       var ratio = 1.0;
+                       var ratio = 100;
+
                        if (angular.isDefined(tAttrs['horizontal'])) {
                            // The horizontal ratio is the total data column length minus the left columns minus the right
                            // columns divided by the number of visible center columns
                            // The presence of the row numbers at the far right must be considered
-                           ratio = (scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length) / scope.$$variableCenterColumns.length * 100;
+                           if (angular.isDefined(scope.data[0])) {
+                                ratio = (scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length) / scope.$$variableCenterColumns.length * 100;
+                           }
                            iElement.addClass('hscrollbar');
                            iElement.css('width', Math.ceil(ratio) + '%');
-                           if (ratio <= 100) iElement.parent().parent().css('display', 'none');
+                           if (ratio <= 100) iElement.parent().css('display', 'none');
                            // Save the reference to the element in order to manage scroll position
                            // after $apply force the redraw of DIVs
+                           scope.$$horizontalScrollbarElement = iElement;
                            scope.$$horizontalScrollbarWrapperElement = iElement.parent()[0];
                        } else
                        if (angular.isDefined(tAttrs['vertical'])) {
                            // The vertical ratio is the number of data rows minus headers and footers divided by the the number
                            // of visible middle rows
-                           ratio = (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length) / scope.$$rows.length * 100;
+                           if (angular.isDefined(scope.data)) {
+                                ratio = (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length) / scope.$$rows.length * 100;
+                           }
                            iElement.addClass('vscrollbar');
                            iElement.css('height', ratio + '%');
                            if (ratio <= 100) iElement.parent().css('display', 'none');
                            // Save the reference to the element in order to manage scroll position
                            // after $apply force the redraw of DIVs
+                           scope.$parent.$parent.$$verticalScrollbarElement = iElement;
                            scope.$parent.$parent.$$verticalScrollbarWrapperElement = iElement.parent()[0];
                        }
                    },
