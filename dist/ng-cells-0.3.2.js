@@ -638,14 +638,14 @@ angular.module('ngcTableDirective', ['ngc-template', 'ngSanitize'])
                      * @param data
                      * @returns {*}
                      */
-                    function defaultFormatFn(data /*, row, col*/) {return angular.isDefined(data) ? data : '';}
+                    function defaultFormatFn(data /*, row, col*/) {return angular.isDefined(data) ? data : '&nbsp;';}
 
                     /**
                      * Default html content function
                      * @param data
                      * @returns {*}
                      */
-                    function defaultHtmlFn(data, row, col, formattedValue) {return angular.isDefined(formattedValue) ? String(formattedValue) : '';}
+                    function defaultHtmlFn(data, row, col, formattedValue) {return angular.isDefined(formattedValue) ? String(formattedValue) : '&nbsp;';}
 
 
                     /**
@@ -866,11 +866,17 @@ angular.module('ngcTableDirective', ['ngc-template', 'ngSanitize'])
                                 scope.$$updateData();
                                 // Refresh the scrollbars
                                 var ratio = 100;
+                                // This should be factorized with the scrollbar directive
                                 if (angular.isDefined(scope.data)) {
+
                                     ratio = (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length) / scope.$$rows.length * 100;
                                     scope.$$verticalScrollbarElement.css('height', ratio + '%');
                                     if (ratio <= 100) scope.$$verticalScrollbarElement.parent().css('display', 'none')
                                     else scope.$$verticalScrollbarElement.parent().css('display', 'block');
+
+                                    var elem = angular.element(scope.$$verticalScrollbarWrapperElement);
+                                    var height = elem.parent()[0].offsetHeight;
+                                    elem.css('height', height + 'px');
                                 }
                                 if (angular.isDefined(scope.data[0])) {
                                     ratio = (scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length) / scope.$$variableCenterColumns.length * 100;
