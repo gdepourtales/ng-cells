@@ -14,9 +14,11 @@
  limitations under the License.
  */
 
-angular.module('ngcTableDirective', ['ngc-template', 'ngSanitize'])
-    .directive('ngcTable', ['$templateCache', '$sce', function($templateCache, $sce) {
+(function() {
 
+    var module = angular.module('ngcTableDirective', ['ngc-template', 'ngSanitize']);
+
+    module.directive('ngcTable', ['$templateCache', '$sce', function($templateCache, $sce) {
 
         /**
          * ngcTable Controller declaration. The format is given to be able to minify the directive. The scope is
@@ -304,7 +306,7 @@ angular.module('ngcTableDirective', ['ngc-template', 'ngSanitize'])
                 },
 
 
-                post: function postLink(scope /*, iElement , iAttrs, controller*/) {
+                post: function postLink(scope , iElement /*, iAttrs, controller*/) {
 
                     /**
                      * Returns a letter combination for an index
@@ -583,6 +585,40 @@ angular.module('ngcTableDirective', ['ngc-template', 'ngSanitize'])
                             }
                         }
                     );
+
+                    /**
+                     * Handle touch scrolling
+                     * Start event
+                     */
+                    iElement.on("touchstart", function(e) {
+                        scope.$$touchClientX = e.touches[0].clientX;
+                        scope.$$touchClientY = e.touches[0].clientY;
+                        e.preventDefault();
+                    });
+
+                    /**
+                     * Handle movement
+                     */
+                    iElement.on("touchmove", function(e) {
+                        var deltaX = e.touches[0].clientX - scope.$$touchClientX;
+                        var deltaY = e.touches[0].clientY - scope.$$touchClientY;
+
+                        scope.$$verticalScrollbarWrapperElement.scrollTop -= deltaY;
+                        scope.$$horizontalScrollbarWrapperElement.scrollLeft -= deltaX;
+
+                        scope.$$updateData();
+
+                        scope.$$touchClientX = e.touches[0].clientX;
+                        scope.$$touchClientY = e.touches[0].clientY;
+                        e.preventDefault();
+
+                    });
+
+                    iElement.on("touchend", function(e) {
+                        scope.$$touchClientX = e.touches[0].clientX;
+                        scope.$$touchClientY = e.touches[0].clientY;
+                        e.preventDefault();
+                    });
                 }
             }
         }
@@ -827,3 +863,4 @@ angular.module('ngcTableDirective', ['ngc-template', 'ngSanitize'])
     }])
 ;
 
+})();
