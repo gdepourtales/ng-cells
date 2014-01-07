@@ -16,6 +16,7 @@ and integrated during the build process in the `ngc-template` module. The templa
 * Any number of fixed header and footer rows
 * No table redraw : Supports big data sets without impacting display speed
 * Scrolls on full rows and columns
+* Support scrolling on mobile devices with touch events
 * Data ranges with custom CSS class, format and styling functions and event callbacks
 * Append custom sanitized or trusted HTML elements in cells (v0.2.0)
 * Table elements CSS classes for easy theming
