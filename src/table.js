@@ -590,7 +590,7 @@
                      * Handle touch scrolling
                      * Start event
                      */
-                    iElement.on("touchstart", function(e) {
+                    iElement.find('table').on("touchstart", function(e) {
                         scope.$$touchClientX = e.touches[0].clientX;
                         scope.$$touchClientY = e.touches[0].clientY;
                         e.preventDefault();
@@ -599,7 +599,7 @@
                     /**
                      * Handle movement
                      */
-                    iElement.on("touchmove", function(e) {
+                    iElement.find('table').on("touchmove", function(e) {
                         var deltaX = e.touches[0].clientX - scope.$$touchClientX;
                         var deltaY = e.touches[0].clientY - scope.$$touchClientY;
 
@@ -612,12 +612,6 @@
                         scope.$$touchClientY = e.touches[0].clientY;
                         e.preventDefault();
 
-                    });
-
-                    iElement.on("touchend", function(e) {
-                        scope.$$touchClientX = e.touches[0].clientX;
-                        scope.$$touchClientY = e.touches[0].clientY;
-                        e.preventDefault();
                     });
                 }
             }
@@ -750,7 +744,11 @@
                     mouseleave: scope.mouseleaveFn,
                     mousemove: scope.mousemoveFn,
                     mouseover: scope.mouseoverFn,
-                    mouseup: scope.mouseupFn
+                    mouseup: scope.mouseupFn,
+                    touchstart: scope.touchstartFn,
+                    touchmove: scope.touchmoveFn,
+                    touchend: scope.touchendFn
+
                 });
             }
         };
