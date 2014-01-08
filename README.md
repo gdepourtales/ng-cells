@@ -9,7 +9,7 @@ tested on Google Chrome, Safari, Opera and Firefox and Internet Explorer 10 (8+ 
 Tu use this directive, just add the ngcTableDirective as dependency. The template is handle as an external HTML file
 and integrated during the build process in the `ngc-template` module. The template is registered in the angularjs template cache with the key `ngc.table.tpl.html`
 
-#Features
+# Features
 
 * Automatic column and row references like in popular spreadsheets
 * Any number of fixed left and right columns
@@ -22,9 +22,9 @@ and integrated during the build process in the `ngc-template` module. The templa
 * Table elements CSS classes for easy theming
 * No dependency except AngularJS
 
-#Usage
+# Usage
 
-##Table
+## Table
 
 The directive displays a grid of cells organized as the following principles :
 
@@ -43,6 +43,10 @@ The directive displays a grid of cells organized as the following principles :
 
 When the data matrix vertical dimension than the total number of rows, the area between header and footer is scrollable.
 The behaviour is identical for the number of columns, the area between the left and right columns becomes scrollable.
+
+ng-cells is also available through bower (bower install ng-cells)
+
+
 
 Minimal example to display a table with one million cells (1000 x 1000 data matrix) with default settings and no styling :
 
@@ -110,7 +114,7 @@ names should be self-explanatory. Please see the reference below. For example:
 ```
 
 
-##Cell Ranges
+## Cell Ranges
 Ranges
 
 Ranges let specify custom behaviour for data ranges. The range is defined by the area limits and holds custom
@@ -149,7 +153,7 @@ $scope.clickFn = function(event, cellData) {
 ```
 
 
-##CSS Classes
+## CSS Classes
 
 In addition to ranges custom classes, the table embeds CSS classes to identify each part of the table. For example, to
 set the pen color and the background color of all cells of the right header part, use the following CSS statement in your stylesheet. If you have other elements that clash you can add an additional `ngc` class to make it more specific.
@@ -161,9 +165,9 @@ set the pen color and the background color of all cells of the right header part
 }
 ```
 
-#Directive Reference
+# Directive Reference
 
-##Table
+## Table
 
 * `data` The 2D data matrix. The matrix can be of any dimension. By default, the displayed data is the data raw value
 * `custom-data-value-fn` A custom function to extract the data value from the data source. The provided function should
@@ -191,7 +195,7 @@ string values. If the value is a single string, the same width is applied to all
 * `footer-row-heights` The height of the footer rows. See `header-row-heights` for value specification
 
 
-##Range
+## Range
 
 * `top` The top row (inclusive) limit of this range
 * `bottom` The bottom (non-inclusive) row limit of this range
@@ -221,12 +225,12 @@ The function must be of the form `function(value, row, col)` where `value` is th
 ** `eventCallbacks` An object with all registered callbacks identified the event type
 ** `enclosingRanges` An array of all ranges that enclose the current cell
 
-##CSS Reference
+## CSS Reference
 
 Here's a list of the classes which can be used to select cells according to the table parts they belong to
 
 ### Column names 
-* row : `column-names row`
+* Row : `column-names row`
 * Row # column : `row-header column-name cell`
 * Left columns : `left column-name cell`
 * Center columns : `center column-name cell`
@@ -252,6 +256,15 @@ Here's a list of the classes which can be used to select cells according to the 
 * Left columns : `left footer cell`
 * Center columns : `center footer cell`
 * Right columns : `right footer cell`
+
+For example, in order to select the cells of the last row of the center columns in the middle section, use the following selector
+
+```css
+.ngc.middle.row .center.middle.last.cell {
+...
+}
+```
+
 
 All element class declarations also have the `ngc` class. First and last rows of each section have the resp. `first` and
 `last` classes. Same for cells in each row and section.
