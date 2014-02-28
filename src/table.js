@@ -426,16 +426,17 @@
                             }
                         });
 
+                        var value = formatFn(data, row, col);
                         return {
                             row: row,
                             col: col,
                             data: data,
-                            value: formatFn(data, row, col),
+                            value: value,
                             clazz: clazz,
                             style: styleFn(data, row, col),
                             eventCallbacks: eventCallbacks,
                             enclosingRanges: enclosingRanges,
-                            customHTML:  (angular.isDefined(customTrustedHtmlFn)) ? $sce.trustAsHtml(customTrustedHtmlFn(data, row, col, formatFn(data, row, col))) : customHtmlFn(data, row, col, formatFn(data, row, col))
+                            customHTML:  (angular.isDefined(customTrustedHtmlFn)) ? $sce.trustAsHtml(customTrustedHtmlFn(data, row, col, value)) : customHtmlFn(data, row, col, value)
                         };
                     }
 
