@@ -18,7 +18,10 @@
 
     var module = angular.module('ngcTableDirective', ['ngc-template', 'ngSanitize']);
 
-    module.directive('ngcTable', ['$templateCache', '$sce', function($templateCache, $sce) {
+    // trigger this when the table's content are udpated
+    module.constant('contentUpdatedEvent', 'contentUpdatedEvent');
+
+    module.directive('ngcTable', ['$templateCache', '$sce', 'contentUpdatedEvent', function($templateCache, $sce, contentUpdatedEvent) {
 
         /**
          * ngcTable Controller declaration. The format is given to be able to minify the directive. The scope is
@@ -543,6 +546,8 @@
                         var footerStartRow = Math.max(this.data.length - this.$$footerRows.length, this.$$headerRows.length + this.$$rows.length);
                         this.$$setCenterColumnsData(this.$$footerRows.length, this.$$bottomCenterData, footerStartRow);
                         this.$$setLeftAndRightColumnsData(this.$$footerRows.length, this.$$bottomLeftRowHeadersData, this.$$bottomLeftData, this.$$bottomRightData, footerStartRow);
+
+                        this.$broadcast(contentUpdatedEvent);
                     };
 
                     // Send an initial callback to set the scroll position on correct values if required
@@ -815,7 +820,7 @@
             }
         };
     })
-    .directive('ngcScrollbar', ['$timeout', function($timeout) {
+    .directive('ngcScrollbar', ['$timeout', 'contentUpdatedEvent', function($timeout, contentUpdatedEvent) {
         /* Internal directive for virtual horizontal and vertical scrollbars management */
         return {
             require:"^ngcTable",
@@ -915,6 +920,22 @@
                             // rootDirectiveScope.$$scrolling = false;
                         };
 
+                        /*
+                         Firefox does not handle correctly divs with 100% height in a div of 100% height
+                         The timeout calculates the min-height after the actual rendering
+                         */
+                        var updateVScrollBarHeight = function() {
+                            $timeout(function() {
+                                if (iElement.hasClass("vscrollbar")) {
+                                    var ratio = (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length) / scope.$$rows.length;
+                                    var elem = angular.element(scope.$$verticalScrollbarWrapperElement);
+                                    var height = elem.parent()[0].offsetHeight;
+                                    elem.css('height', height + 'px');
+                                    iElement.css('height', (height * ratio) + 'px')
+                                }
+                            });
+                        };
+
                         parentEl.on('wheel', function(){
                             //DEBUG
                             //console.warn('wheel: ', e);
@@ -937,23 +958,9 @@
 
                         });
 
-                        /*
-                         Firefox does not handle correctly divs with 100% height in a div of 100% height
-                         The timeout calculates the min-height after the actual rendering
-                         */
-                        var updateVScrollBarHeight = function() {
-                            $timeout(function() {
-                                if (iElement.hasClass("vscrollbar")) {
-                                    var ratio = (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length) / scope.$$rows.length;
-                                    var elem = angular.element(scope.$$verticalScrollbarWrapperElement);
-                                    var height = elem.parent()[0].offsetHeight;
-                                    elem.css('height', height + 'px');
-                                    iElement.css('height', (height * ratio) + 'px')
-                                }
-                            });
-                        };
-
                         updateVScrollBarHeight();
+                        // trigger this when contentUpdatedEvent is received
+                        scope.$on(contentUpdatedEvent, updateVScrollBarHeight);
                     }
                 };
             }
