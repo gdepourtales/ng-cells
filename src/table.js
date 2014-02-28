@@ -599,12 +599,12 @@
                                 }
                             }
 
-                            if (scope.centerColumnNumber >= newColumnCount) {
+                            if (centerColumnNumber >= newColumnCount) {
                                 scrollPosition.left = 0;
                             } else {
                                 if (oldColumnCount) {
                                     oldColumnCount -= -scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length;
-                                    if (oldColumnCount < newColumnCount) {
+                                    if (oldColumnCount < centerColumnNumber) {
                                         oldColumnCount = 0;
                                     }
                                 }
