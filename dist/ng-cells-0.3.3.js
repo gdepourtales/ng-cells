@@ -1267,16 +1267,17 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
 
                         // Handle the scroll event on parent elements
                         parentEl.on("scroll", function(e) {
+                            var args = [].slice.call(arguments);
                             if (scheduledScrollProcess) {
                                 clearTimeout(scheduledScrollProcess);
                             }
-                            scheduledScrollProcess = setTimeout(angular.bind(this, processScrollEvent, e), scrollDelay);
-                            // rootDirectiveScope.$$scrolling = true;
-
+                            scheduledScrollProcess = setTimeout(
+                                angular.bind.apply(angular, [this, processScrollEvent].concat(args)), // add this current event handler's arguments to the argument list of processScrollEvent
+                                scrollDelay
+                            );
                         });
 
                         // Handle vertical scroll triggered by mouse wheel over the whole table area
-                        var parentEl = iElement.parent();
                         if (parentEl.hasClass('vertical')) {
                             parentEl.closest('tbody').on('wheel', function(evt){
                                 var target = evt.target,
