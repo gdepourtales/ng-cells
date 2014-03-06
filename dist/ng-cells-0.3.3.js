@@ -860,10 +860,72 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                     // Initialize the data
                     scope.$$updateData();
 
+                    // Update the scroll positions (top and left) for the new data object
+                    // It'll translate the old positions to the new ones proportionally
+                    scope.$$updateScrollPositions = function (oldData) {
+                        var scope = this,
+                            data = scope.data,
+                            scrollPosition = scope.$$scrollPosition,
+                            rowNumber = scope.rowNumber,
+                            centerColumnNumber = scope.centerColumnNumber,
+                            newRowCount = data && data.length || 0,
+                            newColumnCount = data && data[0] && data[0].length || 0,
+                            oldRowCount = oldData && oldData.length || 0,
+                            oldColumnCount = oldData && oldData[0] && oldData[0].length || 0;
+
+                        if (scrollPosition.top){
+                            if (newRowCount) {
+                                newRowCount -= scope.$$headerRows.length - scope.$$footerRows.length;
+                                if (newRowCount < 0) {
+                                    newRowCount = 0;
+                                }
+                            }
+
+                            if (rowNumber >= newRowCount) {
+                                scrollPosition.top = 0;
+                            } else {
+                                if (oldRowCount) {
+                                    oldRowCount -= scope.$$headerRows.length - scope.$$footerRows.length;
+                                    if (oldRowCount < rowNumber) {
+                                        oldRowCount = 0;
+                                    }
+                                }
+
+                                scrollPosition.top = oldRowCount &&
+                                    (Math.round((scrollPosition.top + 1) * (newRowCount - rowNumber) / (oldRowCount - rowNumber)) - 1);
+                            }
+                        }
+
+                        if (scrollPosition.left) {
+                            if (newColumnCount) {
+                                newColumnCount -= -scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length;
+                                if (newColumnCount < 0) {
+                                    newColumnCount = 0;
+                                }
+                            }
+
+                            if (centerColumnNumber >= newColumnCount) {
+                                scrollPosition.left = 0;
+                            } else {
+                                if (oldColumnCount) {
+                                    oldColumnCount -= -scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length;
+                                    if (oldColumnCount < centerColumnNumber) {
+                                        oldColumnCount = 0;
+                                    }
+                                }
+
+                                scrollPosition.left = oldColumnCount &&
+                                    (Math.round((scrollPosition.left + 1) * (newColumnCount - newColumnCount) / (oldColumnCount - newColumnCount)) - 1);
+                            }
+                        }
+                    };
+
                     scope.$watch(
                         'data',
                         function(newValue, oldValue) {
                             if ( newValue !== oldValue ) {
+                                scope.$$updateScrollPositions(oldValue);
+
                                 // Update the data
                                 scope.$$updateData();
                                 // Refresh the scrollbars
