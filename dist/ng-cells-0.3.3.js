@@ -1158,6 +1158,37 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                             }
                         });
 
+                        // Handle vertical scroll triggered by mouse wheel over the whole table area
+                        var parentEl = iElement.parent();
+                        if (parentEl.hasClass('vertical')) {
+                            parentEl.closest('tbody').on('wheel', function(evt){
+                                var target = evt.target,
+                                    parentElDom = parentEl[0];
+                                if (target !== parentElDom) {
+                                    var scrollHeight = parentElDom.scrollHeight;
+                                    if (!scrollHeight) { // if scrolling vertically is not possible
+                                        return;
+                                    }
+
+                                    var initScrollTop = parentElDom.scrollTop,
+                                        lineScrollOffset = evt.originalEvent.deltaY > 0 ? 3 : -3;
+
+                                    // if we can't scroll further in that direction
+                                    if ((initScrollTop === 0 && lineScrollOffset < 0) ||
+                                        ((initScrollTop + parentElDom.offsetHeight) === scrollHeight && lineScrollOffset > 0)) {
+                                        return;
+                                    }
+
+                                    // if we can scroll more
+                                    if (parentElDom.scrollByLines) {
+                                        parentElDom.scrollByLines(lineScrollOffset);
+                                    } else { // if scrollByLines is not available, use pixels to scroll
+                                        parentElDom.scrollBy(lineScrollOffset * 10);
+                                    }
+                                    evt.preventDefault();
+                                }
+                            });
+                        }
                     }
                 };
             }
