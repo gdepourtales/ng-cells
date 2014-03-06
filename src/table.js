@@ -962,12 +962,14 @@
 
                         // Handle the scroll event on parent elements
                         parentEl.on("scroll", function(e) {
+                            var args = [].slice.call(arguments);
                             if (scheduledScrollProcess) {
                                 clearTimeout(scheduledScrollProcess);
                             }
-                            scheduledScrollProcess = setTimeout(angular.bind(this, processScrollEvent, e), scrollDelay);
-                            // rootDirectiveScope.$$scrolling = true;
-
+                            scheduledScrollProcess = setTimeout(
+                                angular.bind.apply(angular, [this, processScrollEvent].concat(args)), // add this current event handler's arguments to the argument list of processScrollEvent
+                                scrollDelay
+                            );
                         });
 
                         // Handle vertical scroll triggered by mouse wheel over the whole table area
