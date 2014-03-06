@@ -323,7 +323,10 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
 
     var module = angular.module('ngcTableDirective', ['ngc-template', 'ngSanitize']);
 
-    module.directive('ngcTable', ['$templateCache', '$sce', function($templateCache, $sce) {
+    // trigger this when the table's content are udpated
+    module.constant('contentUpdatedEvent', 'contentUpdatedEvent');
+
+    module.directive('ngcTable', ['$templateCache', '$sce', 'contentUpdatedEvent', function($templateCache, $sce, contentUpdatedEvent) {
 
         /**
          * ngcTable Controller declaration. The format is given to be able to minify the directive. The scope is
@@ -728,16 +731,17 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                             }
                         });
 
+                        var value = formatFn(data, row, col);
                         return {
                             row: row,
                             col: col,
                             data: data,
-                            value: formatFn(data, row, col),
+                            value: value,
                             clazz: clazz,
                             style: styleFn(data, row, col),
                             eventCallbacks: eventCallbacks,
                             enclosingRanges: enclosingRanges,
-                            customHTML:  (angular.isDefined(customTrustedHtmlFn)) ? $sce.trustAsHtml(customTrustedHtmlFn(data, row, col, formatFn(data, row, col))) : customHtmlFn(data, row, col, formatFn(data, row, col))
+                            customHTML:  (angular.isDefined(customTrustedHtmlFn)) ? $sce.trustAsHtml(customTrustedHtmlFn(data, row, col, value)) : customHtmlFn(data, row, col, value)
                         };
                     }
 
@@ -848,6 +852,8 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                         var footerStartRow = Math.max(this.data.length - this.$$footerRows.length, this.$$headerRows.length + this.$$rows.length);
                         this.$$setCenterColumnsData(this.$$footerRows.length, this.$$bottomCenterData, footerStartRow);
                         this.$$setLeftAndRightColumnsData(this.$$footerRows.length, this.$$bottomLeftRowHeadersData, this.$$bottomLeftData, this.$$bottomRightData, footerStartRow);
+
+                        this.$broadcast(contentUpdatedEvent);
                     };
 
                     // Send an initial callback to set the scroll position on correct values if required
@@ -860,10 +866,72 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                     // Initialize the data
                     scope.$$updateData();
 
+                    // Update the scroll positions (top and left) for the new data object
+                    // It'll translate the old positions to the new ones proportionally
+                    scope.$$updateScrollPositions = function (oldData) {
+                        var scope = this,
+                            data = scope.data,
+                            scrollPosition = scope.$$scrollPosition,
+                            rowNumber = scope.rowNumber,
+                            centerColumnNumber = scope.centerColumnNumber,
+                            newRowCount = data && data.length || 0,
+                            newColumnCount = data && data[0] && data[0].length || 0,
+                            oldRowCount = oldData && oldData.length || 0,
+                            oldColumnCount = oldData && oldData[0] && oldData[0].length || 0;
+
+                        if (scrollPosition.top){
+                            if (newRowCount) {
+                                newRowCount -= scope.$$headerRows.length - scope.$$footerRows.length;
+                                if (newRowCount < 0) {
+                                    newRowCount = 0;
+                                }
+                            }
+
+                            if (rowNumber >= newRowCount) {
+                                scrollPosition.top = 0;
+                            } else {
+                                if (oldRowCount) {
+                                    oldRowCount -= scope.$$headerRows.length - scope.$$footerRows.length;
+                                    if (oldRowCount < rowNumber) {
+                                        oldRowCount = 0;
+                                    }
+                                }
+
+                                scrollPosition.top = oldRowCount &&
+                                    (Math.round((scrollPosition.top + 1) * (newRowCount - rowNumber) / (oldRowCount - rowNumber)) - 1);
+                            }
+                        }
+
+                        if (scrollPosition.left) {
+                            if (newColumnCount) {
+                                newColumnCount -= -scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length;
+                                if (newColumnCount < 0) {
+                                    newColumnCount = 0;
+                                }
+                            }
+
+                            if (centerColumnNumber >= newColumnCount) {
+                                scrollPosition.left = 0;
+                            } else {
+                                if (oldColumnCount) {
+                                    oldColumnCount -= -scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length;
+                                    if (oldColumnCount < centerColumnNumber) {
+                                        oldColumnCount = 0;
+                                    }
+                                }
+
+                                scrollPosition.left = oldColumnCount &&
+                                    (Math.round((scrollPosition.left + 1) * (newColumnCount - newColumnCount) / (oldColumnCount - newColumnCount)) - 1);
+                            }
+                        }
+                    };
+
                     scope.$watch(
                         'data',
                         function(newValue, oldValue) {
                             if ( newValue !== oldValue ) {
+                                scope.$$updateScrollPositions(oldValue);
+
                                 // Update the data
                                 scope.$$updateData();
                                 // Refresh the scrollbars
@@ -1058,7 +1126,7 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
             }
         };
     })
-    .directive('ngcScrollbar', ['$timeout', function($timeout) {
+    .directive('ngcScrollbar', ['$timeout', 'contentUpdatedEvent', function($timeout, contentUpdatedEvent) {
         /* Internal directive for virtual horizontal and vertical scrollbars management */
         return {
             require:"^ngcTable",
@@ -1098,14 +1166,25 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                            if (ratio <= 100) iElement.parent().css('display', 'none');
                            // Save the reference to the element in order to manage scroll position
                            // after $apply force the redraw of DIVs
-                           scope.$parent.$parent.$$verticalScrollbarElement = iElement;
-                           scope.$parent.$parent.$$verticalScrollbarWrapperElement = iElement.parent()[0];
+                           var rootDirectiveScope = scope.$parent.$parent;
+                           rootDirectiveScope.$$verticalScrollbarElement = iElement;
+                           rootDirectiveScope.$$verticalScrollbarWrapperElement = iElement.parent()[0];
                        }
                    },
                     post: function postLink(scope, iElement /*, iAttrs*/) {
 
-                        // Handle the scroll event on parent elements
-                        iElement.parent().on("scroll", function(e) {
+                        var scheduledScrollProcess, // timeout id of the scheduled scroll event callback
+                            scheduledWheelProcess, // timeout id of the scheduled wheel event callback
+                            defaultScrollDelay = 120, // default scroll delay (ms)
+                            scrollDelay = defaultScrollDelay, // current scroll delay (ms)
+                            defaultWheelDelay = 500, // default wheel delay (ms)
+                            parentEl = iElement.parent(); // parent DOM element of this directive's DOM root
+
+                        /**
+                         * Handles the scroll event of the vertical scroll bar
+                         * @param {jQuery.Event} e
+                         */
+                        var processScrollEvent = function (e) {
 
                             var scrollRatio,
                                 // Save scroll positions to set them after the call to $apply which
@@ -1130,34 +1209,64 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
 
                             if (angular.isFunction(scope.scrollFn)) scope.scrollFn(e, {
                                 top: scope.$$scrollPosition.top +  scope.$$headerRows.length,
-                                left:scope.$$scrollPosition.left + scope.$$leftFixedColumns.length
+                                left: scope.$$scrollPosition.left + scope.$$leftFixedColumns.length
                             });
 
                             scope.$$updateData();
 
-                            scope.$apply();
                             // $apply redraws the divs so they reset their position
+                            // WARNING: This is quite slow once the number of cells exceeds 300!
+                            scope.$apply();
                             // Therefore we msu
                             // Reposition the elements with the saved position
                             scope.$$verticalScrollbarWrapperElement.scrollTop = verticalScrollPos;
                             scope.$$horizontalScrollbarWrapperElement.scrollLeft = horizontalScrollPos;
 
-                        });
+                            updateVScrollBarHeight();
+                            // rootDirectiveScope.$$scrolling = false;
+                        };
 
                         /*
                          Firefox does not handle correctly divs with 100% height in a div of 100% height
                          The timeout calculates the min-height after the actual rendering
                          */
-                        $timeout(function() {
-                            if (iElement.hasClass("vscrollbar")) {
-                                var ratio = (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length) / scope.$$rows.length;
-                                var elem = angular.element(scope.$$verticalScrollbarWrapperElement);
-                                var height = elem.parent()[0].offsetHeight;
-                                elem.css('height', height + 'px');
-                                iElement.css('height', (height * ratio) + 'px')
+                        var updateVScrollBarHeight = function() {
+                            $timeout(function() {
+                                if (iElement.hasClass("vscrollbar")) {
+                                    var ratio = (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length) / scope.$$rows.length;
+                                    var elem = angular.element(scope.$$verticalScrollbarWrapperElement);
+                                    var height = elem.parent()[0].offsetHeight;
+                                    elem.css('height', height + 'px');
+                                    iElement.css('height', (height * ratio) + 'px')
+                                }
+                            });
+                        };
+
+                        parentEl.on('wheel', function(){
+                            //DEBUG
+                            //console.warn('wheel: ', e);
+                            if (scheduledWheelProcess) {
+                                clearTimeout(scheduledWheelProcess);
                             }
+                            scrollDelay = defaultWheelDelay; // if the user wheel action triggers a scroll, it'll use this different delay value
+                            scheduledWheelProcess = setTimeout(function(){ // restore the default scroll delay later
+                                scrollDelay = defaultScrollDelay;
+                            }, defaultWheelDelay);
                         });
 
+                        // Handle the scroll event on parent elements
+                        parentEl.on("scroll", function(e) {
+                            if (scheduledScrollProcess) {
+                                clearTimeout(scheduledScrollProcess);
+                            }
+                            scheduledScrollProcess = setTimeout(angular.bind(this, processScrollEvent, e), scrollDelay);
+                            // rootDirectiveScope.$$scrolling = true;
+
+                        });
+
+                        updateVScrollBarHeight();
+                        // trigger this when contentUpdatedEvent is received
+                        scope.$on(contentUpdatedEvent, updateVScrollBarHeight);
                     }
                 };
             }
