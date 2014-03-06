@@ -995,8 +995,12 @@
                                     // if we can scroll more
                                     if (parentElDom.scrollByLines) {
                                         parentElDom.scrollByLines(lineScrollOffset);
-                                    } else { // if scrollByLines is not available, use pixels to scroll
-                                        parentElDom.scrollBy(lineScrollOffset * 10);
+                                    } else { // if scrollByLines is not available, use the IE similar function
+                                        if (parentElDom.doScroll) {
+                                            parentElDom.doScroll(lineScrollOffset > 0 ? 'scrollbarDown' : 'scrollbarUp');
+                                        } else { // last solution, try to do it manually
+                                            parentElDom.scrollTop += lineScrollOffset * 10;
+                                        }
                                     }
                                     evt.preventDefault();
                                 }
