@@ -1267,13 +1267,46 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
 
                         // Handle the scroll event on parent elements
                         parentEl.on("scroll", function(e) {
+                            var args = [].slice.call(arguments);
                             if (scheduledScrollProcess) {
                                 clearTimeout(scheduledScrollProcess);
                             }
-                            scheduledScrollProcess = setTimeout(angular.bind(this, processScrollEvent, e), scrollDelay);
-                            // rootDirectiveScope.$$scrolling = true;
-
+                            scheduledScrollProcess = setTimeout(
+                                angular.bind.apply(angular, [this, processScrollEvent].concat(args)), // add this current event handler's arguments to the argument list of processScrollEvent
+                                scrollDelay
+                            );
                         });
+
+                        // Handle vertical scroll triggered by mouse wheel over the whole table area
+                        if (parentEl.hasClass('vertical')) {
+                            parentEl.closest('tbody').on('wheel', function(evt){
+                                var target = evt.target,
+                                    parentElDom = parentEl[0];
+                                if (target !== parentElDom) {
+                                    var scrollHeight = parentElDom.scrollHeight;
+                                    if (!scrollHeight) { // if scrolling vertically is not possible
+                                        return;
+                                    }
+
+                                    var initScrollTop = parentElDom.scrollTop,
+                                        lineScrollOffset = evt.originalEvent.deltaY > 0 ? 3 : -3;
+
+                                    // if we can't scroll further in that direction
+                                    if ((initScrollTop === 0 && lineScrollOffset < 0) ||
+                                        ((initScrollTop + parentElDom.offsetHeight) === scrollHeight && lineScrollOffset > 0)) {
+                                        return;
+                                    }
+
+                                    // if we can scroll more
+                                    if (parentElDom.scrollByLines) {
+                                        parentElDom.scrollByLines(lineScrollOffset);
+                                    } else { // if scrollByLines is not available, use pixels to scroll
+                                        parentElDom.scrollBy(lineScrollOffset * 10);
+                                    }
+                                    evt.preventDefault();
+                                }
+                            });
+                        }
 
                         updateVScrollBarHeight();
                         // trigger this when contentUpdatedEvent is received
