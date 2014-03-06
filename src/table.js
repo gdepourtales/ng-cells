@@ -973,7 +973,6 @@
                         });
 
                         // Handle vertical scroll triggered by mouse wheel over the whole table area
-                        var parentEl = iElement.parent();
                         if (parentEl.hasClass('vertical')) {
                             parentEl.closest('tbody').on('wheel', function(evt){
                                 var target = evt.target,
