@@ -894,7 +894,7 @@
 
                             } else
                             // Detect if vertical according to the class
-                            if (e.currentTarget !== null && angular.element(e.target).hasClass("vertical")) {
+                            if (angular.element(e.target).hasClass("vertical")) {
                                 scrollRatio = e.target.scrollTop / (e.target.scrollHeight);
                                 scope.$$scrollPosition.top = Math.round(scrollRatio * (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length));
                             } else {
