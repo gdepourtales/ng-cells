@@ -921,22 +921,6 @@
                             // rootDirectiveScope.$$scrolling = false;
                         };
 
-                        /*
-                         Firefox does not handle correctly divs with 100% height in a div of 100% height
-                         The timeout calculates the min-height after the actual rendering
-                         */
-                        var updateVScrollBarHeight = function() {
-                            $timeout(function() {
-                                if (iElement.hasClass("vscrollbar")) {
-                                    var ratio = (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length) / scope.$$rows.length;
-                                    var elem = angular.element(scope.$$verticalScrollbarWrapperElement);
-                                    var height = elem.parent()[0].offsetHeight;
-                                    elem.css('height', height + 'px');
-                                    iElement.css('height', (height * ratio) + 'px')
-                                }
-                            });
-                        };
-
                         parentEl.on('wheel', function(){
                             //DEBUG
                             //console.warn('wheel: ', e);
@@ -956,12 +940,58 @@
                             }
                             scheduledScrollProcess = setTimeout(angular.bind(this, processScrollEvent, e), scrollDelay);
                             // rootDirectiveScope.$$scrolling = true;
-
                         });
 
+                        /*
+                         Firefox does not handle correctly divs with 100% height in a div of 100% height
+                         The timeout calculates the min-height after the actual rendering
+                         */
+                        var updateVScrollBarHeight = function() {
+                            $timeout(function() {
+                                if (iElement.hasClass("vscrollbar")) {
+                                    var ratio = (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length) / scope.$$rows.length;
+                                    var elem = angular.element(scope.$$verticalScrollbarWrapperElement);
+                                    var height = elem.parent()[0].offsetHeight;
+                                    elem.css('height', height + 'px');
+                                    iElement.css('height', (height * ratio) + 'px')
+                                }
+                            });
+                        };
+
                         updateVScrollBarHeight();
-                        // trigger this when contentUpdatedEvent is received
-                        scope.$on(contentUpdatedEvent, updateVScrollBarHeight);
+
+
+                        // Handle vertical scroll triggered by mouse wheel over the whole table area
+                        var parentEl = iElement.parent();
+                        if (parentEl.hasClass('vertical')) {
+                            parentEl.parent().parent().parent().on('wheel', function(evt){
+                                var target = evt.target,
+                                    parentElDom = parentEl[0];
+                                if (target !== parentElDom) {
+                                    var scrollHeight = parentElDom.scrollHeight;
+                                    if (!scrollHeight) { // if scrolling vertically is not possible
+                                        return;
+                                    }
+
+                                    var initScrollTop = parentElDom.scrollTop,
+                                        lineScrollOffset = evt.deltaY > 0 ? 3 : -3;
+
+                                    // if we can't scroll further in that direction
+                                    if ((initScrollTop === 0 && lineScrollOffset < 0) ||
+                                        ((initScrollTop + parentElDom.offsetHeight) === scrollHeight && lineScrollOffset > 0)) {
+                                        return;
+                                    }
+
+                                    // if we can scroll more
+                                    if (parentElDom.scrollByLines) {
+                                        parentElDom.scrollByLines(lineScrollOffset);
+                                    } else { // if scrollByLines is not available, use pixels to scroll
+                                        parentElDom.scrollBy(lineScrollOffset * 10);
+                                    }
+                                    evt.preventDefault();
+                                }
+                            });
+                        }
                     }
                 };
             }
