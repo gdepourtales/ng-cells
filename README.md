@@ -269,6 +269,15 @@ For example, in order to select the cells of the last row of the center columns 
 All element class declarations also have the `ngc` class. First and last rows of each section have the resp. `first` and
 `last` classes. Same for cells in each row and section.
 
+
+# Thanks
+
+Many thanks for contributors
+
+* kayhadrin: Many improvements on mouse and scrolls behaviour
+* iiome: Update of the web pages
+
+
 # License
 
 Copyright 2013,2014 Guy de Pourtalès
