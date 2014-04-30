@@ -946,7 +946,6 @@
 
                         // Handle the scroll event on parent elements
                         parentEl.on("scroll", function(e) {
-                            var args = [].slice.call(arguments);
                             if (scheduledScrollProcess) {
                                 clearTimeout(scheduledScrollProcess);
                             }
