@@ -388,7 +388,7 @@
                      * @param scope The scope
                      * @param row The row in data space
                      * @param col The column in data space
-                     * @returns {{data: *, value: *, class: string, style: string, eventCallbacks: {}, enclosingRanges: Array}}
+                     * @returns {{row: *, col: *, data: *, value: *, clazz: string, style: *, eventCallbacks: {}, enclosingRanges: Array, customCellTemplate: (string|Function), customHTML: string}}
                      */
                     function $$getCellData(scope, row, col) {
                         /* The additional optional class(es) */
@@ -403,6 +403,12 @@
                         var customHtmlFn = defaultHtmlFn;
                         /* The custom append function */
                         var customTrustedHtmlFn = undefined;
+                        /**
+                         * The custom template resolver
+                         * @type {string|Function} A template URL string or a function that returns the template url string.
+                         * Function signature: function(rawData, row, col, formattedValue, scope)
+                         */
+                        var customCellTemplate = undefined;
 
                         /* The cell event callbacks */
                         var eventCallbacks = {};
@@ -429,6 +435,9 @@
                                 if (angular.isFunction(range.styleFn)) styleFn = range['styleFn'];
                                 if (angular.isFunction(range.customHtmlFn)) customHtmlFn = range['customHtmlFn'];
                                 if (angular.isFunction(range.customTrustedHtmlFn)) customTrustedHtmlFn = range['customTrustedHtmlFn'];
+                                if (angular.isDefined(range.customCellTemplate)) {
+                                    customCellTemplate = range.customCellTemplate;
+                                }
 
                                 /* Register available event callbacks */
                                 angular.forEach(events, function(event) {
@@ -437,7 +446,16 @@
                             }
                         });
 
-                        var value = formatFn(data, row, col);
+                        var value = formatFn(data, row, col),
+                            customHTML;
+
+                        if (customCellTemplate && angular.isFunction(customCellTemplate)) {
+                            customCellTemplate = customCellTemplate(data, row, col, value, scope);
+                        }
+
+                        if (customCellTemplate == null || customCellTemplate == '') { // null, undefined or empty string
+                            customHTML = (angular.isDefined(customTrustedHtmlFn)) ? $sce.trustAsHtml(customTrustedHtmlFn(data, row, col, value)) : customHtmlFn(data, row, col, value);
+                        }
                         return {
                             row: row,
                             col: col,
@@ -447,7 +465,7 @@
                             style: styleFn(data, row, col),
                             eventCallbacks: eventCallbacks,
                             enclosingRanges: enclosingRanges,
-                            customHTML:  (angular.isDefined(customTrustedHtmlFn)) ? $sce.trustAsHtml(customTrustedHtmlFn(data, row, col, value)) : customHtmlFn(data, row, col, value)
+                            customHTML: customHTML
                         };
                     }
 
@@ -771,6 +789,9 @@
                 customHtmlFn: '=?',
                 /* Function to insert custom trusted HTML in the range */
                 customTrustedHtmlFn: '=?',
+                /* URL string of a custom template to render the cell contents.
+                 Can also be a Function instead, with the following signature: function(rawData, row, col, formattedValue, scope) */
+                customCellTemplate: '=?',
                 /* CSS class to be added to the cells */
                 clazz: '=?',
                 /* CSS style additional declaration to be added to the cell */
@@ -813,6 +834,7 @@
                     styleFn: scope.styleFn,
                     customHtmlFn: scope.customHtmlFn,
                     customTrustedHtmlFn: scope.customTrustedHtmlFn,
+                    customCellTemplate: scope.customCellTemplate,
                     click: scope.clickFn,
                     dblclick: scope.dblclickFn,
                     keydown: scope.keydownFn,
@@ -827,7 +849,6 @@
                     touchstart: scope.touchstartFn,
                     touchmove: scope.touchmoveFn,
                     touchend: scope.touchendFn
-
                 });
             }
         };
@@ -1009,6 +1030,49 @@
 
         };
     }])
+    /**
+     * @name extInclude
+     * Extended version of ngInclude where we can also specify an additional scope variable as 'scopeExtension'.
+     * Can only be used as an Attribute.
+     *
+     * @param {string} extInclude Angular expression evaluating to a template URL
+     * @param {string} scopeExtension Angular expression evaluating to an object. Its value will be available in the
+     *                                inner scope of the directive.
+     */
+    .directive('extInclude', [
+        function() {
+            // List of attributes to map to the scope
+            var attrToMap = ['extInclude', 'scopeExtension'];
+
+            /**
+             * Sets a given attribute onto the scope after evaluating it and watch for future value changes
+             * @param {Object} scope
+             * @param {Object} attr
+             * @param {string} attrName
+             * @return {void}
+             */
+            var setupScopeVar = function(scope, attr, attrName) {
+                scope.$watch(attr[attrName], function(newValue, oldValue) {
+                    if (newValue === oldValue) {
+                        return;
+                    }
+                    scope[attrName] = newValue;
+                }, true);
+                scope[attrName] = scope.$eval(attr[attrName]);
+            };
+
+            return {
+                restrict: 'A',
+                template: '<ng-include src="extInclude"></ng-include>',
+                scope: true,
+                link: function(scope, element, attr) {
+                    for(var i= 0, len=attrToMap.length; i < len; i++) {
+                        setupScopeVar(scope, attr, attrToMap[i]);
+                    }
+                }
+            };
+        }
+    ]);
 ;
 
 })();
