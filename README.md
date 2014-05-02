@@ -235,9 +235,7 @@ Accepts types:
 <br>
 <br>
 **Note:** The cell value is stored in `scopeExtension.rawCellData` and can be accessed in the Angular template as follow:
-```html
-<span style="color: red">{{scopeExtension.rawCellData.data.id}}</span>
-```
+`<span style="color: red">{{scopeExtension.rawCellData.data}}</span>`. <br>
 See test case [./test/custom-cell-template.html](./test/custom-cell-template.html) for a full example.
 
 ## CSS Reference
