@@ -465,6 +465,7 @@
                             style: styleFn(data, row, col),
                             eventCallbacks: eventCallbacks,
                             enclosingRanges: enclosingRanges,
+                            customCellTemplate: customCellTemplate,
                             customHTML: customHTML
                         };
                     }
