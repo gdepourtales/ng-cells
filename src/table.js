@@ -1006,7 +1006,8 @@
                                     }
 
                                     var initScrollTop = parentElDom.scrollTop,
-                                        lineScrollOffset = evt.deltaY > 0 ? 3 : -3;
+                                        originalEvent = evt.originalEvent || evt, // need this to make this code work with/without jQuery
+                                        lineScrollOffset = originalEvent.deltaY > 0 ? 3 : -3;
 
                                     // if we can't scroll further in that direction
                                     if ((initScrollTop === 0 && lineScrollOffset < 0) ||
