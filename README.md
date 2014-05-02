@@ -238,6 +238,7 @@ Accepts types:
 ```html
 <span style="color: red">{{scopeExtension.rawCellData.data.id}}</span>
 ```
+See test case [./test/custom-cell-template.html](./test/custom-cell-template.html) for a full example.
 
 ## CSS Reference
 
