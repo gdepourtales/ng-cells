@@ -465,6 +465,7 @@
                             style: styleFn(data, row, col),
                             eventCallbacks: eventCallbacks,
                             enclosingRanges: enclosingRanges,
+                            customCellTemplate: customCellTemplate,
                             customHTML: customHTML
                         };
                     }
@@ -994,7 +995,6 @@
 
 
                         // Handle vertical scroll triggered by mouse wheel over the whole table area
-                        var parentEl = iElement.parent();
                         if (parentEl.hasClass('vertical')) {
                             parentEl.parent().parent().parent().on('wheel', function(evt){
                                 var target = evt.target,
@@ -1006,7 +1006,8 @@
                                     }
 
                                     var initScrollTop = parentElDom.scrollTop,
-                                        lineScrollOffset = evt.deltaY > 0 ? 3 : -3;
+                                        originalEvent = evt.originalEvent || evt, // need this to make this code work with/without jQuery
+                                        lineScrollOffset = originalEvent.deltaY > 0 ? 3 : -3;
 
                                     // if we can't scroll further in that direction
                                     if ((initScrollTop === 0 && lineScrollOffset < 0) ||
@@ -1073,6 +1074,4 @@
             };
         }
     ]);
-;
-
 })();
