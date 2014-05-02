@@ -216,14 +216,28 @@ The function must be of the form `function(value, row, col)` where `value` is th
 * `<event>-fn` Custom event callbacks. The event can be any of `click`, `dblclick`, `mousedown`, `mouseenter`, `mouseleave`
 `mousemove`, `mouseover`, `mouseup` event types. The callback must be of the form `function(event, cellData)` where
 `event` is the initial Javascript event and the `cellData` an object with the following attributes :
-** `row` The row of the data value in original data space (not table space)
-** `col` The column of the data value in original data space (not table space)
-** `data` The original data value located at row and column
-** `value` The value of the cell as displayed
-** `clazz` The classes of the cell
-** `style` The style declaration of the cell
-** `eventCallbacks` An object with all registered callbacks identified the event type
-** `enclosingRanges` An array of all ranges that enclose the current cell
+    * `row` The row of the data value in original data space (not table space)
+    * `col` The column of the data value in original data space (not table space)
+    * `data` The original data value located at row and column
+    * `value` The value of the cell as displayed
+    * `clazz` The classes of the cell
+    * `style` The style declaration of the cell
+    * `eventCallbacks` An object with all registered callbacks identified the event type
+    * `enclosingRanges` An array of all ranges that enclose the current cell
+* `custom-cell-template` Render a custom Angular template in the cell instead of using `custom-html-fn`. <br/>
+Accepts types: 
+    * `string`: URL of an Angular template. E.g. `custom-cell-template="'template.html'"`
+    * `Function`: function that returns the URL of an Angular template. 
+    E.g. `custom-cell-template="getTemplate"` <br/>
+    Function signature is `function(rawData, row, col, formattedValue, scope)` where
+    `rawData` is an object that describes the table cell.
+    `rawData.data` points to the actual cell value.
+<br>
+<br>
+**Note:** The cell value is stored in `scopeExtension.rawCellData` and can be accessed in the Angular template as follow:
+```html
+<span style="color: red">{{scopeExtension.rawCellData.data.id}}</span>
+```
 
 ## CSS Reference
 
