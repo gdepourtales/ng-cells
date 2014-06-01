@@ -70,8 +70,13 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
     "                    ng-class=\"{first: $first, last: $last}\"\n" +
     "                    class=\"ngc left header cell {{$$topLeftData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
     "                    style=\"{{$$topLeftData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
-    "                    <div class=\"ngc cell-content\" style=\"{{row.height}}; {{column.style}}\"\n" +
-    "                         ng-bind-html=\"$$topLeftData[$parent.$index][$index].customHTML\"></div>\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-html\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"!$$topLeftData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ng-bind-html=\"$$topLeftData[$parent.$parent.$index][$index].customHTML\"></div>\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-cell-template\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"$$topLeftData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ext-include=\"$$topLeftData[row.index][$index].customCellTemplate\"\n" +
+    "                         scope-extension=\"{'rawCellData': $$topLeftData[row.index][$index]}\"></div>\n" +
     "                </td>\n" +
     "\n" +
     "                <!-- Cells for middle variable columns -->\n" +
@@ -90,8 +95,13 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
     "                    ng-class=\"{first: $first, last: $last}\"\n" +
     "                    class=\"ngc center header cell {{$$topCenterData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
     "                    style=\"{{$$topCenterData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
-    "                    <div class=\"ngc cell-content\" style=\"{{row.height}}; {{column.style}}\"\n" +
-    "                         ng-bind-html=\"$$topCenterData[$parent.$index][$index].customHTML\"></div>\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-html\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"!$$topCenterData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ng-bind-html=\"$$topCenterData[$parent.$parent.$index][$index].customHTML\"></div>\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-cell-template\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"$$topCenterData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ext-include=\"$$topCenterData[row.index][$index].customCellTemplate\"\n" +
+    "                         scope-extension=\"{'rawCellData': $$topCenterData[row.index][$index]}\"></div>\n" +
     "                </td>\n" +
     "\n" +
     "                <!-- Cells for right fixed columns -->\n" +
@@ -110,8 +120,13 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
     "                    ng-class=\"{first: $first, last: $last}\"\n" +
     "                    class=\"ngc right header cell {{$$topRightData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
     "                    style=\"{{$$topRightData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
-    "                    <div class=\"ngc cell-content\" style=\"{{row.height}}; {{column.style}}\"\n" +
-    "                         ng-bind-html=\"$$topRightData[$parent.$index][$index].customHTML\"></div>\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-html\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"!$$topRightData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ng-bind-html=\"$$topRightData[$parent.$parent.$index][$index].customHTML\"></div>\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-cell-template\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"$$topRightData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ext-include=\"$$topRightData[row.index][$index].customCellTemplate\"\n" +
+    "                         scope-extension=\"{'rawCellData': $$topRightData[row.index][$index]}\"></div>\n" +
     "                </td>\n" +
     "\n" +
     "                <!-- Placeholder for vertical scroll -->\n" +
@@ -144,8 +159,13 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
     "                    ng-class=\"{first: $first, last: $last}\"\n" +
     "                    class=\"ngc left middle cell {{$$middleLeftData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
     "                    style=\"{{$$middleLeftData[$parent.$index][$index].style}} ; {{row.height}}; {{column.style}}\">\n" +
-    "                    <div class=\"ngc cell-content\" style=\"{{row.height}}; {{column.style}}\"\n" +
-    "                         ng-bind-html=\"$$middleLeftData[$parent.$index][$index].customHTML\"></div>\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-html\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"!$$middleLeftData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ng-bind-html=\"$$middleLeftData[$parent.$parent.$index][$index].customHTML\"></div>\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-cell-template\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"$$middleLeftData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ext-include=\"$$middleLeftData[row.index][$index].customCellTemplate\"\n" +
+    "                         scope-extension=\"{'rawCellData': $$middleLeftData[row.index][$index]}\"></div>\n" +
     "                </td>\n" +
     "\n" +
     "                <!-- Cells for middle variable columns -->\n" +
@@ -164,8 +184,13 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
     "                    ng-class=\"{first: $first, last: $last}\"\n" +
     "                    class=\"ngc center cell middle {{$$middleCenterData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
     "                    style=\"{{$$middleCenterData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
-    "                    <div class=\"ngc cell-content\" style=\"{{row.height}}; {{column.style}}\"\n" +
-    "                         ng-bind-html=\"$$middleCenterData[$parent.$index][$index].customHTML\"></div>\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-html\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"!$$middleCenterData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ng-bind-html=\"$$middleCenterData[$parent.$parent.$index][$index].customHTML\"></div>\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-cell-template\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"$$middleCenterData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ext-include=\"$$middleCenterData[row.index][$index].customCellTemplate\"\n" +
+    "                         scope-extension=\"{'rawCellData': $$middleCenterData[row.index][$index]}\"></div>\n" +
     "                </td>\n" +
     "\n" +
     "                <!-- Cells for right fixed columns -->\n" +
@@ -184,8 +209,13 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
     "                    ng-class=\"{first: $first, last: $last}\"\n" +
     "                    class=\"ngc right cell middle {{$$middleRightData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
     "                    style=\"{{$$middleRightData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
-    "                    <div class=\"ngc cell-content\" style=\"{{row.height}}; {{column.style}}\"\n" +
-    "                         ng-bind-html=\"$$middleRightData[$parent.$index][$index].customHTML\"></div>\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-html\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"!$$middleRightData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ng-bind-html=\"$$middleRightData[$parent.$parent.$index][$index].customHTML\"></div>\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-cell-template\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"$$middleRightData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ext-include=\"$$middleRightData[row.index][$index].customCellTemplate\"\n" +
+    "                         scope-extension=\"{'rawCellData': $$middleRightData[row.index][$index]}\"></div>\n" +
     "                </td>\n" +
     "                <td class=\"ngc scroll-wrapper-cell\" ng-if=\"$first\" rowspan=\"{{$$rows.length}}\">\n" +
     "                    <div class=\"ngc scroll-wrapper vertical\">\n" +
@@ -220,8 +250,13 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
     "                     ng-class=\"{first: $first, last: $last}\"\n" +
     "                     class=\"ngc left footer cell {{$$bottomLeftData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
     "                     style=\"{{$$bottomLeftData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
-    "                    <div class=\"ngc cell-content\" style=\"{{row.height}}; {{column.style}}\"\n" +
-    "                         ng-bind-html=\"$$bottomLeftData[$parent.$index][$index].customHTML\"></div>\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-html\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"!$$bottomLeftData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ng-bind-html=\"$$bottomLeftData[$parent.$parent.$index][$index].customHTML\"></div>\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-cell-template\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"$$bottomLeftData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ext-include=\"$$bottomLeftData[row.index][$index].customCellTemplate\"\n" +
+    "                         scope-extension=\"{'rawCellData': $$bottomLeftData[row.index][$index]}\"></div>\n" +
     "                </td>\n" +
     "\n" +
     "                <!-- Cells for middle variable columns -->\n" +
@@ -240,8 +275,13 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
     "                    ng-class=\"{first: $first, last: $last}\"\n" +
     "                    class=\"ngc center footer cell {{$$bottomCenterData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
     "                    style=\"{{$$bottomCenterData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
-    "                    <div class=\"ngc cell-content\" style=\"{{row.height}}; {{column.style}}\"\n" +
-    "                         ng-bind-html=\"$$bottomCenterData[$parent.$index][$index].customHTML\"></div>\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-html\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"!$$bottomCenterData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ng-bind-html=\"$$bottomCenterData[$parent.$parent.$index][$index].customHTML\"></div>\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-cell-template\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"$$bottomCenterData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ext-include=\"$$bottomCenterData[row.index][$index].customCellTemplate\"\n" +
+    "                         scope-extension=\"{'rawCellData': $$bottomCenterData[row.index][$index]}\"></div>\n" +
     "                </td>\n" +
     "\n" +
     "                <!-- Cells for right fixed columns -->\n" +
@@ -260,8 +300,13 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
     "                    ng-class=\"{first: $first, last: $last}\"\n" +
     "                    class=\"ngc right footer cell {{$$bottomRightData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
     "                    style=\"{{$$bottomRightData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
-    "                    <div class=\"ngc cell-content\" style=\"{{row.height}}; {{column.style}}\"\n" +
-    "                         ng-bind-html=\"$$bottomRightData[$parent.$index][$index].customHTML\"></div>\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-html\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"!$$bottomRightData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ng-bind-html=\"$$bottomRightData[$parent.$parent.$index][$index].customHTML\"></div>\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-cell-template\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"$$bottomRightData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ext-include=\"$$bottomRightData[row.index][$index].customCellTemplate\"\n" +
+    "                         scope-extension=\"{'rawCellData': $$bottomRightData[row.index][$index]}\"></div>\n" +
     "                </td>\n" +
     "\n" +
     "                <!-- Placeholder for vertical scroll -->\n" +
@@ -300,8 +345,7 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
     "            </tr>\n" +
     "        </table>\n" +
     "    </form>\n" +
-    "</div>\n" +
-    "");
+    "</div>");
 }]);
 /*
  Copyright 2013,2014 Guy de Pourtalès
@@ -536,6 +580,42 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                     }
 
                     /**
+                     * Creates a row definition object
+                     * @param {number|Array} rowHeight Row height as a number, or an array
+                     * @param {number} index Index of the rowHeight to use, when it's an array
+                     * @returns {{index: *, height: string}}
+                     */
+                    function createRowDefinitionByIndex(rowHeight, index) {
+                        return {
+                            index: index,
+                            height: $$getStyleDecl('height', rowHeight, index) + ';' + $$getStyleDecl('max-height', rowHeight, index)
+                        };
+                    }
+
+                    /**
+                     * Creates row definitions array based on provided row properties
+                     * @param params
+                     * @returns {Array}
+                     */
+                    function createRowsDefinitions(params) {
+                        var showRows = params.showRows,
+                            rowNumber = params.rowNumber,
+                            rowHeights = params.rowHeights,
+                            defaultRowNumber = params.defaultRowNumber || 1,
+                            rows = [];
+
+                        if (!showRows) {
+                            return rows;
+                        }
+
+                        rowNumber = angular.isNumber(rowNumber) ? rowNumber : defaultRowNumber;
+                        for (var i = 0; i < rowNumber; i++) {
+                            rows.push(createRowDefinitionByIndex(rowHeights, i));
+                        }
+                        return rows;
+                    }
+
+                    /**
                      * Flag to show the header rows.
                      * @type {string|.scope.showHeader|showHeader}
                      */
@@ -545,21 +625,12 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                      * Header rows definitions
                      * @type {Array}
                      */
-                    scope.$$headerRows = [];
-
-                    /*
-                    Initialize the headers rows. By default one is added if no parameter is given
-                     */
-                    var nHeaderRows = angular.isNumber(scope.headerRowNumber) ? scope.headerRowNumber : 1;
-                    nHeaderRows = scope.showHeader ? nHeaderRows : 0;
-
-                    for (i = 0; i < nHeaderRows; i++) {
-                        var headerRowDef = {
-                            index: i,
-                            height: $$getStyleDecl('height', scope.headerRowHeights, i) + ';' + $$getStyleDecl('max-height', scope.headerRowHeights, i)
-                        };
-                        scope.$$headerRows.push(headerRowDef);
-                    }
+                    scope.$$headerRows = createRowsDefinitions({
+                        showRows: scope.showHeader,
+                        rowNumber: scope.headerRowNumber,
+                        rowHeights: scope.headerRowHeights,
+                        defaultRowNumber: 1
+                    });
 
                     /**
                      * Flag to show the filter rows.
@@ -572,19 +643,12 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                      * Row definitions
                      * @type {Array}
                      */
-                    scope.$$rows = [];
-
-                    /*
-                     Initialize the rows. By default 10 are added if no parameter is given
-                     */
-                    var nRows = angular.isNumber(scope.rowNumber) ? scope.rowNumber : 10;
-                    for (i = 0; i < nRows; i++) {
-                        var rowDef = {
-                            index: i,
-                            height: $$getStyleDecl('height', scope.rowHeights, i) + ';' + $$getStyleDecl('max-height', scope.rowHeights, i)
-                        };
-                        scope.$$rows.push(rowDef);
-                    }
+                    scope.$$rows = createRowsDefinitions({
+                        showRows: true,
+                        rowNumber: scope.rowNumber,
+                        rowHeights: scope.rowHeights,
+                        defaultRowNumber: 10
+                    });
 
                     /**
                      * Flag to show the footer rows.
@@ -595,21 +659,12 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                     /**
                      * Footer row definitions
                      */
-                    scope.$$footerRows = [];
-
-                    /*
-                     Initialize the footer rows. By default 1 is added if no parameter is given
-                     */
-                    var nFooterRows = angular.isNumber(scope.footerRowNumber) ? scope.footerRowNumber : 1;
-                    nFooterRows = scope.showFooter ? nFooterRows : 0;
-
-                    for (i = 0; i < nFooterRows; i++) {
-                        var footerRowDef = {
-                            index: i,
-                            height: $$getStyleDecl('height', scope.footerRowHeights, i) + ';' + $$getStyleDecl('max-height', scope.footerRowHeights, i)
-                        };
-                        scope.$$footerRows.push(footerRowDef);
-                    }
+                    scope.$$footerRows = createRowsDefinitions({
+                        showRows: scope.showFooter,
+                        rowNumber: scope.footerRowNumber,
+                        rowHeights: scope.footerRowHeights,
+                        defaultRowNumber: 1
+                    });
 
                 },
 
@@ -682,7 +737,7 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                      * @param scope The scope
                      * @param row The row in data space
                      * @param col The column in data space
-                     * @returns {{data: *, value: *, class: string, style: string, eventCallbacks: {}, enclosingRanges: Array}}
+                     * @returns {{row: *, col: *, data: *, value: *, clazz: string, style: *, eventCallbacks: {}, enclosingRanges: Array, customCellTemplate: (string|Function), customHTML: string}}
                      */
                     function $$getCellData(scope, row, col) {
                         /* The additional optional class(es) */
@@ -697,6 +752,12 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                         var customHtmlFn = defaultHtmlFn;
                         /* The custom append function */
                         var customTrustedHtmlFn = undefined;
+                        /**
+                         * The custom template resolver
+                         * @type {string|Function} A template URL string or a function that returns the template url string.
+                         * Function signature: function(rawData, row, col, formattedValue, scope)
+                         */
+                        var customCellTemplate = undefined;
 
                         /* The cell event callbacks */
                         var eventCallbacks = {};
@@ -723,6 +784,9 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                                 if (angular.isFunction(range.styleFn)) styleFn = range['styleFn'];
                                 if (angular.isFunction(range.customHtmlFn)) customHtmlFn = range['customHtmlFn'];
                                 if (angular.isFunction(range.customTrustedHtmlFn)) customTrustedHtmlFn = range['customTrustedHtmlFn'];
+                                if (angular.isDefined(range.customCellTemplate)) {
+                                    customCellTemplate = range.customCellTemplate;
+                                }
 
                                 /* Register available event callbacks */
                                 angular.forEach(events, function(event) {
@@ -731,7 +795,16 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                             }
                         });
 
-                        var value = formatFn(data, row, col);
+                        var value = formatFn(data, row, col),
+                            customHTML;
+
+                        if (customCellTemplate && angular.isFunction(customCellTemplate)) {
+                            customCellTemplate = customCellTemplate(data, row, col, value, scope);
+                        }
+
+                        if (customCellTemplate == null || customCellTemplate == '') { // null, undefined or empty string
+                            customHTML = (angular.isDefined(customTrustedHtmlFn)) ? $sce.trustAsHtml(customTrustedHtmlFn(data, row, col, value)) : customHtmlFn(data, row, col, value);
+                        }
                         return {
                             row: row,
                             col: col,
@@ -741,7 +814,8 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                             style: styleFn(data, row, col),
                             eventCallbacks: eventCallbacks,
                             enclosingRanges: enclosingRanges,
-                            customHTML:  (angular.isDefined(customTrustedHtmlFn)) ? $sce.trustAsHtml(customTrustedHtmlFn(data, row, col, value)) : customHtmlFn(data, row, col, value)
+                            customCellTemplate: customCellTemplate,
+                            customHTML: customHTML
                         };
                     }
 
@@ -1065,6 +1139,9 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                 customHtmlFn: '=?',
                 /* Function to insert custom trusted HTML in the range */
                 customTrustedHtmlFn: '=?',
+                /* URL string of a custom template to render the cell contents.
+                 Can also be a Function instead, with the following signature: function(rawData, row, col, formattedValue, scope) */
+                customCellTemplate: '=?',
                 /* CSS class to be added to the cells */
                 clazz: '=?',
                 /* CSS style additional declaration to be added to the cell */
@@ -1107,6 +1184,7 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                     styleFn: scope.styleFn,
                     customHtmlFn: scope.customHtmlFn,
                     customTrustedHtmlFn: scope.customTrustedHtmlFn,
+                    customCellTemplate: scope.customCellTemplate,
                     click: scope.clickFn,
                     dblclick: scope.dblclickFn,
                     keydown: scope.keydownFn,
@@ -1121,7 +1199,6 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                     touchstart: scope.touchstartFn,
                     touchmove: scope.touchmoveFn,
                     touchend: scope.touchendFn
-
                 });
             }
         };
@@ -1267,7 +1344,6 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
 
 
                         // Handle vertical scroll triggered by mouse wheel over the whole table area
-                        var parentEl = iElement.parent();
                         if (parentEl.hasClass('vertical')) {
                             parentEl.parent().parent().parent().on('wheel', function(evt){
                                 var target = evt.target,
@@ -1279,7 +1355,8 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                                     }
 
                                     var initScrollTop = parentElDom.scrollTop,
-                                        lineScrollOffset = evt.deltaY > 0 ? 3 : -3;
+                                        originalEvent = evt.originalEvent || evt, // need this to make this code work with/without jQuery
+                                        lineScrollOffset = originalEvent.deltaY > 0 ? 3 : -3;
 
                                     // if we can't scroll further in that direction
                                     if ((initScrollTop === 0 && lineScrollOffset < 0) ||
@@ -1303,6 +1380,47 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
 
         };
     }])
-;
+    /**
+     * @name extInclude
+     * Extended version of ngInclude where we can also specify an additional scope variable as 'scopeExtension'.
+     * Can only be used as an Attribute.
+     *
+     * @param {string} extInclude Angular expression evaluating to a template URL
+     * @param {string} scopeExtension Angular expression evaluating to an object. Its value will be available in the
+     *                                inner scope of the directive.
+     */
+    .directive('extInclude', [
+        function() {
+            // List of attributes to map to the scope
+            var attrToMap = ['extInclude', 'scopeExtension'];
 
+            /**
+             * Sets a given attribute onto the scope after evaluating it and watch for future value changes
+             * @param {Object} scope
+             * @param {Object} attr
+             * @param {string} attrName
+             * @return {void}
+             */
+            var setupScopeVar = function(scope, attr, attrName) {
+                scope.$watch(attr[attrName], function(newValue, oldValue) {
+                    if (newValue === oldValue) {
+                        return;
+                    }
+                    scope[attrName] = newValue;
+                }, true);
+                scope[attrName] = scope.$eval(attr[attrName]);
+            };
+
+            return {
+                restrict: 'A',
+                template: '<ng-include src="extInclude"></ng-include>',
+                scope: true,
+                link: function(scope, element, attr) {
+                    for(var i= 0, len=attrToMap.length; i < len; i++) {
+                        setupScopeVar(scope, attr, attrToMap[i]);
+                    }
+                }
+            };
+        }
+    ]);
 })();
