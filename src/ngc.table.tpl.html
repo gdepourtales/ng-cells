@@ -66,8 +66,13 @@
                     ng-class="{first: $first, last: $last}"
                     class="ngc left header cell {{$$topLeftData[$parent.$index][$index].clazz}} {{column.clazz}}"
                     style="{{$$topLeftData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
-                    <div class="ngc cell-content" style="{{row.height}}; {{column.style}}"
-                         ng-bind-html="$$topLeftData[$parent.$index][$index].customHTML"></div>
+                    <div class="ngc cell-content ngc-custom-html" style="{{row.height}}; {{column.style}}"
+                         ng-if="!$$topLeftData[$parent.$index][$index].customCellTemplate"
+                         ng-bind-html="$$topLeftData[$parent.$parent.$index][$index].customHTML"></div>
+                    <div class="ngc cell-content ngc-custom-cell-template" style="{{row.height}}; {{column.style}}"
+                         ng-if="$$topLeftData[$parent.$index][$index].customCellTemplate"
+                         ext-include="$$topLeftData[row.index][$index].customCellTemplate"
+                         scope-extension="{'rawCellData': $$topLeftData[row.index][$index]}"></div>
                 </td>
 
                 <!-- Cells for middle variable columns -->
@@ -86,8 +91,13 @@
                     ng-class="{first: $first, last: $last}"
                     class="ngc center header cell {{$$topCenterData[$parent.$index][$index].clazz}} {{column.clazz}}"
                     style="{{$$topCenterData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
-                    <div class="ngc cell-content" style="{{row.height}}; {{column.style}}"
-                         ng-bind-html="$$topCenterData[$parent.$index][$index].customHTML"></div>
+                    <div class="ngc cell-content ngc-custom-html" style="{{row.height}}; {{column.style}}"
+                         ng-if="!$$topCenterData[$parent.$index][$index].customCellTemplate"
+                         ng-bind-html="$$topCenterData[$parent.$parent.$index][$index].customHTML"></div>
+                    <div class="ngc cell-content ngc-custom-cell-template" style="{{row.height}}; {{column.style}}"
+                         ng-if="$$topCenterData[$parent.$index][$index].customCellTemplate"
+                         ext-include="$$topCenterData[row.index][$index].customCellTemplate"
+                         scope-extension="{'rawCellData': $$topCenterData[row.index][$index]}"></div>
                 </td>
 
                 <!-- Cells for right fixed columns -->
@@ -106,8 +116,13 @@
                     ng-class="{first: $first, last: $last}"
                     class="ngc right header cell {{$$topRightData[$parent.$index][$index].clazz}} {{column.clazz}}"
                     style="{{$$topRightData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
-                    <div class="ngc cell-content" style="{{row.height}}; {{column.style}}"
-                         ng-bind-html="$$topRightData[$parent.$index][$index].customHTML"></div>
+                    <div class="ngc cell-content ngc-custom-html" style="{{row.height}}; {{column.style}}"
+                         ng-if="!$$topRightData[$parent.$index][$index].customCellTemplate"
+                         ng-bind-html="$$topRightData[$parent.$parent.$index][$index].customHTML"></div>
+                    <div class="ngc cell-content ngc-custom-cell-template" style="{{row.height}}; {{column.style}}"
+                         ng-if="$$topRightData[$parent.$index][$index].customCellTemplate"
+                         ext-include="$$topRightData[row.index][$index].customCellTemplate"
+                         scope-extension="{'rawCellData': $$topRightData[row.index][$index]}"></div>
                 </td>
 
                 <!-- Placeholder for vertical scroll -->
@@ -140,8 +155,13 @@
                     ng-class="{first: $first, last: $last}"
                     class="ngc left middle cell {{$$middleLeftData[$parent.$index][$index].clazz}} {{column.clazz}}"
                     style="{{$$middleLeftData[$parent.$index][$index].style}} ; {{row.height}}; {{column.style}}">
-                    <div class="ngc cell-content" style="{{row.height}}; {{column.style}}"
-                         ng-bind-html="$$middleLeftData[$parent.$index][$index].customHTML"></div>
+                    <div class="ngc cell-content ngc-custom-html" style="{{row.height}}; {{column.style}}"
+                         ng-if="!$$middleLeftData[$parent.$index][$index].customCellTemplate"
+                         ng-bind-html="$$middleLeftData[$parent.$parent.$index][$index].customHTML"></div>
+                    <div class="ngc cell-content ngc-custom-cell-template" style="{{row.height}}; {{column.style}}"
+                         ng-if="$$middleLeftData[$parent.$index][$index].customCellTemplate"
+                         ext-include="$$middleLeftData[row.index][$index].customCellTemplate"
+                         scope-extension="{'rawCellData': $$middleLeftData[row.index][$index]}"></div>
                 </td>
 
                 <!-- Cells for middle variable columns -->
@@ -160,8 +180,13 @@
                     ng-class="{first: $first, last: $last}"
                     class="ngc center cell middle {{$$middleCenterData[$parent.$index][$index].clazz}} {{column.clazz}}"
                     style="{{$$middleCenterData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
-                    <div class="ngc cell-content" style="{{row.height}}; {{column.style}}"
-                         ng-bind-html="$$middleCenterData[$parent.$index][$index].customHTML"></div>
+                    <div class="ngc cell-content ngc-custom-html" style="{{row.height}}; {{column.style}}"
+                         ng-if="!$$middleCenterData[$parent.$index][$index].customCellTemplate"
+                         ng-bind-html="$$middleCenterData[$parent.$parent.$index][$index].customHTML"></div>
+                    <div class="ngc cell-content ngc-custom-cell-template" style="{{row.height}}; {{column.style}}"
+                         ng-if="$$middleCenterData[$parent.$index][$index].customCellTemplate"
+                         ext-include="$$middleCenterData[row.index][$index].customCellTemplate"
+                         scope-extension="{'rawCellData': $$middleCenterData[row.index][$index]}"></div>
                 </td>
 
                 <!-- Cells for right fixed columns -->
@@ -180,8 +205,13 @@
                     ng-class="{first: $first, last: $last}"
                     class="ngc right cell middle {{$$middleRightData[$parent.$index][$index].clazz}} {{column.clazz}}"
                     style="{{$$middleRightData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
-                    <div class="ngc cell-content" style="{{row.height}}; {{column.style}}"
-                         ng-bind-html="$$middleRightData[$parent.$index][$index].customHTML"></div>
+                    <div class="ngc cell-content ngc-custom-html" style="{{row.height}}; {{column.style}}"
+                         ng-if="!$$middleRightData[$parent.$index][$index].customCellTemplate"
+                         ng-bind-html="$$middleRightData[$parent.$parent.$index][$index].customHTML"></div>
+                    <div class="ngc cell-content ngc-custom-cell-template" style="{{row.height}}; {{column.style}}"
+                         ng-if="$$middleRightData[$parent.$index][$index].customCellTemplate"
+                         ext-include="$$middleRightData[row.index][$index].customCellTemplate"
+                         scope-extension="{'rawCellData': $$middleRightData[row.index][$index]}"></div>
                 </td>
                 <td class="ngc scroll-wrapper-cell" ng-if="$first" rowspan="{{$$rows.length}}">
                     <div class="ngc scroll-wrapper vertical">
@@ -216,8 +246,13 @@
                      ng-class="{first: $first, last: $last}"
                      class="ngc left footer cell {{$$bottomLeftData[$parent.$index][$index].clazz}} {{column.clazz}}"
                      style="{{$$bottomLeftData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
-                    <div class="ngc cell-content" style="{{row.height}}; {{column.style}}"
-                         ng-bind-html="$$bottomLeftData[$parent.$index][$index].customHTML"></div>
+                    <div class="ngc cell-content ngc-custom-html" style="{{row.height}}; {{column.style}}"
+                         ng-if="!$$bottomLeftData[$parent.$index][$index].customCellTemplate"
+                         ng-bind-html="$$bottomLeftData[$parent.$parent.$index][$index].customHTML"></div>
+                    <div class="ngc cell-content ngc-custom-cell-template" style="{{row.height}}; {{column.style}}"
+                         ng-if="$$bottomLeftData[$parent.$index][$index].customCellTemplate"
+                         ext-include="$$bottomLeftData[row.index][$index].customCellTemplate"
+                         scope-extension="{'rawCellData': $$bottomLeftData[row.index][$index]}"></div>
                 </td>
 
                 <!-- Cells for middle variable columns -->
@@ -236,8 +271,13 @@
                     ng-class="{first: $first, last: $last}"
                     class="ngc center footer cell {{$$bottomCenterData[$parent.$index][$index].clazz}} {{column.clazz}}"
                     style="{{$$bottomCenterData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
-                    <div class="ngc cell-content" style="{{row.height}}; {{column.style}}"
-                         ng-bind-html="$$bottomCenterData[$parent.$index][$index].customHTML"></div>
+                    <div class="ngc cell-content ngc-custom-html" style="{{row.height}}; {{column.style}}"
+                         ng-if="!$$bottomCenterData[$parent.$index][$index].customCellTemplate"
+                         ng-bind-html="$$bottomCenterData[$parent.$parent.$index][$index].customHTML"></div>
+                    <div class="ngc cell-content ngc-custom-cell-template" style="{{row.height}}; {{column.style}}"
+                         ng-if="$$bottomCenterData[$parent.$index][$index].customCellTemplate"
+                         ext-include="$$bottomCenterData[row.index][$index].customCellTemplate"
+                         scope-extension="{'rawCellData': $$bottomCenterData[row.index][$index]}"></div>
                 </td>
 
                 <!-- Cells for right fixed columns -->
@@ -256,8 +296,13 @@
                     ng-class="{first: $first, last: $last}"
                     class="ngc right footer cell {{$$bottomRightData[$parent.$index][$index].clazz}} {{column.clazz}}"
                     style="{{$$bottomRightData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}">
-                    <div class="ngc cell-content" style="{{row.height}}; {{column.style}}"
-                         ng-bind-html="$$bottomRightData[$parent.$index][$index].customHTML"></div>
+                    <div class="ngc cell-content ngc-custom-html" style="{{row.height}}; {{column.style}}"
+                         ng-if="!$$bottomRightData[$parent.$index][$index].customCellTemplate"
+                         ng-bind-html="$$bottomRightData[$parent.$parent.$index][$index].customHTML"></div>
+                    <div class="ngc cell-content ngc-custom-cell-template" style="{{row.height}}; {{column.style}}"
+                         ng-if="$$bottomRightData[$parent.$index][$index].customCellTemplate"
+                         ext-include="$$bottomRightData[row.index][$index].customCellTemplate"
+                         scope-extension="{'rawCellData': $$bottomRightData[row.index][$index]}"></div>
                 </td>
 
                 <!-- Placeholder for vertical scroll -->
