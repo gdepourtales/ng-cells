@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html ng-app="ngcTableDirectiveTest">
+<head>
+    <title>Set scroll positions</title>
+    <link href="../dist/ng-cells-0.3.6.css" rel="stylesheet" type="text/css">
+    <script src="../lib/angular-1.2.6.js"></script>
+    <script src="../lib/angular-sanitize-1.2.6.js"></script>
+    <script src="../dist/ng-cells-0.3.6.js"></script>
+    <script>
+        angular.module('ngcTableDirectiveTest', ['ngcTableDirective'])
+                .controller('TestCtrl', function($scope, $timeout) {
+                    $scope.data = [];
+
+                    for (var row = 0; row < 1000; row++) {
+                        var rowContent = [];
+                        for (var col = 0; col < 1000; col++) {
+                            rowContent.push(row * col + col);
+                        }
+                        $scope.data.push(rowContent);
+                    }
+
+                    var counter = 0;
+                    $scope.scrollTopPosition = counter;
+                    $scope.scrollLeftPosition = counter;
+
+                    var increment = function() {
+                        counter += 75;
+                        $scope.scrollTopPosition = counter;
+                        $scope.scrollLeftPosition = counter;
+                        if (counter < 500) {
+                            $timeout(increment, 1000);
+                        }
+                    }
+
+                    increment();
+                });
+
+    </script>
+
+</head>
+<body>
+<div ng-controller="TestCtrl">
+    <div ngc-table data="data" scroll-top-position="scrollTopPosition" scroll-left-position="scrollLeftPosition"></div>
+</div>
+</body>
+</html>
