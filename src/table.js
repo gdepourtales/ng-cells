@@ -702,7 +702,6 @@
                         'scrollTopPosition',
                         function(newValue, oldValue) {
                             if (angular.isDefined(newValue) && newValue !== oldValue) {
-                                console.log('scrollTopPosition called from scope' + scope.$id);
                                 scope.$$scrollDirty = true;
 
                                 if (scope.scrollTopPosition > (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length)) {
@@ -721,7 +720,6 @@
                         'scrollLeftPosition',
                         function(newValue, oldValue) {
                             if (angular.isDefined(newValue) &&  newValue !== oldValue) {
-                                console.log('scrollLeftPosition called from scope' + scope.$id);
                                 scope.$$scrollDirty = true;
 
                                 if (scope.scrollLeftPosition > (scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length)) {
