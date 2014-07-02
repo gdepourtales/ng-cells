@@ -1051,7 +1051,6 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                         'scrollTopPosition',
                         function(newValue, oldValue) {
                             if (angular.isDefined(newValue) && newValue !== oldValue) {
-                                console.log('scrollTopPosition called from scope' + scope.$id);
                                 scope.$$scrollDirty = true;
 
                                 if (scope.scrollTopPosition > (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length)) {
@@ -1070,7 +1069,6 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                         'scrollLeftPosition',
                         function(newValue, oldValue) {
                             if (angular.isDefined(newValue) &&  newValue !== oldValue) {
-                                console.log('scrollLeftPosition called from scope' + scope.$id);
                                 scope.$$scrollDirty = true;
 
                                 if (scope.scrollLeftPosition > (scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length)) {
@@ -1447,8 +1445,12 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                                     // if we can scroll more
                                     if (parentElDom.scrollByLines) {
                                         parentElDom.scrollByLines(lineScrollOffset);
-                                    } else { // if scrollByLines is not available, use pixels to scroll
+                                    } else if (parentElDom.doScroll) { // if scrollByLines is not available, try to use the IE similar function
+                                        parentElDom.doScroll(lineScrollOffset > 0 ? 'scrollbarDown' : 'scrollbarUp');
+                                    } else if (parentElDom.scrollBy) { // if scrollBy is available (an old DOM-0 method)
                                         parentElDom.scrollBy(lineScrollOffset * 10);
+                                    } else { // last solution, try to do it manually
+                                        parentElDom.scrollTop += lineScrollOffset * 10;
                                     }
                                     evt.preventDefault();
                                 }
