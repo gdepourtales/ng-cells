@@ -1,9 +1,9 @@
 {
   "name": "ng-cells",
-  "version": "0.3.3",
+  "version": "0.3.6",
   "main": [
-    "dist/ng-cells-0.3.3.min.js",
-    "dist/ng-cells-0.3.3.css"
+    "dist/ng-cells-0.3.6.min.js",
+    "dist/ng-cells-0.3.6.css"
   ],
 
 

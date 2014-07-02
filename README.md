@@ -193,6 +193,8 @@ string values. If the value is a single string, the same width is applied to all
 * `row-heights` The height of the middle rows. See `header-row-heights` for value specification
 * `footer-row-number` The number of rows in the footer section of the table
 * `footer-row-heights` The height of the footer rows. See `header-row-heights` for value specification
+* `scroll-top-position` The vertical scroll position. This attribute can be set to scroll programmatically. The diagonalScroll.html test file shows how to bind horizontal and vertical scrollbars
+* `scroll-left-position` The horizontal scroll position. See `scroll-top-position`  
 
 
 ## Range
