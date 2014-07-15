@@ -23,7 +23,7 @@ module.exports = function(grunt) {
 
             dist: {
                 src: ['generated/template.js', 'src/table.js'],
-                dest: 'dist/<%= pkg.name %>-<%= pkg.version %>.js'
+                dest: 'dist/<%= pkg.version %>/<%= pkg.name %>.js'
             }
         },
 
@@ -33,15 +33,15 @@ module.exports = function(grunt) {
             },
 
             build: {
-                src: 'dist/<%= pkg.name %>-<%= pkg.version %>.js',
-                dest: 'dist/<%= pkg.name %>-<%= pkg.version %>.min.js'
+                src: 'dist/<%= pkg.version %>/<%= pkg.name %>.js',
+                dest: 'dist/<%= pkg.version %>/<%= pkg.name %>.min.js'
             }
         },
 
         cssmin: {
             combine: {
                 files: {
-                    'dist/<%= pkg.name %>-<%= pkg.version %>.css': ['css/table.css']
+                    'dist/<%= pkg.version %>/<%= pkg.name %>.css': ['css/table.css']
                 }
             },
 
