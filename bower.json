@@ -2,8 +2,9 @@
   "name": "ng-cells",
   "version": "0.3.7",
   "main": [
-    "dist/ng-cells-0.3.7.min.js",
-    "dist/ng-cells-0.3.7.css"
+    "dist/latest/ng-cells.js",
+    "dist/latest/ng-cells.min.js",
+    "dist/latest/ng-cells.css"
   ],
 
 
@@ -19,15 +20,8 @@
   ],
   "license": "Apache 2.0",
   "ignore": [
-    "**/.*",
-    "bower_components",
-    "css",
-    "doc",
-    "generated",
-    "lib",
-    "node_modules",
-    "src",
-    "test"
+    "**/*.*",
+    "Gruntfile.js"
   ],
     "dependencies": {
         "angular": ">1.2.3",
