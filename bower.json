@@ -21,7 +21,13 @@
   "license": "Apache 2.0",
   "ignore": [
     "**/*.*",
-    "Gruntfile.js"
+    "Gruntfile.js",
+    "css",
+    "doc",
+    "generated",
+    "lib",
+    "src",
+    "test"
   ],
     "dependencies": {
         "angular": ">1.2.3",
