@@ -963,7 +963,6 @@
                             defaultScrollDelay = 120, // default scroll delay (ms)
                             scrollDelay = defaultScrollDelay, // current scroll delay (ms)
                             defaultWheelDelay = 500, // default wheel delay (ms)
-                            vscrollBarHeight = undefined, // The calculated height of the vertical scrollbar needed by firefox
                             parentEl = iElement.parent(); // parent DOM element of this directive's DOM root
 
 
@@ -1061,11 +1060,9 @@
                         var updateVScrollBarHeight = function() {
                             $timeout(function() {
                                 if (iElement.hasClass("vscrollbar")) {
-                                    var ratio = (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length) / scope.$$rows.length;
-                                    var elem = angular.element(scope.$$verticalScrollbarWrapperElement);
-                                    if (angular.isUndefined(vscrollBarHeight)) {
+                                    var ratio = (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length) / scope.$$rows.length,
+                                        elem = angular.element(scope.$$verticalScrollbarWrapperElement),
                                         vscrollBarHeight = elem.parent()[0].offsetHeight;
-                                    }
                                     elem.css('height', vscrollBarHeight + 'px');
                                     iElement.css('height', (vscrollBarHeight * ratio) + 'px')
                                 }
