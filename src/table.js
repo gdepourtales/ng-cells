@@ -993,13 +993,17 @@
 
                             // Detect if horizontal according to the class
                             if (angular.element(e.target).hasClass("horizontal")) {
-                                scrollRatio = e.target.scrollLeft / (e.target.scrollWidth);
+                                // add `0` value check to ensure that the ratio is not NaN.
+                                // If that happens, scope.$$setCenterColumnsData will not behave properly
+                                scrollRatio = e.target.scrollWidth && e.target.scrollLeft / e.target.scrollWidth;
                                 scope.$$scrollPosition.left = Math.round(scrollRatio * (scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length));
 
                             } else
                             // Detect if vertical according to the class
                             if (angular.element(e.target).hasClass("vertical")) {
-                                scrollRatio = e.target.scrollTop / (e.target.scrollHeight);
+                                // add `0` value check to ensure that the ratio is not NaN.
+                                // If that happens, scope.$$setCenterColumnsData will not behave properly
+                                scrollRatio = e.target.scrollHeight && e.target.scrollTop / e.target.scrollHeight;
                                 scope.$$scrollPosition.top = Math.round(scrollRatio * (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length));
                             } else {
                                 // If other scroll event do not process data redraw
