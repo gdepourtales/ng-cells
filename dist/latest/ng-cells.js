@@ -1312,7 +1312,6 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                             defaultScrollDelay = 120, // default scroll delay (ms)
                             scrollDelay = defaultScrollDelay, // current scroll delay (ms)
                             defaultWheelDelay = 500, // default wheel delay (ms)
-                            vscrollBarHeight = undefined, // The calculated height of the vertical scrollbar needed by firefox
                             parentEl = iElement.parent(); // parent DOM element of this directive's DOM root
 
 
@@ -1343,13 +1342,17 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
 
                             // Detect if horizontal according to the class
                             if (angular.element(e.target).hasClass("horizontal")) {
-                                scrollRatio = e.target.scrollLeft / (e.target.scrollWidth);
+                                // add `0` value check to ensure that the ratio is not NaN.
+                                // If that happens, scope.$$setCenterColumnsData will not behave properly
+                                scrollRatio = e.target.scrollWidth && e.target.scrollLeft / e.target.scrollWidth;
                                 scope.$$scrollPosition.left = Math.round(scrollRatio * (scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length));
 
                             } else
                             // Detect if vertical according to the class
                             if (angular.element(e.target).hasClass("vertical")) {
-                                scrollRatio = e.target.scrollTop / (e.target.scrollHeight);
+                                // add `0` value check to ensure that the ratio is not NaN.
+                                // If that happens, scope.$$setCenterColumnsData will not behave properly
+                                scrollRatio = e.target.scrollHeight && e.target.scrollTop / e.target.scrollHeight;
                                 scope.$$scrollPosition.top = Math.round(scrollRatio * (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length));
                             } else {
                                 // If other scroll event do not process data redraw
@@ -1410,11 +1413,9 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                         var updateVScrollBarHeight = function() {
                             $timeout(function() {
                                 if (iElement.hasClass("vscrollbar")) {
-                                    var ratio = (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length) / scope.$$rows.length;
-                                    var elem = angular.element(scope.$$verticalScrollbarWrapperElement);
-                                    if (angular.isUndefined(vscrollBarHeight)) {
+                                    var ratio = (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length) / scope.$$rows.length,
+                                        elem = angular.element(scope.$$verticalScrollbarWrapperElement),
                                         vscrollBarHeight = elem.parent()[0].offsetHeight;
-                                    }
                                     elem.css('height', vscrollBarHeight + 'px');
                                     iElement.css('height', (vscrollBarHeight * ratio) + 'px')
                                 }
