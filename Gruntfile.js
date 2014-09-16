@@ -23,7 +23,12 @@ module.exports = function(grunt) {
 
             dist: {
                 src: ['generated/template.js', 'src/table.js'],
-                dest: 'dist/<%= pkg.name %>-<%= pkg.version %>.js'
+                dest: 'dist/<%= pkg.version %>/<%= pkg.name %>.js'
+            },
+
+            dist_latest: {
+                src: ['generated/template.js', 'src/table.js'],
+                dest: 'dist/latest/<%= pkg.name %>.js'
             }
         },
 
@@ -33,15 +38,21 @@ module.exports = function(grunt) {
             },
 
             build: {
-                src: 'dist/<%= pkg.name %>-<%= pkg.version %>.js',
-                dest: 'dist/<%= pkg.name %>-<%= pkg.version %>.min.js'
+                src: 'dist/<%= pkg.version %>/<%= pkg.name %>.js',
+                dest: 'dist/<%= pkg.version %>/<%= pkg.name %>.min.js'
+            },
+
+            build_latest: {
+                src: 'dist/<%= pkg.version %>/<%= pkg.name %>.js',
+                dest: 'dist/latest/<%= pkg.name %>.min.js'
             }
         },
 
         cssmin: {
             combine: {
                 files: {
-                    'dist/<%= pkg.name %>-<%= pkg.version %>.css': ['css/table.css']
+                    'dist/<%= pkg.version %>/<%= pkg.name %>.css': ['css/table.css'],
+                    'dist/latest/<%= pkg.name %>.css': ['css/table.css']
                 }
             },
 
@@ -63,6 +74,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-html2js');
 
     // Default task(s).
-    grunt.registerTask('default', ['html2js:main', 'concat:dist', 'uglify', 'cssmin' ]);
+    grunt.registerTask('default', ['html2js:main', 'concat:dist', 'concat:dist_latest', 'uglify', 'uglify:build_latest',  'cssmin' ]);
 
 };
