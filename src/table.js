@@ -967,6 +967,10 @@
          * @returns {jqLite} Returns the found parent tag or null if not found in the whole DOM tree.
          */
         var getClosestParentTag = function(el, tagName) {
+            if (el.closest) { // if jQuery is available with Angular
+                return el.closest(tagName);
+            }
+
             el = el.parent();
             while (el.length) {
                 if (el[0].nodeName === tagName) {
