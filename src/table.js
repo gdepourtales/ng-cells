@@ -656,27 +656,29 @@
 
                     scope.$$refreshScrollbars = function() {
                         // Refresh the scrollbars
-                        var ratio = 100;
+                        var ratio;
                         // This should be factorized with the scrollbar directive
                         if (angular.isDefined(scope.data)) {
-
                             ratio = (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length) / scope.$$rows.length * 100;
                             scope.$$verticalScrollbarElement.css('height', ratio + '%');
-                            if (ratio <= 100) scope.$$verticalScrollbarElement.parent().css('display', 'none')
-                            else scope.$$verticalScrollbarElement.parent().css('display', 'block');
+                            scope.$$verticalScrollbarElement.parent().css('display', (ratio <= 100)? 'none' : 'block');
 
                             var elem = angular.element(scope.$$verticalScrollbarWrapperElement);
+                            // we need to clear the scrollbar wrapper fixed height,
+                            // otherwise it might cause the table size not to shrink to the minimum height properly
+                            elem.css('height', 'auto');
                             var height = elem.parent()[0].offsetHeight;
                             elem.css('height', height + 'px');
 
-
                         }
+
                         if (angular.isDefined(scope.data[0])) {
                             ratio = (scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length) / scope.$$variableCenterColumns.length * 100;
                             scope.$$horizontalScrollbarElement.css('width', Math.ceil(ratio) + '%');
-                            if (ratio <= 100) scope.$$horizontalScrollbarElement.parent().css('display', 'none')
-                            else scope.$$horizontalScrollbarElement.parent().css('display', 'block');
+                            scope.$$horizontalScrollbarElement.parent().css('display', (ratio <= 100)? 'none' : 'block');
 
+                            // @note Does not handle the 'horizontal' resize of the scrollbar case yet
+                            // because we haven't got a use case for it yet
                         }
                     };
 
