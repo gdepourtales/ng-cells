@@ -21,7 +21,7 @@
     // trigger this when the table's content are udpated
     module.constant('contentUpdatedEvent', 'contentUpdatedEvent');
 
-    module.directive('ngcTable', ['$templateCache', '$sce', 'contentUpdatedEvent', function($templateCache, $sce, contentUpdatedEvent) {
+    module.directive('ngcTable', ['$templateCache', '$sce', '$timeout', 'contentUpdatedEvent', function($templateCache, $sce, $timeout, contentUpdatedEvent) {
 
         /**
          * ngcTable Controller declaration. The format is given to be able to minify the directive. The scope is
@@ -682,6 +682,20 @@
                         }
                     };
 
+                    var refreshDelay = 10;
+                    scope.$$scheduledScrollbarRefresh = function() {
+                        var previous = $$scheduledScrollbarRefresh.previous;
+                        if (previous) { // if we already scheduled a scrollbar refresh
+                            $timeout.cancel(previous); // cancel previous one
+                        }
+
+                        $$scheduledScrollbarRefresh.previous = $timeout(function(){ // schedule refresh of scrollbars
+                            $$scheduledScrollbarRefresh.previous = null;
+                            scope.$$refreshScrollbars();
+                        }, refreshDelay);
+                    };
+                    var $$scheduledScrollbarRefresh = scope.$$scheduledScrollbarRefresh;
+
                     scope.$watch(
                         'data',
                         function(newValue, oldValue) {
@@ -914,6 +928,55 @@
         };
     })
     .directive('ngcScrollbar', ['$timeout', 'contentUpdatedEvent', function($timeout, contentUpdatedEvent) {
+        /**
+         * Handle the resizing of the table to refresh the scrollbars.
+         * When the height or width of the table body changes, then we'll try to refresh the scrollbars (width/height)
+         * The refresh is done asynchronously (after a 10ms delay) because multiple table contents layout changes may
+         * occur in a short time and we don't want to refresh the scrollbars each time.
+         * e.g. image, styles or inner templates are loaded
+         * @param {string} orientation Orientation to check. e.g. 'horizontal' or 'vertical'
+         * @param {object} scope Angular scope
+         * @param {DOMElement} domEl DOM element where we check its dimensions
+         * @returns {Function} Returns a deregistration function to cancel the scope.$watch()
+         */
+        var tableResizeHandler = function (orientation, scope, domEl) {
+            var watchGetter;
+
+            // generate the watch function in advance to make the watchGetter function run as fast as possible
+            if (orientation === 'vertical') {
+                watchGetter = function () { // watch for table height changes
+                    return domEl.offsetHeight;
+                };
+            } else {
+                watchGetter = function () { // watch for table width changes
+                    return domEl.offsetWidth;
+                };
+            }
+
+            return scope.$watch(watchGetter, function (newValue, oldValue) {
+                if (newValue !== oldValue) { // when it changes
+                    scope.$$scheduledScrollbarRefresh();
+                }
+            });
+        };
+
+        /**
+         * Get closest parent tag of a given tag name.
+         * @param {jqLite} el Element where to start looking for the tag
+         * @param {string} tagName Tag name. e.g. TBODY
+         * @returns {jqLite} Returns the found parent tag or null if not found in the whole DOM tree.
+         */
+        var getClosestParentTag = function(el, tagName) {
+            el = el.parent();
+            while (el.length) {
+                if (el[0].nodeName === tagName) {
+                    return el;
+                }
+                el = el.parent();
+            }
+            return null;
+        };
+
         /* Internal directive for virtual horizontal and vertical scrollbars management */
         return {
             require:"^ngcTable",
@@ -1078,8 +1141,14 @@
                         updateVScrollBarHeight();
 
 
-                        // Handle vertical scroll triggered by mouse wheel over the whole table area
+                        var tbodyEl = getClosestParentTag(parentEl, 'TBODY');
+                        if (!tbodyEl.length) {
+                            throw new Error("Unable to find TBODY tag from the scrollbar wrapper");
+                        }
+
+                        // vertical scrolling perks
                         if (parentEl.hasClass('vertical')) {
+                            // Handle vertical scroll triggered by mouse wheel over the whole table area
                             parentEl.parent().parent().parent().on('wheel', function(evt){
                                 var target = evt.target,
                                     parentElDom = parentEl[0];
@@ -1112,6 +1181,14 @@
                                     evt.preventDefault();
                                 }
                             });
+
+                            // target element is the scrollbar wrapper parent element
+                            tableResizeHandler('vertical', scope, tbodyEl[0]);
+
+                        // Does not handle the 'horizontal' case yet because we haven't got a use case for it yet
+                        // } else {
+                        //    // target element is the scrollbar wrapper parent element
+                        //    tableResizeHandler('horizontal', scope, tbodyEl[0]);
                         }
                     }
                 };
