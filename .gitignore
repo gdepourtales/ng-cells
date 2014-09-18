@@ -1,2 +1,6 @@
 *.iml
 .idea
+bower_components
+generated
+node_modules
+temp
