@@ -689,18 +689,24 @@
                         }
                     };
 
-                    scope.$$scheduledScrollbarRefresh = function() {
+                    /**
+                     * Schedule a scrollbar refresh in `scrollbarRefreshDelay` milliseconds.
+                     * We need this delay to give enough time for the browser to stabilise its styles.
+                     * When used, it will check if we already a scheduled scrollbar refresh.
+                     * If so, it will cancel it and schedule a new one instead.
+                     */
+                    var $$scheduledScrollbarRefresh = function() {
                         var previous = $$scheduledScrollbarRefresh.previous;
-                        if (previous) { // if we already scheduled a scrollbar refresh
-                            $timeout.cancel(previous); // cancel previous one
+                        if (previous) {
+                            $timeout.cancel(previous);
                         }
 
-                        $$scheduledScrollbarRefresh.previous = $timeout(function(){ // schedule refresh of scrollbars
+                        $$scheduledScrollbarRefresh.previous = $timeout(function () { // schedule refresh
                             $$scheduledScrollbarRefresh.previous = null;
                             scope.$$refreshScrollbars();
                         }, scrollbarRefreshDelay);
                     };
-                    var $$scheduledScrollbarRefresh = scope.$$scheduledScrollbarRefresh;
+                    scope.$$scheduledScrollbarRefresh = $$scheduledScrollbarRefresh;
 
                     scope.$watch(
                         'data',
