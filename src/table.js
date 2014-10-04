@@ -23,6 +23,9 @@
 
     module.directive('ngcTable', ['$templateCache', '$sce', '$timeout', 'contentUpdatedEvent', function($templateCache, $sce, $timeout, contentUpdatedEvent) {
 
+        // Wait delay before refreshing the scrollbar
+        var scrollbarRefreshDelay = 10;
+
         /**
          * ngcTable Controller declaration. The format is given to be able to minify the directive. The scope is
          * injected.
@@ -682,7 +685,6 @@
                         }
                     };
 
-                    var refreshDelay = 10;
                     scope.$$scheduledScrollbarRefresh = function() {
                         var previous = $$scheduledScrollbarRefresh.previous;
                         if (previous) { // if we already scheduled a scrollbar refresh
@@ -692,7 +694,7 @@
                         $$scheduledScrollbarRefresh.previous = $timeout(function(){ // schedule refresh of scrollbars
                             $$scheduledScrollbarRefresh.previous = null;
                             scope.$$refreshScrollbars();
-                        }, refreshDelay);
+                        }, scrollbarRefreshDelay);
                     };
                     var $$scheduledScrollbarRefresh = scope.$$scheduledScrollbarRefresh;
 
