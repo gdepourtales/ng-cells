@@ -949,7 +949,7 @@
          * @param {string} orientation Orientation to check. e.g. 'horizontal' or 'vertical'
          * @param {object} scope Angular scope
          * @param {DOMElement} domEl DOM element where we check its dimensions
-         * @returns {Function} Returns a deregistration function to cancel the scope.$watch()
+         * @returns {Function} Returns a unsubscribe function to cancel the scope.$watch()
          */
         var tableResizeHandler = function (orientation, scope, domEl) {
             var watchGetter;
