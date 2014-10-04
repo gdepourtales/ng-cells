@@ -657,6 +657,10 @@
                         }
                     };
 
+                    /**
+                     * Refresh the scrollbar height based on the table body height
+                     * @note Does not handle the horizontal scenario yet
+                     */
                     scope.$$refreshScrollbars = function() {
                         // Refresh the scrollbars
                         var ratio;
