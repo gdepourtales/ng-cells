@@ -2,11 +2,11 @@
 <html ng-app="ngcTableDirectiveTest">
 <head>
     <title>Ranges and formats Test</title>
-    <link href="../dist/0.3.4/ng-cells-0.3.4.css" rel="stylesheet" type="text/css">
+    <link href="../dist/latest/ng-cells.css" rel="stylesheet" type="text/css">
 
     <script src="../lib/angular-1.2.6.js"></script>
     <script src="../lib/angular-sanitize-1.2.6.js"></script>
-    <script src="../dist/0.3.4/ng-cells-0.3.4.js"></script>
+    <script src="../dist/latest/ng-cells.js"></script>
     <script src="test.js"></script>
 
     <style>
@@ -65,6 +65,8 @@
     <div ng-controller="TestCtrl">
         <ngc-table
                 data="data"
+                scroll-delay="0"
+                show-column-names='false'
                 left-column-number="5" left-column-widths="['40px']"
                 center-column-number="10" center-column-widths="'60px'"
                 right-column-number="5" right-column-widths="['60px', '60px', '60px', '45px', '50px', '55px']"

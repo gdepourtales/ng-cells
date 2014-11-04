@@ -2,12 +2,12 @@
 <html ng-app="ngcTableDirectiveTest">
 <head>
     <title>Custom elements Test</title>
-    <link href="../dist/0.3.4/ng-cells-0.3.4.css" rel="stylesheet" type="text/css">
+    <link href="../dist/latest/ng-cells.css" rel="stylesheet" type="text/css">
     <link href="test.css" rel="stylesheet" type="text/css">
 
     <script src="../lib/angular-1.2.6.js"></script>
     <script src="../lib/angular-sanitize-1.2.6.js"></script>
-    <script src="../dist/0.3.4/ng-cells-0.3.4.js"></script>
+    <script src="../dist/latest/ng-cells.js"></script>
     <script src="custom-cell-template.js"></script>
 
     <style>
@@ -26,6 +26,7 @@
 
         <ngc-table
                 data="data"
+                scroll-delay="0"
                 show-filter="false"
                 left-column-number="2" left-column-widths="'40px'"
                 center-column-number="10" center-column-widths="'44px'"
@@ -49,5 +50,9 @@
         </ngc-table>
 
     </div>
+
 </body>
+
+
+
 </html>
