@@ -195,6 +195,8 @@ string values. If the value is a single string, the same width is applied to all
 * `footer-row-heights` The height of the footer rows. See `header-row-heights` for value specification
 * `scroll-top-position` The vertical scroll position. This attribute can be set to scroll programmatically. The diagonalScroll.html test file shows how to bind horizontal and vertical scrollbars
 * `scroll-left-position` The horizontal scroll position. See `scroll-top-position`  
+* `scroll-delay` The scroll delay in ms after which the content is updated after dragging a scrollbar. If set to 0, the content is updated immediately
+* `wheel-scroll-delay` The scroll delay in ms after which the content is updated after using the mouse wheel. This value is strongly related to 'scroll-delay' option. If set to 0, the content is updated immediately
 
 
 ## Range

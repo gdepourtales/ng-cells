@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html ng-app="ngcTableDirectiveTest">
+<head>
+    <title>Fast scroll</title>
+    <link href="../dist/latest/ng-cells.css" rel="stylesheet" type="text/css">
+    <script src="../lib/angular-1.2.6.js"></script>
+    <script src="../lib/angular-sanitize-1.2.6.js"></script>
+    <script src="../dist/latest/ng-cells.js"></script>
+    <script>
+        angular.module('ngcTableDirectiveTest', ['ngcTableDirective'])
+                .controller('TestCtrl', function($scope) {
+                    $scope.data = [];
+
+                    for (var row = 0; row < 1000; row++) {
+                        var rowContent = [];
+                        for (var col = 0; col < 1000; col++) {
+                            rowContent.push(row * col + col);
+                        }
+                        $scope.data.push(rowContent);
+                    }
+
+                });
+
+    </script>
+
+</head>
+<body>
+<div ng-controller="TestCtrl">
+    <div ngc-table data="data"
+         scroll-delay="2000"
+         wheel-scroll-delay="2000"
+            ></div>
+</div>
+</body>
+</html>

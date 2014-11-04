@@ -1193,7 +1193,13 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                 /* Let read or set the vertical data position in the middle center part */
                 scrollTopPosition: '=?',
                 /* Let read or set the horizontal data position in the middle center part */
-                scrollLeftPosition: '=?'
+                scrollLeftPosition: '=?',
+
+                /* The scroll delay for controlling the refresh behaviour when scrolling, a value of 0 means immediate scrolling */
+                scrollDelay: '=?',
+
+                /* The scroll wheel delay for controlling the refresh behaviour when scrolling with the wheel, a value of 0 means immediate scrolling */
+                wheelScrollDelay: '=?'
 
             },
             restrict:'AE',
@@ -1348,6 +1354,7 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
             restrict:'A',
             replace:true,
             template:'<div class="ngc"></div>',
+
             compile: function(tElement, tAttrs) {
 
 
@@ -1391,8 +1398,8 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                         var scheduledScrollProcess, // timeout id of the scheduled scroll event callback
                             scheduledWheelProcess, // timeout id of the scheduled wheel event callback
                             defaultScrollDelay = 120, // default scroll delay (ms)
-                            scrollDelay = defaultScrollDelay, // current scroll delay (ms)
-                            defaultWheelDelay = 500, // default wheel delay (ms)
+                            scrollDelay = angular.isDefined(scope.scrollDelay) ? scope.scrollDelay : defaultScrollDelay, // current scroll delay (ms)
+                            defaultWheelDelay = angular.isDefined(scope.wheelScrollDelay) ? scope.wheelScrollDelay : 500, // default wheel delay (ms)
                             parentEl = iElement.parent(); // parent DOM element of this directive's DOM root
 
 
