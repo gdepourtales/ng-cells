@@ -850,7 +850,10 @@
                 scrollDelay: '=?',
 
                 /* The scroll wheel delay for controlling the refresh behaviour when scrolling with the wheel, a value of 0 means immediate scrolling */
-                wheelScrollDelay: '=?'
+                wheelScrollDelay: '=?',
+
+                /* If false, disables the vertical scrollbar height resizing. This features sometimes triggers unwanted scroll events. Default is true */
+                verticalScrollbarAutoResize: '=?'
 
             },
             restrict:'AE',
@@ -1051,7 +1054,8 @@
                             defaultScrollDelay = 120, // default scroll delay (ms)
                             scrollDelay = angular.isDefined(scope.scrollDelay) ? scope.scrollDelay : defaultScrollDelay, // current scroll delay (ms)
                             defaultWheelDelay = angular.isDefined(scope.wheelScrollDelay) ? scope.wheelScrollDelay : 500, // default wheel delay (ms)
-                            parentEl = iElement.parent(); // parent DOM element of this directive's DOM root
+                            parentEl = iElement.parent(),
+                            shouldResizeVerticalScrollbar = angular.isDefined(scope.verticalScrollbarAutoResize) ? scope.verticalScrollbarAutoResize : true; // parent DOM element of this directive's DOM root
 
 
 
@@ -1118,7 +1122,9 @@
                             // scope.$$verticalScrollbarWrapperElement.scrollTop = verticalScrollPos;
                             // scope.$$horizontalScrollbarWrapperElement.scrollLeft = horizontalScrollPos;
 
-                            updateVScrollBarHeight();
+                            if (shouldResizeVerticalScrollbar ) {
+                                updateVScrollBarHeight();
+                            }
                             // rootDirectiveScope.$$scrolling = false;
                         };
 
@@ -1148,6 +1154,8 @@
                         /*
                          Firefox does not handle correctly divs with 100% height in a div of 100% height
                          The timeout calculates the min-height after the actual rendering
+                         In some cases this method triggers additional unwanted scroll events
+                         in this case, you should set verticalScrollbarAutoResize to false
                          */
                         var updateVScrollBarHeight = function() {
                             $timeout(function() {
