@@ -3,10 +3,10 @@ ng-cells
 
 AngularJS Table directive
 
-This directive draws a table of data with different features. It has no dependency other than angularjs. it has been
+This directive draws a table of data with different features. It has no dependency other than angularjs. It has been
 tested on Google Chrome, Safari, Opera and Firefox and Internet Explorer 10 (8+ in developer mode)
 
-Tu use this directive, just add the ngcTableDirective as dependency. The template is handle as an external HTML file
+To use this directive, just add the ngcTableDirective as dependency. The template is handled as an external HTML file
 and integrated during the build process in the `ngc-template` module. The template is registered in the angularjs template cache with the key `ngc.table.tpl.html`
 
 # Features
