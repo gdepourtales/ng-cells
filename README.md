@@ -218,6 +218,7 @@ AngularJS sanitizer. For security reason, it is better to use the `custom-html-f
 `custom-html-fn`
 * `style-fn` A custom style format function to be applied to the cells. Use it to apply sophisticated styling to the table.
 The function must be of the form `function(value, row, col)` where `value` is the value of the source data at the position `[row][col]`
+* `style` A custom style format to be directly applied to the cells. If provided, it is added to the style from the `style-fn` above.
 * `<event>-fn` Custom event callbacks. The event can be any of `click`, `dblclick`, `mousedown`, `mouseenter`, `mouseleave`
 `mousemove`, `mouseover`, `mouseup` event types. The callback must be of the form `function(event, cellData)` where
 `event` is the initial Javascript event and the `cellData` an object with the following attributes :

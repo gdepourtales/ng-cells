@@ -398,7 +398,9 @@
                     function $$getCellData(scope, row, col) {
                         /* The additional optional class(es) */
                         var clazz = '';
-                        /* The optional style declaration */
+                        /* The optional style function declaration */
+                        var style = '';
+                        /* The optional style function declaration */
                         var styleFn = defaultStyleFn;
                         /* The data format function */
                         var formatFn = defaultFormatFn;
@@ -437,6 +439,7 @@
                                 /* Register the CSS class */
                                 if (angular.isString(range.clazz)) clazz = range.clazz;
                                 /* Register the CSS style declaration */
+                                if (angular.isString(range.style)) style = range.style;
                                 if (angular.isFunction(range.styleFn)) styleFn = range['styleFn'];
                                 if (angular.isFunction(range.customHtmlFn)) customHtmlFn = range['customHtmlFn'];
                                 if (angular.isFunction(range.customTrustedHtmlFn)) customTrustedHtmlFn = range['customTrustedHtmlFn'];
@@ -461,13 +464,14 @@
                         if (customCellTemplate == null || customCellTemplate == '') { // null, undefined or empty string
                             customHTML = (angular.isDefined(customTrustedHtmlFn)) ? $sce.trustAsHtml(customTrustedHtmlFn(data, row, col, value)) : customHtmlFn(data, row, col, value);
                         }
+
                         return {
                             row: row,
                             col: col,
                             data: data,
                             value: value,
                             clazz: clazz,
-                            style: styleFn(data, row, col),
+                            style: styleFn(data, row, col) + ';' + style,
                             eventCallbacks: eventCallbacks,
                             enclosingRanges: enclosingRanges,
                             customCellTemplate: customCellTemplate,
@@ -889,6 +893,8 @@
                 customCellTemplate: '=?',
                 /* CSS class to be added to the cells */
                 clazz: '=?',
+                /* Direct CSS styling to be injected in the cells */
+                style: '=?',
                 /* CSS style additional declaration to be added to the cell */
                 styleFn: '=?',
                 /* Callback for the 'click' event */
@@ -927,6 +933,7 @@
                     formatFn: scope.formatFn,
                     clazz: scope.clazz,
                     styleFn: scope.styleFn,
+                    style: scope.style,
                     customHtmlFn: scope.customHtmlFn,
                     customTrustedHtmlFn: scope.customTrustedHtmlFn,
                     customCellTemplate: scope.customCellTemplate,
