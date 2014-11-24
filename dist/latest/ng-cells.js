@@ -317,7 +317,7 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
     "            <tr class=\"ngc row scrollbar\">\n" +
     "                <!-- Cells for row headers columns -->\n" +
     "                <td ng-repeat=\"column in $$leftRowHeadersColumns\"\n" +
-    "                    class=\"ngc hscrollbar cell {{column.clazz}}\"\n" +
+    "                    class=\"ngc scrollbar cell {{column.clazz}}\"\n" +
     "                    style=\"{{column.style}}\">\n" +
     "                    <!--<div class=\"ngc row-header-content\"></div>-->\n" +
     "                </td>\n" +
