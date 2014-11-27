@@ -1,6 +1,6 @@
 {
   "name": "ng-cells",
-  "version": "0.3.9",
+  "version": "0.3.10",
   "devDependencies": {
     "grunt": "~0.4.2",
     "grunt-contrib-jshint": "~0.6.0",
