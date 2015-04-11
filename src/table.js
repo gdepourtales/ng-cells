@@ -1179,13 +1179,13 @@
                         updateVScrollBarHeight();
 
 
-                        var tbodyEl = getClosestParentTag(parentEl, 'TBODY');
-                        if (!tbodyEl.length) {
-                            throw new Error("Unable to find TBODY tag from the scrollbar wrapper");
-                        }
-
                         // vertical scrolling perks
                         if (parentEl.hasClass('vertical')) {
+                            var tbodyEl = getClosestParentTag(parentEl, 'TBODY');
+                            if (!tbodyEl.length) {
+                                throw new Error("Unable to find TBODY tag from the scrollbar wrapper");
+                            }
+                            
                             // Handle vertical scroll triggered by mouse wheel over the whole table area
                             parentEl.parent().parent().parent().on('wheel', function(evt){
                                 var target = evt.target,
