@@ -1,0 +1,13 @@
+#
+# This list is used by git-shortlog to fix a few botched name translations
+# in the git archive, either because the author's full name was messed up
+# and/or not always written the same way, making contributions from the
+# same person appearing not to be so.
+#
+# Here's how to list all the git authors in this repository: git log --all --format="%aN <%aE>" | sort -u
+
+Guy de Pourtalès <guy@gadp.ch>
+Guy de Pourtalès <guy@gadp.ch> <guy@sapphireinnovation.com>
+
+David HAN SZE CHUEN <kayhadrin@users.noreply.github.com> <david.hanszechuen@macquarie.com>
+David HAN SZE CHUEN <kayhadrin@users.noreply.github.com>
