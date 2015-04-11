@@ -1058,9 +1058,9 @@
 
                         var scheduledScrollProcess, // timeout id of the scheduled scroll event callback
                             scheduledWheelProcess, // timeout id of the scheduled wheel event callback
-                            defaultScrollDelay = 120, // default scroll delay (ms)
-                            scrollDelay = angular.isDefined(scope.scrollDelay) ? scope.scrollDelay : defaultScrollDelay, // current scroll delay (ms)
+                            defaultScrollDelay = angular.isDefined(scope.scrollDelay) ? scope.scrollDelay : 120, // default scroll delay (ms)
                             defaultWheelDelay = angular.isDefined(scope.wheelScrollDelay) ? scope.wheelScrollDelay : 500, // default wheel delay (ms)
+                            scrollDelay = defaultScrollDelay, // current scroll delay (ms)
                             parentEl = iElement.parent(),
                             shouldResizeVerticalScrollbar = angular.isDefined(scope.verticalScrollbarAutoResize) ? scope.verticalScrollbarAutoResize : true; // parent DOM element of this directive's DOM root
 
