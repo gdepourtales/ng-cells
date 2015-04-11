@@ -1185,7 +1185,7 @@
                             if (!tbodyEl.length) {
                                 throw new Error("Unable to find TBODY tag from the scrollbar wrapper");
                             }
-                            
+
                             // Handle vertical scroll triggered by mouse wheel over the whole table area
                             parentEl.parent().parent().parent().on('wheel', function(evt){
                                 var target = evt.target,
@@ -1202,7 +1202,7 @@
 
                                     // if we can't scroll further in that direction
                                     if ((initScrollTop === 0 && lineScrollOffset < 0) ||
-                                        ((initScrollTop + parentElDom.offsetHeight) === scrollHeight && lineScrollOffset > 0)) {
+                                        (lineScrollOffset > 0 && (initScrollTop + parentElDom.offsetHeight) === scrollHeight)) {
                                         return;
                                     }
 
