@@ -1,6 +1,21 @@
 {
   "name": "ng-cells",
   "version": "0.3.10",
+  "homepage": "http://gdepourtales.github.io/ng-cells/",
+  "description": "Flexible table angularjs directive",
+  "keywords": [
+    "angularjs",
+    "directive",
+    "table"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/gdepourtales/ng-cells.git"
+  },
+  "authors": [
+    "Guy de Pourtalès <guy@gadp.ch>"
+  ],
+  "license": "Apache 2.0",
   "devDependencies": {
     "grunt": "~0.4.2",
     "grunt-contrib-jshint": "~0.6.0",
