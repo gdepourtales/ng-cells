@@ -656,7 +656,7 @@
                                 }
 
                                 scrollPosition.left = oldColumnCount &&
-                                    (Math.round((scrollPosition.left + 1) * (newColumnCount - newColumnCount) / (oldColumnCount - newColumnCount)) - 1);
+                                    (Math.round((scrollPosition.left + 1) * (newColumnCount - centerColumnNumber) / (oldColumnCount - centerColumnNumber)) - 1);
                             }
                         }
                     };
