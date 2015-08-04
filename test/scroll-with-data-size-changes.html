@@ -1,0 +1,174 @@
+<html ng-app="ngcTableDirectiveTest">
+
+<head>
+    <script src="https://code.angularjs.org/1.3.15/angular.js"></script>
+    <script src="https://code.angularjs.org/1.3.15/angular-sanitize.js"></script>
+    <script src="../dist/0.3.11/ng-cells.js"></script>
+
+    <style>
+        table.ngc{border-collapse:collapse;border-spacing:0;table-layout:fixed}.ngc.vertical.scroll-wrapper{height:100%;width:16px;overflow-x:hidden;overflow-y:scroll}.ngc.scrollbar.cell{background:0 0}.ngc.vscrollbar{width:1px}.ngc.horizontal.scroll-wrapper{height:14px;overflow-x:scroll;overflow-y:hidden;position:relative;width:100%}.ngc.hscrollbar{height:1px;position:absolute}.ngc.scroll-wrapper-cell{vertical-align:middle;padding:0}
+        * {
+            font-family: Helvetica,serif;
+        }
+
+        .ngc.cell {
+            font-size: 12px;
+            border: 1px solid white;
+            text-align: center;
+            width:80px;
+            height:40px;
+        }
+
+        .cell-content {
+            padding: 2px;
+        }
+
+
+        .cell.left.header {
+            background-color: #b22222;
+            color: whitesmoke;
+        }
+
+        .cell.center.header {
+            background-color: crimson;
+            color: whitesmoke;
+        }
+
+
+        .cell.right.header {
+            background-color: #880000;
+            color: whitesmoke;
+        }
+
+
+        .cell.left.middle {
+            background-color: beige;
+            color: black;
+        }
+
+        .cell.center.middle {
+            background-color: #e0f2be;
+            color: black;
+        }
+
+        .cell.right.middle {
+            background-color: lavender;
+            color: black;
+        }
+
+
+        .cell.left.footer {
+            background-color: #0040D0;
+            color: #ffffff;
+        }
+
+        .cell.center.footer {
+            background-color: #0099F0;
+            color: #ffffff;
+        }
+
+        .cell.right.footer {
+            background-color: #004490;
+            color: #ffffff;
+        }
+
+
+
+        .ngc.columns.left div.cell:last-child {
+            border-right: 2px dotted darkred;
+        }
+
+        .ngc.columns.right div.cell:first-child {
+            border-left: 2px dotted darkred;
+        }
+
+        .ngc.table_part.headers div.ngc.row.header:last-child div.cell,
+        .ngc.table_part.middle div.ngc.row.data:last-child div.cell {
+            border-bottom: 2px dotted darkred;
+        }
+
+        .ngc.table_part.middle div.ngc.row.data:first-child div.cell {
+            border-top: 2px dotted darkred;
+        }
+
+
+
+
+
+    </style>
+
+    <script>
+        angular.module('ngcTableDirectiveTest', ['ngcTableDirective'])
+                .controller('TestCtrl', function($scope, $timeout) {
+                    $scope.numrow = 7;
+                    $scope.enableNgc = true;
+
+                    var initData = function(){
+                        var header = [];
+                        for (var col = 0; col < 1001; col++) {
+                            header.push('header'+col);
+                        }
+                        $scope.data = [header];
+                        for (var row = 1; row < 1001; row++) {
+                            var rowContent = [];
+                            rowContent.push('name'+row);
+                            for (var col = 1; col < 1001; col++) {
+                                rowContent.push(row * col + col);
+                            }
+                            $scope.data.push(rowContent);
+                        }
+                    };
+
+                    initData();
+
+                    $scope.customDataFn = function(data, row, col) {
+                        return data[row][col];
+                    }
+                    $scope.customTrustedHTMLFn = function(value, row, col) {
+                        return '<div style="color:red">' + value + '</div>';
+                    };
+
+                    $scope.reload = function() {
+                        $scope.enableNgc = false;
+                        $timeout(function(){
+                            initData();
+                            $scope.enableNgc = true;
+                        }, 1);
+                    };
+
+                    $scope.reset = function() {
+                        $scope.data.splice(501, 500);
+
+                        $scope.data[0].splice(501, 500);
+
+                        for (var row = 1; row < 501; row++) {
+                            $scope.data[row].splice(501, 500);
+                            var rowContent = $scope.data[row];
+                            for (var col = 1; col < 501; col++) {
+                                rowContent[col]=0;
+                            }
+                        }
+                        $scope.data = $scope.data.slice();
+                    };
+                });
+
+
+    </script>
+</head>
+
+<body>
+
+<div ng-controller="TestCtrl" >
+    <form>
+        <input type="submit" ng-click="reset()" value="Reset"/>
+        <input type="button" ng-click="reload()" value="Reload"/>
+    </form>
+    <div ng-if="enableNgc" ngc-table data="data" row-number="5" show-column-names="false" show-row-numbers="false" footer-row-number="0" right-column-number="0" center-column-number="5" custom-data-value-fn="customDataFn" wheel-scroll-delay="0" scroll-delay="0">
+        <ngc-range top="1" bottom="1001" left="1" right="1001" format-fn="cellFormat" custom-trusted-html-fn="customTrustedHTMLFn"></ngc-range>
+    </div>
+</div>
+
+</body>
+
+</html>
+

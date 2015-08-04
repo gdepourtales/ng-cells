@@ -372,7 +372,7 @@
                      */
                     scope.$$dispatchEvent = function(eventName, event, cellData) {
                         /* Only handle callbacks that are actually functions */
-                        if (angular.isFunction(cellData.eventCallbacks[eventName])) {
+                        if (cellData && angular.isFunction(cellData.eventCallbacks[eventName])) {
                             /* Save the scroll positions */
                             var verticalScrollPos = this.$$verticalScrollbarWrapperElement.scrollTop;
                             var horizontalScrollPos = this.$$horizontalScrollbarWrapperElement.scrollLeft;
@@ -616,7 +616,7 @@
 
                         if (scrollPosition.top){
                             if (newRowCount) {
-                                newRowCount -= scope.$$headerRows.length - scope.$$footerRows.length;
+                                newRowCount -= (scope.$$headerRows.length + scope.$$footerRows.length);
                                 if (newRowCount < 0) {
                                     newRowCount = 0;
                                 }
@@ -626,7 +626,7 @@
                                 scrollPosition.top = 0;
                             } else {
                                 if (oldRowCount) {
-                                    oldRowCount -= scope.$$headerRows.length - scope.$$footerRows.length;
+                                    oldRowCount -= (scope.$$headerRows.length + scope.$$footerRows.length);
                                     if (oldRowCount < rowNumber) {
                                         oldRowCount = 0;
                                     }
@@ -634,12 +634,13 @@
 
                                 scrollPosition.top = oldRowCount &&
                                     (Math.round((scrollPosition.top + 1) * (newRowCount - rowNumber) / (oldRowCount - rowNumber)) - 1);
+                                scrollPosition.top = Math.min(scrollPosition.top, newRowCount - rowNumber);
                             }
                         }
 
                         if (scrollPosition.left) {
                             if (newColumnCount) {
-                                newColumnCount -= -scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length;
+                                newColumnCount -= (scope.$$leftFixedColumns.length + scope.$$rightFixedColumns.length);
                                 if (newColumnCount < 0) {
                                     newColumnCount = 0;
                                 }
@@ -649,14 +650,16 @@
                                 scrollPosition.left = 0;
                             } else {
                                 if (oldColumnCount) {
-                                    oldColumnCount -= -scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length;
+                                    oldColumnCount -= (scope.$$leftFixedColumns.length + scope.$$rightFixedColumns.length);
                                     if (oldColumnCount < centerColumnNumber) {
                                         oldColumnCount = 0;
                                     }
                                 }
 
                                 scrollPosition.left = oldColumnCount &&
-                                    (Math.round((scrollPosition.left + 1) * (newColumnCount - newColumnCount) / (oldColumnCount - newColumnCount)) - 1);
+                                    (Math.round((scrollPosition.left + 1) * (newColumnCount - centerColumnNumber) / (oldColumnCount - centerColumnNumber)) - 1);
+                                scrollPosition.left = Math.min(scrollPosition.left, newColumnCount - centerColumnNumber);
+
                             }
                         }
                     };
@@ -677,9 +680,11 @@
                             var elem = angular.element(scope.$$verticalScrollbarWrapperElement);
                             // we need to clear the scrollbar wrapper fixed height,
                             // otherwise it might cause the table size not to shrink to the minimum height properly
+                            /*
                             elem.css('height', 'auto');
                             var height = elem.parent()[0].offsetHeight;
                             elem.css('height', height + 'px');
+                            */
 
                         }
 
@@ -718,11 +723,11 @@
                             if (newValue !== oldValue ) {
                                 scope.$$updateScrollPositions(oldValue);
 
-                                // Update the data
-                                scope.$$updateData();
-
                                 // Refresh scrollbars
                                 scope.$$refreshScrollbars();
+
+                                // Update the data
+                                scope.$$updateData();
 
                             }
                         }
