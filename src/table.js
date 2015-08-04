@@ -1058,9 +1058,9 @@
 
                         var scheduledScrollProcess, // timeout id of the scheduled scroll event callback
                             scheduledWheelProcess, // timeout id of the scheduled wheel event callback
-                            defaultScrollDelay = 120, // default scroll delay (ms)
-                            scrollDelay = angular.isDefined(scope.scrollDelay) ? scope.scrollDelay : defaultScrollDelay, // current scroll delay (ms)
+                            defaultScrollDelay = angular.isDefined(scope.scrollDelay) ? scope.scrollDelay : 120, // default scroll delay (ms)
                             defaultWheelDelay = angular.isDefined(scope.wheelScrollDelay) ? scope.wheelScrollDelay : 500, // default wheel delay (ms)
+                            scrollDelay = defaultScrollDelay, // current scroll delay (ms)
                             parentEl = iElement.parent(),
                             shouldResizeVerticalScrollbar = angular.isDefined(scope.verticalScrollbarAutoResize) ? scope.verticalScrollbarAutoResize : true; // parent DOM element of this directive's DOM root
 
@@ -1179,13 +1179,13 @@
                         updateVScrollBarHeight();
 
 
-                        var tbodyEl = getClosestParentTag(parentEl, 'TBODY');
-                        if (!tbodyEl.length) {
-                            throw new Error("Unable to find TBODY tag from the scrollbar wrapper");
-                        }
-
                         // vertical scrolling perks
                         if (parentEl.hasClass('vertical')) {
+                            var tbodyEl = getClosestParentTag(parentEl, 'TBODY');
+                            if (!tbodyEl.length) {
+                                throw new Error("Unable to find TBODY tag from the scrollbar wrapper");
+                            }
+
                             // Handle vertical scroll triggered by mouse wheel over the whole table area
                             parentEl.parent().parent().parent().on('wheel', function(evt){
                                 var target = evt.target,
@@ -1202,7 +1202,7 @@
 
                                     // if we can't scroll further in that direction
                                     if ((initScrollTop === 0 && lineScrollOffset < 0) ||
-                                        ((initScrollTop + parentElDom.offsetHeight) === scrollHeight && lineScrollOffset > 0)) {
+                                        (lineScrollOffset > 0 && (initScrollTop + parentElDom.offsetHeight) === scrollHeight)) {
                                         return;
                                     }
 
@@ -1212,7 +1212,7 @@
                                     } else if (parentElDom.doScroll) { // if scrollByLines is not available, try to use the IE similar function
                                         parentElDom.doScroll(lineScrollOffset > 0 ? 'scrollbarDown' : 'scrollbarUp');
                                     } else if (parentElDom.scrollBy) { // if scrollBy is available (an old DOM-0 method)
-                                        parentElDom.scrollBy(lineScrollOffset * 10);
+                                        parentElDom.scrollBy(0, lineScrollOffset * 10);
                                     } else { // last solution, try to do it manually
                                         parentElDom.scrollTop += lineScrollOffset * 10;
                                     }
