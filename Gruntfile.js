@@ -27,7 +27,7 @@ module.exports = function(grunt) {
             },
 
             dist_latest: {
-                src: ['generated/template.js', 'src/table.js'],
+                src: ['src/table.js','generated/template.js'],
                 dest: 'dist/latest/<%= pkg.name %>.js'
             }
         },
