@@ -1,6 +1,6 @@
 {
   "name": "ng-cells",
-  "version": "0.3.11",
+  "version": "0.4.0",
   "main": [
     "dist/latest/ng-cells.js",
     "dist/latest/ng-cells.min.js",
@@ -30,6 +30,7 @@
   ],
     "dependencies": {
         "angular": ">1.2.3",
-        "angular-sanitize": ">1.2.3"
+        "angular-sanitize": ">1.2.3",
+      "ng-scrollable": "gdepourtales/ng-scrollable#cbf2e4312b70ab791673de51f6b536e56ff50b87"
     }
 }
