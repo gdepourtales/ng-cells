@@ -1,6 +1,6 @@
 {
   "name": "ng-cells",
-  "version": "0.3.11",
+  "version": "0.4.0",
   "homepage": "http://gdepourtales.github.io/ng-cells/",
   "description": "Flexible table angularjs directive",
   "keywords": [
@@ -16,6 +16,11 @@
     "Guy de Pourtalès <guy@gadp.ch>"
   ],
   "license": "Apache 2.0",
+  "dependencies": {
+    "angular": ">1.2.3",
+    "angular-sanitize": ">1.2.3",
+    "ng-scrollable": "gdepourtales/ng-scrollable"
+  },
   "devDependencies": {
     "grunt": "~0.4.2",
     "grunt-contrib-jshint": "~0.6.0",
