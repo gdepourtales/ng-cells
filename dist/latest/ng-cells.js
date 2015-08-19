@@ -1,352 +1,3 @@
-angular.module('ngc-template', ['ngc.table.tpl.html']);
-
-angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("ngc.table.tpl.html",
-    "<div class=\"ngc table\">\n" +
-    "    <div ng-transclude style=\"display: hidden\"></div>\n" +
-    "\n" +
-    "    <form>\n" +
-    "        <table class=\"ngc\">\n" +
-    "            <!-- Column Names -->\n" +
-    "            <tr class=\"ngc row column-names\" ng-show=\"{{showColumnNames}}\"  ng-class=\"{first: $first, last: $last}\">\n" +
-    "                <!-- Cells for row headers columns -->\n" +
-    "                <td ng-repeat=\"column in $$leftRowHeadersColumns\"\n" +
-    "                    ng-class=\"{first: $first, last: $last}\"\n" +
-    "                    class=\"ngc row-header column-name cell {{column.clazz}}\"\n" +
-    "                    style=\"{{column.style}}\">\n" +
-    "                    <div class=\"ngc cell-content\" style=\"{{column.style}}\"></div>\n" +
-    "                </td>\n" +
-    "\n" +
-    "                <!-- Cells for left fixed columns -->\n" +
-    "                <td ng-repeat=\"column in $$leftFixedColumns\"\n" +
-    "                    ng-class=\"{first: $first, last: $last}\"\n" +
-    "                    class=\"ngc left column-name cell {{$$leftColumnNames[$index].clazz}} {{column.clazz}}\"\n" +
-    "                    style=\"{{$$leftColumnNames[$index].style}}; {{column.style}}\">\n" +
-    "                    <div class=\"ngc cell-content\" style=\"{{column.style}}\">{{$$leftColumnNames[$index].value}}</div>\n" +
-    "                </td>\n" +
-    "\n" +
-    "                <!-- Cells for middle variable columns -->\n" +
-    "                <td ng-repeat=\"column in $$variableCenterColumns\"\n" +
-    "                    ng-class=\"{first: $first, last: $last}\"\n" +
-    "                    class=\"ngc center column-name cell {{$$centerColumnNames[$index].clazz}} {{column.clazz}}\"\n" +
-    "                    style=\"{{$$centerColumnNames[$index].style}}; {{column.style}}\">\n" +
-    "                    <div class=\"ngc cell-content\" style=\"{{column.style}}\">{{$$centerColumnNames[$index].value}}</div>\n" +
-    "                </td>\n" +
-    "\n" +
-    "                <!-- Cells for right fixed columns -->\n" +
-    "                <td ng-repeat=\"column in $$rightFixedColumns\"\n" +
-    "                    ng-class=\"{first: $first, last: $last}\"\n" +
-    "                    class=\"ngc right column-name cell {{$$rightColumnNames[$index].clazz}} {{column.clazz}}\"\n" +
-    "                    style=\"{{$$rightColumnNames[$index].style}}; {{column.style}}\">\n" +
-    "                    <div class=\"ngc cell-content\" style=\"{{column.style}}\">{{$$rightColumnNames[$index].value}}</div>\n" +
-    "                </td>\n" +
-    "                <!-- Placeholder for vertical scroll -->\n" +
-    "                <td></td>\n" +
-    "            </tr>\n" +
-    "\n" +
-    "            <!-- Headers -->\n" +
-    "            <tr class=\"ngc row header\"  ng-show=\"{{showHeader}}\" ng-repeat=\"row in $$headerRows\" ng-class=\"{first: $first, last: $last}\">\n" +
-    "                <!-- Cells for row headers columns -->\n" +
-    "                <td ng-repeat=\"column in $$leftRowHeadersColumns\"\n" +
-    "                    ng-class=\"{first: $first, last: $last}\"\n" +
-    "                     class=\"ngc row-header header cell {{$$topLeftRowHeadersData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
-    "                     style=\"{{$$topLeftRowHeadersData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
-    "                    <div class=\"ngc cell-content\" style=\"{{row.height}}; {{column.style}}\" >{{$$topLeftRowHeadersData[$parent.$index][$index].value}}</div>\n" +
-    "                </td>\n" +
-    "\n" +
-    "                <!-- Cells for left fixed columns -->\n" +
-    "                <td ng-repeat=\"column in $$leftFixedColumns\"\n" +
-    "                    ng-click=\"$$dispatchEvent('click', $event, $$topLeftData[$parent.$index][$index])\"\n" +
-    "                    ng-dblclick=\"$$dispatchEvent('dblclick', $event, $$topLeftData[$parent.$index][$index])\"\n" +
-    "                    ng-keydown=\"$$dispatchEvent('keydown', $event, $$topLeftData[$parent.$index][$index])\"\n" +
-    "                    ng-keypress=\"$$dispatchEvent('keypress', $event, $$topLeftData[$parent.$index][$index])\"\n" +
-    "                    ng-keyup=\"$$dispatchEvent('keyup', $event, $$topLeftData[$parent.$index][$index])\"\n" +
-    "                    ng-mousedown=\"$$dispatchEvent('mousedown', $event, $$topLeftData[$parent.$index][$index])\"\n" +
-    "                    ng-mouseleave=\"$$dispatchEvent('mouseleave', $event, $$topLeftData[$parent.$index][$index])\"\n" +
-    "                    ng-mouseenter=\"$$dispatchEvent('mouseenter', $event, $$topLeftData[$parent.$index][$index])\"\n" +
-    "                    ng-mousemove=\"$$dispatchEvent('mousemove', $event, $$topLeftData[$parent.$index][$index])\"\n" +
-    "                    ng-mouseover=\"$$dispatchEvent('mouseover', $event, $$topLeftData[$parent.$index][$index])\"\n" +
-    "                    ng-mouseup=\"$$dispatchEvent('mouseup', $event, $$topLeftData[$parent.$index][$index])\"\n" +
-    "                    ng-class=\"{first: $first, last: $last}\"\n" +
-    "                    class=\"ngc left header cell {{$$topLeftData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
-    "                    style=\"{{$$topLeftData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
-    "                    <div class=\"ngc cell-content ngc-custom-html\" style=\"{{row.height}}; {{column.style}}\"\n" +
-    "                         ng-if=\"!$$topLeftData[$parent.$index][$index].customCellTemplate\"\n" +
-    "                         ng-bind-html=\"$$topLeftData[$parent.$parent.$index][$index].customHTML\"></div>\n" +
-    "                    <div class=\"ngc cell-content ngc-custom-cell-template\" style=\"{{row.height}}; {{column.style}}\"\n" +
-    "                         ng-if=\"$$topLeftData[$parent.$index][$index].customCellTemplate\"\n" +
-    "                         ext-include=\"$$topLeftData[row.index][$index].customCellTemplate\"\n" +
-    "                         scope-extension=\"{'rawCellData': $$topLeftData[row.index][$index]}\"></div>\n" +
-    "                </td>\n" +
-    "\n" +
-    "                <!-- Cells for middle variable columns -->\n" +
-    "                <td ng-repeat=\"column in $$variableCenterColumns\"\n" +
-    "                    ng-click=\"$$dispatchEvent('click', $event, $$topCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-dblclick=\"$$dispatchEvent('dblclick', $event, $$topCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-keydown=\"$$dispatchEvent('keydown', $event, $$topCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-keypress=\"$$dispatchEvent('keypress', $event, $$topCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-keyup=\"$$dispatchEvent('keyup', $event, $$topCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-mousedown=\"$$dispatchEvent('mousedown', $event, $$topCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-mouseleave=\"$$dispatchEvent('mouseleave', $event, $$topCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-mouseenter=\"$$dispatchEvent('mouseenter', $event, $$topCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-mousemove=\"$$dispatchEvent('mousemove', $event, $$topCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-mouseover=\"$$dispatchEvent('mouseover', $event, $$topCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-mouseup=\"$$dispatchEvent('mouseup', $event, $$topCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-class=\"{first: $first, last: $last}\"\n" +
-    "                    class=\"ngc center header cell {{$$topCenterData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
-    "                    style=\"{{$$topCenterData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
-    "                    <div class=\"ngc cell-content ngc-custom-html\" style=\"{{row.height}}; {{column.style}}\"\n" +
-    "                         ng-if=\"!$$topCenterData[$parent.$index][$index].customCellTemplate\"\n" +
-    "                         ng-bind-html=\"$$topCenterData[$parent.$parent.$index][$index].customHTML\"></div>\n" +
-    "                    <div class=\"ngc cell-content ngc-custom-cell-template\" style=\"{{row.height}}; {{column.style}}\"\n" +
-    "                         ng-if=\"$$topCenterData[$parent.$index][$index].customCellTemplate\"\n" +
-    "                         ext-include=\"$$topCenterData[row.index][$index].customCellTemplate\"\n" +
-    "                         scope-extension=\"{'rawCellData': $$topCenterData[row.index][$index]}\"></div>\n" +
-    "                </td>\n" +
-    "\n" +
-    "                <!-- Cells for right fixed columns -->\n" +
-    "                <td ng-repeat=\"column in $$rightFixedColumns\"\n" +
-    "                    ng-click=\"$$dispatchEvent('click', $event, $$topRightData[$parent.$index][$index])\"\n" +
-    "                    ng-dblclick=\"$$dispatchEvent('dblclick', $event, $$topRightData[$parent.$index][$index])\"\n" +
-    "                    ng-keydown=\"$$dispatchEvent('keydown', $event, $$topRightData[$parent.$index][$index])\"\n" +
-    "                    ng-keypress=\"$$dispatchEvent('keypress', $event, $$topRightData[$parent.$index][$index])\"\n" +
-    "                    ng-keyup=\"$$dispatchEvent('keyup', $event, $$topRightData[$parent.$index][$index])\"\n" +
-    "                    ng-mousedown=\"$$dispatchEvent('mousedown', $event, $$topRightData[$parent.$index][$index])\"\n" +
-    "                    ng-mouseleave=\"$$dispatchEvent('mouseleave', $event, $$topRightData[$parent.$index][$index])\"\n" +
-    "                    ng-mouseenter=\"$$dispatchEvent('mouseenter', $event, $$topRightData[$parent.$index][$index])\"\n" +
-    "                    ng-mousemove=\"$$dispatchEvent('mousemove', $event, $$topRightData[$parent.$index][$index])\"\n" +
-    "                    ng-mouseover=\"$$dispatchEvent('mouseover', $event, $$topRightData[$parent.$index][$index])\"\n" +
-    "                    ng-mouseup=\"$$dispatchEvent('mouseup', $event, $$topRightData[$parent.$index][$index])\"\n" +
-    "                    ng-class=\"{first: $first, last: $last}\"\n" +
-    "                    class=\"ngc right header cell {{$$topRightData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
-    "                    style=\"{{$$topRightData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
-    "                    <div class=\"ngc cell-content ngc-custom-html\" style=\"{{row.height}}; {{column.style}}\"\n" +
-    "                         ng-if=\"!$$topRightData[$parent.$index][$index].customCellTemplate\"\n" +
-    "                         ng-bind-html=\"$$topRightData[$parent.$parent.$index][$index].customHTML\"></div>\n" +
-    "                    <div class=\"ngc cell-content ngc-custom-cell-template\" style=\"{{row.height}}; {{column.style}}\"\n" +
-    "                         ng-if=\"$$topRightData[$parent.$index][$index].customCellTemplate\"\n" +
-    "                         ext-include=\"$$topRightData[row.index][$index].customCellTemplate\"\n" +
-    "                         scope-extension=\"{'rawCellData': $$topRightData[row.index][$index]}\"></div>\n" +
-    "                </td>\n" +
-    "\n" +
-    "                <!-- Placeholder for vertical scroll -->\n" +
-    "                <td></td>\n" +
-    "            </tr>\n" +
-    "\n" +
-    "            <!-- Middle -->\n" +
-    "            <tr class=\"ngc row middle\" ng-repeat=\"row in $$rows\" ng-class=\"{first: $first, last: $last}\">\n" +
-    "                <!-- Cells for row headers columns -->\n" +
-    "                <td ng-repeat=\"column in $$leftRowHeadersColumns\"\n" +
-    "                    ng-class=\"{first: $first, last: $last}\"\n" +
-    "                    class=\"ngc row-header middle cell {{$$middleLeftRowHeadersData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
-    "                    style=\"{{$$middleLeftRowHeadersData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
-    "                    <div class=\"ngc cell-content\" style=\"{{row.height}}; {{column.style}}\">{{$$middleLeftRowHeadersData[$parent.$index][$index].value}}</div>\n" +
-    "                </td>\n" +
-    "\n" +
-    "                <!-- Cells for left fixed columns -->\n" +
-    "                <td ng-repeat=\"column in $$leftFixedColumns\"\n" +
-    "                    ng-click=\"$$dispatchEvent('click', $event, $$middleLeftData[$parent.$index][$index])\"\n" +
-    "                    ng-dblclick=\"$$dispatchEvent('dblclick', $event, $$middleLeftData[$parent.$index][$index])\"\n" +
-    "                    ng-keydown=\"$$dispatchEvent('keydown', $event, $$middleLeftData[$parent.$index][$index])\"\n" +
-    "                    ng-keypress=\"$$dispatchEvent('keypress', $event, $$middleLeftData[$parent.$index][$index])\"\n" +
-    "                    ng-keyup=\"$$dispatchEvent('keyup', $event, $$middleLeftData[$parent.$index][$index])\"\n" +
-    "                    ng-mousedown=\"$$dispatchEvent('mousedown', $event, $$middleLeftData[$parent.$index][$index])\"\n" +
-    "                    ng-mouseleave=\"$$dispatchEvent('mouseleave', $event, $$middleLeftData[$parent.$index][$index])\"\n" +
-    "                    ng-mouseenter=\"$$dispatchEvent('mouseenter', $event, $$middleLeftData[$parent.$index][$index])\"\n" +
-    "                    ng-mousemove=\"$$dispatchEvent('mousemove', $event, $$middleLeftData[$parent.$index][$index])\"\n" +
-    "                    ng-mouseover=\"$$dispatchEvent('mouseover', $event, $$middleLeftData[$parent.$index][$index])\"\n" +
-    "                    ng-mouseup=\"$$dispatchEvent('mouseup', $event, $$middleLeftData[$parent.$index][$index])\"\n" +
-    "                    ng-class=\"{first: $first, last: $last}\"\n" +
-    "                    class=\"ngc left middle cell {{$$middleLeftData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
-    "                    style=\"{{$$middleLeftData[$parent.$index][$index].style}} ; {{row.height}}; {{column.style}}\">\n" +
-    "                    <div class=\"ngc cell-content ngc-custom-html\" style=\"{{row.height}}; {{column.style}}\"\n" +
-    "                         ng-if=\"!$$middleLeftData[$parent.$index][$index].customCellTemplate\"\n" +
-    "                         ng-bind-html=\"$$middleLeftData[$parent.$parent.$index][$index].customHTML\"></div>\n" +
-    "                    <div class=\"ngc cell-content ngc-custom-cell-template\" style=\"{{row.height}}; {{column.style}}\"\n" +
-    "                         ng-if=\"$$middleLeftData[$parent.$index][$index].customCellTemplate\"\n" +
-    "                         ext-include=\"$$middleLeftData[row.index][$index].customCellTemplate\"\n" +
-    "                         scope-extension=\"{'rawCellData': $$middleLeftData[row.index][$index]}\"></div>\n" +
-    "                </td>\n" +
-    "\n" +
-    "                <!-- Cells for middle variable columns -->\n" +
-    "                <td ng-repeat=\"column in $$variableCenterColumns\"\n" +
-    "                    ng-click=\"$$dispatchEvent('click', $event, $$middleCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-dblclick=\"$$dispatchEvent('dblclick', $event, $$middleCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-keydown=\"$$dispatchEvent('keydown', $event, $$middleCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-keypress=\"$$dispatchEvent('keypress', $event, $$middleCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-keyup=\"$$dispatchEvent('keyup', $event, $$middleCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-mousedown=\"$$dispatchEvent('mousedown', $event, $$middleCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-mouseleave=\"$$dispatchEvent('mouseleave', $event, $$middleCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-mouseenter=\"$$dispatchEvent('mouseenter', $event, $$middleCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-mousemove=\"$$dispatchEvent('mousemove', $event, $$middleCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-mouseover=\"$$dispatchEvent('mouseover', $event, $$middleCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-mouseup=\"$$dispatchEvent('mouseup', $event, $$middleCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-class=\"{first: $first, last: $last}\"\n" +
-    "                    class=\"ngc center cell middle {{$$middleCenterData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
-    "                    style=\"{{$$middleCenterData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
-    "                    <div class=\"ngc cell-content ngc-custom-html\" style=\"{{row.height}}; {{column.style}}\"\n" +
-    "                         ng-if=\"!$$middleCenterData[$parent.$index][$index].customCellTemplate\"\n" +
-    "                         ng-bind-html=\"$$middleCenterData[$parent.$parent.$index][$index].customHTML\"></div>\n" +
-    "                    <div class=\"ngc cell-content ngc-custom-cell-template\" style=\"{{row.height}}; {{column.style}}\"\n" +
-    "                         ng-if=\"$$middleCenterData[$parent.$index][$index].customCellTemplate\"\n" +
-    "                         ext-include=\"$$middleCenterData[row.index][$index].customCellTemplate\"\n" +
-    "                         scope-extension=\"{'rawCellData': $$middleCenterData[row.index][$index]}\"></div>\n" +
-    "                </td>\n" +
-    "\n" +
-    "                <!-- Cells for right fixed columns -->\n" +
-    "                <td ng-repeat=\"column in $$rightFixedColumns\"\n" +
-    "                    ng-click=\"$$dispatchEvent('click', $event, $$middleRightData[$parent.$index][$index])\"\n" +
-    "                    ng-dblclick=\"$$dispatchEvent('dblclick', $event, $$middleRightData[$parent.$index][$index])\"\n" +
-    "                    ng-keydown=\"$$dispatchEvent('keydown', $event, $$middleRightData[$parent.$index][$index])\"\n" +
-    "                    ng-keypress=\"$$dispatchEvent('keypress', $event, $$middleRightData[$parent.$index][$index])\"\n" +
-    "                    ng-keyup=\"$$dispatchEvent('keyup', $event, $$middleRightData[$parent.$index][$index])\"\n" +
-    "                    ng-mousedown=\"$$dispatchEvent('mousedown', $event, $$middleRightData[$parent.$index][$index])\"\n" +
-    "                    ng-mouseleave=\"$$dispatchEvent('mouseleave', $event, $$middleRightData[$parent.$index][$index])\"\n" +
-    "                    ng-mouseenter=\"$$dispatchEvent('mouseenter', $event, $$middleRightData[$parent.$index][$index])\"\n" +
-    "                    ng-mousemove=\"$$dispatchEvent('mousemove', $event, $$middleRightData[$parent.$index][$index])\"\n" +
-    "                    ng-mouseover=\"$$dispatchEvent('mouseover', $event, $$middleRightData[$parent.$index][$index])\"\n" +
-    "                    ng-mouseup=\"$$dispatchEvent('mouseup', $event, $$middleRightData[$parent.$index][$index])\"\n" +
-    "                    ng-class=\"{first: $first, last: $last}\"\n" +
-    "                    class=\"ngc right cell middle {{$$middleRightData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
-    "                    style=\"{{$$middleRightData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
-    "                    <div class=\"ngc cell-content ngc-custom-html\" style=\"{{row.height}}; {{column.style}}\"\n" +
-    "                         ng-if=\"!$$middleRightData[$parent.$index][$index].customCellTemplate\"\n" +
-    "                         ng-bind-html=\"$$middleRightData[$parent.$parent.$index][$index].customHTML\"></div>\n" +
-    "                    <div class=\"ngc cell-content ngc-custom-cell-template\" style=\"{{row.height}}; {{column.style}}\"\n" +
-    "                         ng-if=\"$$middleRightData[$parent.$index][$index].customCellTemplate\"\n" +
-    "                         ext-include=\"$$middleRightData[row.index][$index].customCellTemplate\"\n" +
-    "                         scope-extension=\"{'rawCellData': $$middleRightData[row.index][$index]}\"></div>\n" +
-    "                </td>\n" +
-    "                <td class=\"ngc scroll-wrapper-cell\" ng-if=\"$first\" rowspan=\"{{$$rows.length}}\">\n" +
-    "                    <div class=\"ngc scroll-wrapper vertical\">\n" +
-    "                        <div ngc-scrollbar vertical></div>\n" +
-    "                    </div>\n" +
-    "                </td>\n" +
-    "            </tr>\n" +
-    "\n" +
-    "            <!-- Bottom -->\n" +
-    "            <tr class=\"ngc row footer\" ng-repeat=\"row in $$footerRows\" ng-class=\"{first: $first, last: $last}\">\n" +
-    "                <!-- Cells for row headers columns -->\n" +
-    "                <td ng-repeat=\"column in $$leftRowHeadersColumns\"\n" +
-    "                    ng-class=\"{first: $first, last: $last}\"\n" +
-    "                    class=\"ngc row-header footer cell {{$$bottomLeftRowHeadersData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
-    "                    style=\"{{$$bottomLeftRowHeadersData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
-    "                    <div class=\"ngc cell-content\" style=\"{{row.height}}; {{column.style}}\">{{$$bottomLeftRowHeadersData[$parent.$index][$index].value}}</div>\n" +
-    "                </td>\n" +
-    "\n" +
-    "                <!-- Cells for left fixed columns -->\n" +
-    "                <td  ng-repeat=\"column in $$leftFixedColumns\"\n" +
-    "                     ng-click=\"$$dispatchEvent('click', $event, $$bottomLeftData[$parent.$index][$index])\"\n" +
-    "                     ng-dblclick=\"$$dispatchEvent('dblclick', $event, $$bottomLeftData[$parent.$index][$index])\"\n" +
-    "                     ng-keydown=\"$$dispatchEvent('keydown', $event, $$bottomLeftData[$parent.$index][$index])\"\n" +
-    "                     ng-keypress=\"$$dispatchEvent('keypress', $event, $$bottomLeftData[$parent.$index][$index])\"\n" +
-    "                     ng-keyup=\"$$dispatchEvent('keyup', $event, $$bottomLeftData[$parent.$index][$index])\"\n" +
-    "                     ng-mousedown=\"$$dispatchEvent('mousedown', $event, $$bottomLeftData[$parent.$index][$index])\"\n" +
-    "                     ng-mouseleave=\"$$dispatchEvent('mouseleave', $event, $$bottomLeftData[$parent.$index][$index])\"\n" +
-    "                     ng-mouseenter=\"$$dispatchEvent('mouseenter', $event, $$bottomLeftData[$parent.$index][$index])\"\n" +
-    "                     ng-mousemove=\"$$dispatchEvent('mousemove', $event, $$bottomLeftData[$parent.$index][$index])\"\n" +
-    "                     ng-mouseover=\"$$dispatchEvent('mouseover', $event, $$bottomLeftData[$parent.$index][$index])\"\n" +
-    "                     ng-mouseup=\"$$dispatchEvent('mouseup', $event, $$bottomLeftData[$parent.$index][$index])\"\n" +
-    "                     ng-class=\"{first: $first, last: $last}\"\n" +
-    "                     class=\"ngc left footer cell {{$$bottomLeftData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
-    "                     style=\"{{$$bottomLeftData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
-    "                    <div class=\"ngc cell-content ngc-custom-html\" style=\"{{row.height}}; {{column.style}}\"\n" +
-    "                         ng-if=\"!$$bottomLeftData[$parent.$index][$index].customCellTemplate\"\n" +
-    "                         ng-bind-html=\"$$bottomLeftData[$parent.$parent.$index][$index].customHTML\"></div>\n" +
-    "                    <div class=\"ngc cell-content ngc-custom-cell-template\" style=\"{{row.height}}; {{column.style}}\"\n" +
-    "                         ng-if=\"$$bottomLeftData[$parent.$index][$index].customCellTemplate\"\n" +
-    "                         ext-include=\"$$bottomLeftData[row.index][$index].customCellTemplate\"\n" +
-    "                         scope-extension=\"{'rawCellData': $$bottomLeftData[row.index][$index]}\"></div>\n" +
-    "                </td>\n" +
-    "\n" +
-    "                <!-- Cells for middle variable columns -->\n" +
-    "                <td ng-repeat=\"column in $$variableCenterColumns\"\n" +
-    "                    ng-click=\"$$dispatchEvent('click', $event, $$bottomCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-dblclick=\"$$dispatchEvent('dblclick', $event, $$bottomCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-keydown=\"$$dispatchEvent('keydown', $event, $$bottomCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-keypress=\"$$dispatchEvent('keypress', $event, $$bottomCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-keyup=\"$$dispatchEvent('keyup', $event, $$bottomCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-mousedown=\"$$dispatchEvent('mousedown', $event, $$bottomCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-mouseleave=\"$$dispatchEvent('mouseleave', $event, $$bottomCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-mouseenter=\"$$dispatchEvent('mouseenter', $event, $$bottomCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-mousemove=\"$$dispatchEvent('mousemove', $event, $$bottomCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-mouseover=\"$$dispatchEvent('mouseover', $event, $$bottomCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-mouseup=\"$$dispatchEvent('mouseup', $event, $$bottomCenterData[$parent.$index][$index])\"\n" +
-    "                    ng-class=\"{first: $first, last: $last}\"\n" +
-    "                    class=\"ngc center footer cell {{$$bottomCenterData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
-    "                    style=\"{{$$bottomCenterData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
-    "                    <div class=\"ngc cell-content ngc-custom-html\" style=\"{{row.height}}; {{column.style}}\"\n" +
-    "                         ng-if=\"!$$bottomCenterData[$parent.$index][$index].customCellTemplate\"\n" +
-    "                         ng-bind-html=\"$$bottomCenterData[$parent.$parent.$index][$index].customHTML\"></div>\n" +
-    "                    <div class=\"ngc cell-content ngc-custom-cell-template\" style=\"{{row.height}}; {{column.style}}\"\n" +
-    "                         ng-if=\"$$bottomCenterData[$parent.$index][$index].customCellTemplate\"\n" +
-    "                         ext-include=\"$$bottomCenterData[row.index][$index].customCellTemplate\"\n" +
-    "                         scope-extension=\"{'rawCellData': $$bottomCenterData[row.index][$index]}\"></div>\n" +
-    "                </td>\n" +
-    "\n" +
-    "                <!-- Cells for right fixed columns -->\n" +
-    "                <td ng-repeat=\"column in $$rightFixedColumns\"\n" +
-    "                    ng-click=\"$$dispatchEvent('click', $event, $$bottomRightData[$parent.$index][$index])\"\n" +
-    "                    ng-dblclick=\"$$dispatchEvent('dblclick', $event, $$bottomRightData[$parent.$index][$index])\"\n" +
-    "                    ng-keydown=\"$$dispatchEvent('keydown', $event, $$bottomRightData[$parent.$index][$index])\"\n" +
-    "                    ng-keypress=\"$$dispatchEvent('keypress', $event, $$bottomRightData[$parent.$index][$index])\"\n" +
-    "                    ng-keyup=\"$$dispatchEvent('keyup', $event, $$bottomRightData[$parent.$index][$index])\"\n" +
-    "                    ng-mousedown=\"$$dispatchEvent('mousedown', $event, $$bottomRightData[$parent.$index][$index])\"\n" +
-    "                    ng-mouseleave=\"$$dispatchEvent('mouseleave', $event, $$bottomRightData[$parent.$index][$index])\"\n" +
-    "                    ng-mouseenter=\"$$dispatchEvent('mouseenter', $event, $$bottomRightData[$parent.$index][$index])\"\n" +
-    "                    ng-mousemove=\"$$dispatchEvent('mousemove', $event, $$bottomRightData[$parent.$index][$index])\"\n" +
-    "                    ng-mouseover=\"$$dispatchEvent('mouseover', $event, $$bottomRightData[$parent.$index][$index])\"\n" +
-    "                    ng-mouseup=\"$$dispatchEvent('mouseup', $event, $$bottomRightData[$parent.$index][$index])\"\n" +
-    "                    ng-class=\"{first: $first, last: $last}\"\n" +
-    "                    class=\"ngc right footer cell {{$$bottomRightData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
-    "                    style=\"{{$$bottomRightData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
-    "                    <div class=\"ngc cell-content ngc-custom-html\" style=\"{{row.height}}; {{column.style}}\"\n" +
-    "                         ng-if=\"!$$bottomRightData[$parent.$index][$index].customCellTemplate\"\n" +
-    "                         ng-bind-html=\"$$bottomRightData[$parent.$parent.$index][$index].customHTML\"></div>\n" +
-    "                    <div class=\"ngc cell-content ngc-custom-cell-template\" style=\"{{row.height}}; {{column.style}}\"\n" +
-    "                         ng-if=\"$$bottomRightData[$parent.$index][$index].customCellTemplate\"\n" +
-    "                         ext-include=\"$$bottomRightData[row.index][$index].customCellTemplate\"\n" +
-    "                         scope-extension=\"{'rawCellData': $$bottomRightData[row.index][$index]}\"></div>\n" +
-    "                </td>\n" +
-    "\n" +
-    "                <!-- Placeholder for vertical scroll -->\n" +
-    "                <td></td>\n" +
-    "            </tr>\n" +
-    "\n" +
-    "            <!-- Horizontal scroll -->\n" +
-    "            <tr class=\"ngc row scrollbar\">\n" +
-    "                <!-- Cells for row headers columns -->\n" +
-    "                <td ng-repeat=\"column in $$leftRowHeadersColumns\"\n" +
-    "                    class=\"ngc scrollbar cell {{column.clazz}}\"\n" +
-    "                    style=\"{{column.style}}\">\n" +
-    "                    <!--<div class=\"ngc row-header-content\"></div>-->\n" +
-    "                </td>\n" +
-    "                <!-- Cells for left fixed columns -->\n" +
-    "                <td ng-repeat=\"column in $$leftFixedColumns\" class=\"ngc scrollbar cell {{column.clazz}}\" style=\"{{column.style}}\">\n" +
-    "                    <!--<div class=\"ngc cell-content\"></div>-->\n" +
-    "                </td>\n" +
-    "\n" +
-    "                <!-- Cells for middle variable columns -->\n" +
-    "                <td class=\"ngc scroll-wrapper-cell\" colspan=\"{{$$variableCenterColumns.length}}\">\n" +
-    "                    <div class=\"ngc scroll-wrapper horizontal {{column.clazz}}\" >\n" +
-    "                        <div ngc-scrollbar horizontal></div>\n" +
-    "                    </div>\n" +
-    "                </td>\n" +
-    "\n" +
-    "                <!-- Cells for right fixed columns -->\n" +
-    "                <td ng-repeat=\"column in $$rightFixedColumns\"\n" +
-    "                    class=\"ngc scrollbar cell {{$$middleRightData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
-    "                    style=\"{{column.style}}\">\n" +
-    "                    <!--<div class=\"ngc cell-content\"></div>-->\n" +
-    "                </td>\n" +
-    "\n" +
-    "                <!-- Placeholder for vertical scroll -->\n" +
-    "                <td></td>\n" +
-    "            </tr>\n" +
-    "        </table>\n" +
-    "    </form>\n" +
-    "</div>");
-}]);
 /*
  Copyright 2013,2014 Guy de Pourtalès
 
@@ -365,15 +16,12 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
 
 (function() {
 
-    var module = angular.module('ngcTableDirective', ['ngc-template', 'ngSanitize']);
+    var module = angular.module('ngcTableDirective', ['ngc-template', 'ngSanitize', 'ngScrollable']);
 
     // trigger this when the table's content are udpated
     module.constant('contentUpdatedEvent', 'contentUpdatedEvent');
 
     module.directive('ngcTable', ['$templateCache', '$sce', '$timeout', 'contentUpdatedEvent', function($templateCache, $sce, $timeout, contentUpdatedEvent) {
-
-        // Wait delay before refreshing the scrollbar
-        var scrollbarRefreshDelay = 10;
 
         /**
          * ngcTable Controller declaration. The format is given to be able to minify the directive. The scope is
@@ -397,7 +45,6 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
             return {
 
                 pre: function preLink(scope /*, iElement, iAttrs, controller */) {
-                    var i;
 
                     /**
                      * Utility function to create a style declaration based on the value declaration
@@ -675,6 +322,7 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
 
 
                 post: function postLink(scope , iElement /*, iAttrs, controller*/) {
+
 
                     /**
                      * Returns a letter combination for an index
@@ -1013,67 +661,11 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                         }
                     };
 
-                    /**
-                     * Refresh the scrollbar height based on the table body height
-                     * @note Does not handle the horizontal scenario yet
-                     */
-                    scope.$$refreshScrollbars = function() {
-                        // Refresh the scrollbars
-                        var ratio;
-                        // This should be factorized with the scrollbar directive
-                        if (angular.isDefined(scope.data)) {
-                            ratio = (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length) / scope.$$rows.length * 100;
-                            scope.$$verticalScrollbarElement.css('height', ratio + '%');
-                            scope.$$verticalScrollbarElement.parent().css('display', (ratio <= 100)? 'none' : 'block');
-
-                            var elem = angular.element(scope.$$verticalScrollbarWrapperElement);
-                            // we need to clear the scrollbar wrapper fixed height,
-                            // otherwise it might cause the table size not to shrink to the minimum height properly
-                            /*
-                            elem.css('height', 'auto');
-                            var height = elem.parent()[0].offsetHeight;
-                            elem.css('height', height + 'px');
-                            */
-
-                        }
-
-                        if (angular.isDefined(scope.data[0])) {
-                            ratio = (scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length) / scope.$$variableCenterColumns.length * 100;
-                            scope.$$horizontalScrollbarElement.css('width', Math.ceil(ratio) + '%');
-                            scope.$$horizontalScrollbarElement.parent().css('display', (ratio <= 100)? 'none' : 'block');
-
-                            // @note Does not handle the 'horizontal' resize of the scrollbar case yet
-                            // because we haven't got a use case for it yet
-                        }
-                    };
-
-                    /**
-                     * Schedule a scrollbar refresh in `scrollbarRefreshDelay` milliseconds.
-                     * We need this delay to give enough time for the browser to stabilise its styles.
-                     * When used, it will check if we already a scheduled scrollbar refresh.
-                     * If so, it will cancel it and schedule a new one instead.
-                     */
-                    var $$scheduledScrollbarRefresh = function() {
-                        var previous = $$scheduledScrollbarRefresh.previous;
-                        if (previous) {
-                            $timeout.cancel(previous);
-                        }
-
-                        $$scheduledScrollbarRefresh.previous = $timeout(function () { // schedule refresh
-                            $$scheduledScrollbarRefresh.previous = null;
-                            scope.$$refreshScrollbars();
-                        }, scrollbarRefreshDelay);
-                    };
-                    scope.$$scheduledScrollbarRefresh = $$scheduledScrollbarRefresh;
-
                     scope.$watch(
                         'data',
                         function(newValue, oldValue) {
                             if (newValue !== oldValue ) {
                                 scope.$$updateScrollPositions(oldValue);
-
-                                // Refresh scrollbars
-                                scope.$$refreshScrollbars();
 
                                 // Update the data
                                 scope.$$updateData();
@@ -1082,23 +674,28 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                         }
                     );
 
-                    scope.$$scrollDirty = false;
+
+
+                    scope.containerWidth = undefined;
+                    scope.containerHeight = undefined;
 
                     scope.$watch(
                         'scrollTopPosition',
                         function(newValue, oldValue) {
-                            if (angular.isDefined(newValue) && newValue !== oldValue) {
-                                scope.$$scrollDirty = true;
 
-                                if (scope.scrollTopPosition > (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length)) {
-                                    scope.scrollTopPosition = (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length);
+                            if (angular.isDefined(newValue) && newValue !== oldValue) {
+
+                                var totalRows = scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length ;
+                                var percentage = newValue / scope.contentHeight;
+                                var topPos = Math.ceil(totalRows * percentage);
+
+                                if (topPos > totalRows) {
+                                    topPos = totalRows;
                                 }
 
-                                scope.$$scrollPosition.top = scope.scrollTopPosition;
+                                scope.$$scrollPosition.top = topPos;
                                 scope.$$updateData();
-
-                                scope.$$verticalScrollbarWrapperElement.scrollTop =
-                                    scope.$$verticalScrollbarElement[0].offsetHeight * scope.scrollTopPosition / (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length);
+                                scope.$emit('content.reload');
                             }
                         }
                     );
@@ -1106,49 +703,54 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                         'scrollLeftPosition',
                         function(newValue, oldValue) {
                             if (angular.isDefined(newValue) &&  newValue !== oldValue) {
-                                scope.$$scrollDirty = true;
 
-                                if (scope.scrollLeftPosition > (scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length)) {
-                                    scope.scrollLeftPosition = (scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length);
+                                var totalMiddleCols = scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length;
+                                var percentage = newValue / scope.contentWidth;
+                                var leftPos = Math.ceil(totalMiddleCols * percentage);
+
+                                if (leftPos > totalMiddleCols + scope.$$leftFixedColumns.length) {
+                                    leftPos = totalMiddleCols + scope.$$leftFixedColumns.length;
                                 }
 
-                                scope.$$scrollPosition.left = scope.scrollLeftPosition;
+                                scope.$$scrollPosition.left = leftPos;
                                 scope.$$updateData();
-
-                                scope.$$horizontalScrollbarWrapperElement.scrollLeft =
-                                    scope.$$horizontalScrollbarElement[0].offsetWidth * scope.scrollLeftPosition / (scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length);
+                                scope.$emit('content.reload');
                             }
                         }
                     );
 
 
-                    /**
-                     * Handle touch scrolling
-                     * Start event
-                     */
-                    iElement.find('table').on("touchstart", function(e) {
-                        scope.$$touchClientX = e.touches[0].clientX;
-                        scope.$$touchClientY = e.touches[0].clientY;
-                        e.preventDefault();
+                    scope.$on('scrollable.dimensions', function(event, containerWidth, containerHeight, contentWidth, contentHeight, id) {
+
+                        // If there's no change in the contentWidth and contentHeight
+                        if (contentWidth == scope.contentWidth
+                            && contentHeight == scope.contentHeight
+                            && containerWidth == scope.containerWidth
+                            && containerHeight == scope.containerHeight ) {
+                            return;
+                        }
+
+                        var totalRows = scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length ;
+                        var totalVisibleRows = scope.$$rows.length;
+
+                        var totalCols = scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length;
+                        var totalVisibleCols = scope.$$variableCenterColumns.length;
+
+                        var nVPages = totalRows / totalVisibleRows;
+                        var nHPages = totalCols / totalVisibleCols;
+
+                        scope.contentHeight = containerHeight * nVPages;
+                        scope.contentWidth = containerWidth * nHPages;
+                        scope.containerWidth = containerWidth;
+                        scope.containerHeight = containerHeight;
+
+                        // Update scrollbars size
+                        scope.$emit('content.changed');
+
+
                     });
 
-                    /**
-                     * Handle movement
-                     */
-                    iElement.find('table').on("touchmove", function(e) {
-                        var deltaX = e.touches[0].clientX - scope.$$touchClientX;
-                        var deltaY = e.touches[0].clientY - scope.$$touchClientY;
 
-                        scope.$$verticalScrollbarWrapperElement.scrollTop -= deltaY;
-                        scope.$$horizontalScrollbarWrapperElement.scrollLeft -= deltaX;
-
-                        scope.$$updateData();
-
-                        scope.$$touchClientX = e.touches[0].clientX;
-                        scope.$$touchClientY = e.touches[0].clientY;
-                        e.preventDefault();
-
-                    });
                 }
             }
         }
@@ -1204,14 +806,8 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                 /* Let read or set the horizontal data position in the middle center part */
                 scrollLeftPosition: '=?',
 
-                /* The scroll delay for controlling the refresh behaviour when scrolling, a value of 0 means immediate scrolling */
-                scrollDelay: '=?',
-
-                /* The scroll wheel delay for controlling the refresh behaviour when scrolling with the wheel, a value of 0 means immediate scrolling */
-                wheelScrollDelay: '=?',
-
-                /* If false, disables the vertical scrollbar height resizing. This features sometimes triggers unwanted scroll events. Default is true */
-                verticalScrollbarAutoResize: '=?'
+                contentHeight: '=?',
+                contentWidth: '=?'
 
             },
             restrict:'AE',
@@ -1309,285 +905,7 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
             }
         };
     })
-    .directive('ngcScrollbar', ['$timeout', 'contentUpdatedEvent', function($timeout, contentUpdatedEvent) {
-        /**
-         * Handle the resizing of the table to refresh the scrollbars.
-         * When the height or width of the table body changes, then we'll try to refresh the scrollbars (width/height)
-         * The refresh is done asynchronously (after a 10ms delay) because multiple table contents layout changes may
-         * occur in a short time and we don't want to refresh the scrollbars each time.
-         * e.g. image, styles or inner templates are loaded
-         * @param {string} orientation Orientation to check. e.g. 'horizontal' or 'vertical'
-         * @param {object} scope Angular scope
-         * @param {DOMElement} domEl DOM element where we check its dimensions
-         * @returns {Function} Returns a unsubscribe function to cancel the scope.$watch()
-         */
-        var tableResizeHandler = function (orientation, scope, domEl) {
-            var watchGetter;
 
-            // generate the watch function in advance to make the watchGetter function run as fast as possible
-            if (orientation === 'vertical') {
-                watchGetter = function () { // watch for table height changes
-                    return domEl.offsetHeight;
-                };
-            } else {
-                watchGetter = function () { // watch for table width changes
-                    return domEl.offsetWidth;
-                };
-            }
-
-            return scope.$watch(watchGetter, function (newValue, oldValue) {
-                if (newValue !== oldValue) { // when it changes
-                    scope.$$scheduledScrollbarRefresh();
-                }
-            });
-        };
-
-        /**
-         * Get closest parent tag of a given tag name.
-         * @param {jqLite} el Element where to start looking for the tag
-         * @param {string} tagName Tag name. e.g. TBODY
-         * @returns {jqLite} Returns the found parent tag or null if not found in the whole DOM tree.
-         */
-        var getClosestParentTag = function(el, tagName) {
-            if (el.closest) { // if jQuery is available with Angular
-                return el.closest(tagName);
-            }
-
-            el = el.parent();
-            while (el.length) {
-                if (el[0].nodeName === tagName) {
-                    return el;
-                }
-                el = el.parent();
-            }
-            return null;
-        };
-
-        /* Internal directive for virtual horizontal and vertical scrollbars management */
-        return {
-            require:"^ngcTable",
-            restrict:'A',
-            replace:true,
-            template:'<div class="ngc"></div>',
-
-            compile: function(tElement, tAttrs) {
-
-
-                return {
-                   pre: function postLink(scope, iElement /*, iAttrs */) {
-                       var ratio = 100;
-
-                       if (angular.isDefined(tAttrs['horizontal'])) {
-                           // The horizontal ratio is the total data column length minus the left columns minus the right
-                           // columns divided by the number of visible center columns
-                           // The presence of the row numbers at the far right must be considered
-                           if (angular.isDefined(scope.data[0])) {
-                                ratio = (scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length) / scope.$$variableCenterColumns.length * 100;
-                           }
-                           iElement.addClass('hscrollbar');
-                           iElement.css('width', Math.ceil(ratio) + '%');
-                           if (ratio <= 100) iElement.parent().css('display', 'none');
-                           // Save the reference to the element in order to manage scroll position
-                           // after $apply force the redraw of DIVs
-                           scope.$$horizontalScrollbarElement = iElement;
-                           scope.$$horizontalScrollbarWrapperElement = iElement.parent()[0];
-                       } else
-                       if (angular.isDefined(tAttrs['vertical'])) {
-                           // The vertical ratio is the number of data rows minus headers and footers divided by the the number
-                           // of visible middle rows
-                           if (angular.isDefined(scope.data)) {
-                                ratio = (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length) / scope.$$rows.length * 100;
-                           }
-                           iElement.addClass('vscrollbar');
-                           iElement.css('height', ratio + '%');
-                           if (ratio <= 100) iElement.parent().css('display', 'none');
-                           // Save the reference to the element in order to manage scroll position
-                           // after $apply force the redraw of DIVs
-                           var rootDirectiveScope = scope.$parent.$parent;
-                           rootDirectiveScope.$$verticalScrollbarElement = iElement;
-                           rootDirectiveScope.$$verticalScrollbarWrapperElement = iElement.parent()[0];
-                       }
-                   },
-                    post: function postLink(scope, iElement /*, iAttrs*/) {
-
-                        var scheduledScrollProcess, // timeout id of the scheduled scroll event callback
-                            scheduledWheelProcess, // timeout id of the scheduled wheel event callback
-                            defaultScrollDelay = angular.isDefined(scope.scrollDelay) ? scope.scrollDelay : 120, // default scroll delay (ms)
-                            defaultWheelDelay = angular.isDefined(scope.wheelScrollDelay) ? scope.wheelScrollDelay : 500, // default wheel delay (ms)
-                            scrollDelay = defaultScrollDelay, // current scroll delay (ms)
-                            parentEl = iElement.parent(),
-                            shouldResizeVerticalScrollbar = angular.isDefined(scope.verticalScrollbarAutoResize) ? scope.verticalScrollbarAutoResize : true; // parent DOM element of this directive's DOM root
-
-
-
-                        /**
-                         * Handles the scroll event of the vertical scroll bar
-                         * @param {jQuery.Event} e
-                         */
-                        var processScrollEvent = function (e) {
-
-                            var scrollRatio;
-                                // Save scroll positions to set them after the call to $apply which
-                                // resets the DIVs scroll position
-                                // verticalScrollPos = scope.$$verticalScrollbarWrapperElement.scrollTop,
-                                // horizontalScrollPos = scope.$$horizontalScrollbarWrapperElement.scrollLeft;
-
-
-                            if (scope.$$scrollDirty) {
-                                scope.$$scrollDirty = false;
-                                return;
-                            }
-
-                            if (angular.isDefined(scope.$parent.$parent) && scope.$parent.$parent.$$scrollDirty) {
-                                scope.$parent.$parent.$$scrollDirty = false;
-                                return;
-                            }
-
-
-                            // Detect if horizontal according to the class
-                            if (angular.element(e.target).hasClass("horizontal")) {
-                                // add `0` value check to ensure that the ratio is not NaN.
-                                // If that happens, scope.$$setCenterColumnsData will not behave properly
-                                scrollRatio = e.target.scrollWidth && e.target.scrollLeft / e.target.scrollWidth;
-                                scope.$$scrollPosition.left = Math.round(scrollRatio * (scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length));
-
-                            } else
-                            // Detect if vertical according to the class
-                            if (angular.element(e.target).hasClass("vertical")) {
-                                // add `0` value check to ensure that the ratio is not NaN.
-                                // If that happens, scope.$$setCenterColumnsData will not behave properly
-                                scrollRatio = e.target.scrollHeight && e.target.scrollTop / e.target.scrollHeight;
-                                scope.$$scrollPosition.top = Math.round(scrollRatio * (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length));
-                            } else {
-                                // If other scroll event do not process data redraw
-                                return;
-                            }
-
-                            if (angular.isFunction(scope.scrollFn)) scope.scrollFn(e, {
-                                top: scope.$$scrollPosition.top +  scope.$$headerRows.length,
-                                left: scope.$$scrollPosition.left + scope.$$leftFixedColumns.length,
-                                direction: angular.element(e.target).hasClass('vertical') ? 'vertical' : angular.element(e.target).hasClass('horizontal') ? 'horizontal' : 'none'
-                            });
-
-                            scope.$$updateData();
-
-                            // $apply redraws the divs so they reset their position
-                            // WARNING: This is quite slow once the number of cells exceeds 300!
-                            scope.$apply();
-
-                            // verticalScrollPos = scope.$$verticalScrollbarWrapperElement.scrollTop;
-                            // horizontalScrollPos = scope.$$horizontalScrollbarWrapperElement.scrollLeft;
-
-                            // Therefore we must
-                            // reposition the elements with the saved position
-                            // scope.$$verticalScrollbarWrapperElement.scrollTop = verticalScrollPos;
-                            // scope.$$horizontalScrollbarWrapperElement.scrollLeft = horizontalScrollPos;
-
-                            if (shouldResizeVerticalScrollbar ) {
-                                updateVScrollBarHeight();
-                            }
-                            // rootDirectiveScope.$$scrolling = false;
-                        };
-
-                        parentEl.on('wheel', function(){
-                            //DEBUG
-                            //console.warn('wheel: ', e);
-                            if (scheduledWheelProcess) {
-                                clearTimeout(scheduledWheelProcess);
-                            }
-                            scrollDelay = defaultWheelDelay; // if the user wheel action triggers a scroll, it'll use this different delay value
-                            scheduledWheelProcess = setTimeout(function(){ // restore the default scroll delay later
-                                scrollDelay = defaultScrollDelay;
-                            }, defaultWheelDelay);
-                        });
-
-                        // Handle the scroll event on parent elements
-                        parentEl.on("scroll", function(e) {
-                            if (scheduledScrollProcess) {
-                                clearTimeout(scheduledScrollProcess);
-                            }
-                            scheduledScrollProcess = setTimeout(angular.bind(this, processScrollEvent, e), scrollDelay);
-                            // rootDirectiveScope.$$scrolling = true;
-                        });
-
-
-
-                        /*
-                         Firefox does not handle correctly divs with 100% height in a div of 100% height
-                         The timeout calculates the min-height after the actual rendering
-                         In some cases this method triggers additional unwanted scroll events
-                         in this case, you should set verticalScrollbarAutoResize to false
-                         */
-                        var updateVScrollBarHeight = function() {
-                            $timeout(function() {
-                                if (iElement.hasClass("vscrollbar")) {
-                                    var ratio = (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length) / scope.$$rows.length,
-                                        elem = angular.element(scope.$$verticalScrollbarWrapperElement),
-                                        vscrollBarHeight = elem.parent()[0].offsetHeight;
-                                    elem.css('height', vscrollBarHeight + 'px');
-                                    iElement.css('height', (vscrollBarHeight * ratio) + 'px')
-                                }
-                            });
-                        };
-
-                        updateVScrollBarHeight();
-
-
-                        // vertical scrolling perks
-                        if (parentEl.hasClass('vertical')) {
-                            var tbodyEl = getClosestParentTag(parentEl, 'TBODY');
-                            if (!tbodyEl.length) {
-                                throw new Error("Unable to find TBODY tag from the scrollbar wrapper");
-                            }
-
-                            // Handle vertical scroll triggered by mouse wheel over the whole table area
-                            parentEl.parent().parent().parent().on('wheel', function(evt){
-                                var target = evt.target,
-                                    parentElDom = parentEl[0];
-                                if (target !== parentElDom) {
-                                    var scrollHeight = parentElDom.scrollHeight;
-                                    if (!scrollHeight) { // if scrolling vertically is not possible
-                                        return;
-                                    }
-
-                                    var initScrollTop = parentElDom.scrollTop,
-                                        originalEvent = evt.originalEvent || evt, // need this to make this code work with/without jQuery
-                                        lineScrollOffset = originalEvent.deltaY > 0 ? 3 : -3;
-
-                                    // if we can't scroll further in that direction
-                                    if ((initScrollTop === 0 && lineScrollOffset < 0) ||
-                                        (lineScrollOffset > 0 && (initScrollTop + parentElDom.offsetHeight) === scrollHeight)) {
-                                        return;
-                                    }
-
-                                    // if we can scroll more
-                                    if (parentElDom.scrollByLines) {
-                                        parentElDom.scrollByLines(lineScrollOffset);
-                                    } else if (parentElDom.doScroll) { // if scrollByLines is not available, try to use the IE similar function
-                                        parentElDom.doScroll(lineScrollOffset > 0 ? 'scrollbarDown' : 'scrollbarUp');
-                                    } else if (parentElDom.scrollBy) { // if scrollBy is available (an old DOM-0 method)
-                                        parentElDom.scrollBy(0, lineScrollOffset * 10);
-                                    } else { // last solution, try to do it manually
-                                        parentElDom.scrollTop += lineScrollOffset * 10;
-                                    }
-                                    evt.preventDefault();
-                                }
-                            });
-
-                            // target element is the scrollbar wrapper parent element
-                            tableResizeHandler('vertical', scope, tbodyEl[0]);
-
-                        // Does not handle the 'horizontal' case yet because we haven't got a use case for it yet
-                        // } else {
-                        //    // target element is the scrollbar wrapper parent element
-                        //    tableResizeHandler('horizontal', scope, tbodyEl[0]);
-                        }
-                    }
-                };
-            }
-
-        };
-    }])
     /**
      * @name extInclude
      * Extended version of ngInclude where we can also specify an additional scope variable as 'scopeExtension'.
@@ -1632,3 +950,318 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
         }
     ]);
 })();
+angular.module('ngc-template', ['ngc.table.tpl.html']);
+
+angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("ngc.table.tpl.html",
+    "<div class=\"ngc table\">\n" +
+    "    <div ng-transclude style=\"display: hidden\"></div>\n" +
+    "\n" +
+    "    <div class=\"ngc scroll-wrapper\" ng-scrollable=\"{updateContentPosition:false}\"\n" +
+    "         spy-x=\"scrollLeftPosition\"\n" +
+    "         spy-y=\"scrollTopPosition\"\n" +
+    "         spy-custom-content-width=\"contentWidth\"\n" +
+    "         spy-custom-content-height=\"contentHeight\"\n" +
+    "            >\n" +
+    "        <table class=\"ngc\">\n" +
+    "            <!-- Column Names -->\n" +
+    "            <tr class=\"ngc row column-names\" ng-show=\"{{showColumnNames}}\"  ng-class=\"{first: $first, last: $last}\">\n" +
+    "                <!-- Cells for row headers columns -->\n" +
+    "                <td ng-repeat=\"column in $$leftRowHeadersColumns\"\n" +
+    "                    ng-class=\"{first: $first, last: $last}\"\n" +
+    "                    class=\"ngc row-header column-name cell {{column.clazz}}\"\n" +
+    "                    style=\"{{column.style}}\">\n" +
+    "                    <div class=\"ngc cell-content\" style=\"{{column.style}}\"></div>\n" +
+    "                </td>\n" +
+    "\n" +
+    "                <!-- Cells for left fixed columns -->\n" +
+    "                <td ng-repeat=\"column in $$leftFixedColumns\"\n" +
+    "                    ng-class=\"{first: $first, last: $last}\"\n" +
+    "                    class=\"ngc left column-name cell {{$$leftColumnNames[$index].clazz}} {{column.clazz}}\"\n" +
+    "                    style=\"{{$$leftColumnNames[$index].style}}; {{column.style}}\">\n" +
+    "                    <div class=\"ngc cell-content\" style=\"{{column.style}}\">{{$$leftColumnNames[$index].value}}</div>\n" +
+    "                </td>\n" +
+    "\n" +
+    "                <!-- Cells for middle variable columns -->\n" +
+    "                <td ng-repeat=\"column in $$variableCenterColumns\"\n" +
+    "                    ng-class=\"{first: $first, last: $last}\"\n" +
+    "                    class=\"ngc center column-name cell {{$$centerColumnNames[$index].clazz}} {{column.clazz}}\"\n" +
+    "                    style=\"{{$$centerColumnNames[$index].style}}; {{column.style}}\">\n" +
+    "                    <div class=\"ngc cell-content\" style=\"{{column.style}}\">{{$$centerColumnNames[$index].value}}</div>\n" +
+    "                </td>\n" +
+    "\n" +
+    "                <!-- Cells for right fixed columns -->\n" +
+    "                <td ng-repeat=\"column in $$rightFixedColumns\"\n" +
+    "                    ng-class=\"{first: $first, last: $last}\"\n" +
+    "                    class=\"ngc right column-name cell {{$$rightColumnNames[$index].clazz}} {{column.clazz}}\"\n" +
+    "                    style=\"{{$$rightColumnNames[$index].style}}; {{column.style}}\">\n" +
+    "                    <div class=\"ngc cell-content\" style=\"{{column.style}}\">{{$$rightColumnNames[$index].value}}</div>\n" +
+    "                </td>\n" +
+    "\n" +
+    "            </tr>\n" +
+    "\n" +
+    "            <!-- Headers -->\n" +
+    "            <tr class=\"ngc row header\"  ng-show=\"{{showHeader}}\" ng-repeat=\"row in $$headerRows\" ng-class=\"{first: $first, last: $last}\">\n" +
+    "                <!-- Cells for row headers columns -->\n" +
+    "                <td ng-repeat=\"column in $$leftRowHeadersColumns\"\n" +
+    "                    ng-class=\"{first: $first, last: $last}\"\n" +
+    "                     class=\"ngc row-header header cell {{$$topLeftRowHeadersData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
+    "                     style=\"{{$$topLeftRowHeadersData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
+    "                    <div class=\"ngc cell-content\" style=\"{{row.height}}; {{column.style}}\" >{{$$topLeftRowHeadersData[$parent.$index][$index].value}}</div>\n" +
+    "                </td>\n" +
+    "\n" +
+    "                <!-- Cells for left fixed columns -->\n" +
+    "                <td ng-repeat=\"column in $$leftFixedColumns\"\n" +
+    "                    ng-click=\"$$dispatchEvent('click', $event, $$topLeftData[$parent.$index][$index])\"\n" +
+    "                    ng-dblclick=\"$$dispatchEvent('dblclick', $event, $$topLeftData[$parent.$index][$index])\"\n" +
+    "                    ng-keydown=\"$$dispatchEvent('keydown', $event, $$topLeftData[$parent.$index][$index])\"\n" +
+    "                    ng-keypress=\"$$dispatchEvent('keypress', $event, $$topLeftData[$parent.$index][$index])\"\n" +
+    "                    ng-keyup=\"$$dispatchEvent('keyup', $event, $$topLeftData[$parent.$index][$index])\"\n" +
+    "                    ng-mousedown=\"$$dispatchEvent('mousedown', $event, $$topLeftData[$parent.$index][$index])\"\n" +
+    "                    ng-mouseleave=\"$$dispatchEvent('mouseleave', $event, $$topLeftData[$parent.$index][$index])\"\n" +
+    "                    ng-mouseenter=\"$$dispatchEvent('mouseenter', $event, $$topLeftData[$parent.$index][$index])\"\n" +
+    "                    ng-mousemove=\"$$dispatchEvent('mousemove', $event, $$topLeftData[$parent.$index][$index])\"\n" +
+    "                    ng-mouseover=\"$$dispatchEvent('mouseover', $event, $$topLeftData[$parent.$index][$index])\"\n" +
+    "                    ng-mouseup=\"$$dispatchEvent('mouseup', $event, $$topLeftData[$parent.$index][$index])\"\n" +
+    "                    ng-class=\"{first: $first, last: $last}\"\n" +
+    "                    class=\"ngc left header cell {{$$topLeftData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
+    "                    style=\"{{$$topLeftData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-html\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"!$$topLeftData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ng-bind-html=\"$$topLeftData[$parent.$parent.$index][$index].customHTML\"></div>\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-cell-template\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"$$topLeftData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ext-include=\"$$topLeftData[row.index][$index].customCellTemplate\"\n" +
+    "                         scope-extension=\"{'rawCellData': $$topLeftData[row.index][$index]}\"></div>\n" +
+    "                </td>\n" +
+    "\n" +
+    "                <!-- Cells for middle variable columns -->\n" +
+    "                <td ng-repeat=\"column in $$variableCenterColumns\"\n" +
+    "                    ng-click=\"$$dispatchEvent('click', $event, $$topCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-dblclick=\"$$dispatchEvent('dblclick', $event, $$topCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-keydown=\"$$dispatchEvent('keydown', $event, $$topCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-keypress=\"$$dispatchEvent('keypress', $event, $$topCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-keyup=\"$$dispatchEvent('keyup', $event, $$topCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-mousedown=\"$$dispatchEvent('mousedown', $event, $$topCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-mouseleave=\"$$dispatchEvent('mouseleave', $event, $$topCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-mouseenter=\"$$dispatchEvent('mouseenter', $event, $$topCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-mousemove=\"$$dispatchEvent('mousemove', $event, $$topCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-mouseover=\"$$dispatchEvent('mouseover', $event, $$topCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-mouseup=\"$$dispatchEvent('mouseup', $event, $$topCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-class=\"{first: $first, last: $last}\"\n" +
+    "                    class=\"ngc center header cell {{$$topCenterData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
+    "                    style=\"{{$$topCenterData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-html\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"!$$topCenterData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ng-bind-html=\"$$topCenterData[$parent.$parent.$index][$index].customHTML\"></div>\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-cell-template\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"$$topCenterData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ext-include=\"$$topCenterData[row.index][$index].customCellTemplate\"\n" +
+    "                         scope-extension=\"{'rawCellData': $$topCenterData[row.index][$index]}\"></div>\n" +
+    "                </td>\n" +
+    "\n" +
+    "                <!-- Cells for right fixed columns -->\n" +
+    "                <td ng-repeat=\"column in $$rightFixedColumns\"\n" +
+    "                    ng-click=\"$$dispatchEvent('click', $event, $$topRightData[$parent.$index][$index])\"\n" +
+    "                    ng-dblclick=\"$$dispatchEvent('dblclick', $event, $$topRightData[$parent.$index][$index])\"\n" +
+    "                    ng-keydown=\"$$dispatchEvent('keydown', $event, $$topRightData[$parent.$index][$index])\"\n" +
+    "                    ng-keypress=\"$$dispatchEvent('keypress', $event, $$topRightData[$parent.$index][$index])\"\n" +
+    "                    ng-keyup=\"$$dispatchEvent('keyup', $event, $$topRightData[$parent.$index][$index])\"\n" +
+    "                    ng-mousedown=\"$$dispatchEvent('mousedown', $event, $$topRightData[$parent.$index][$index])\"\n" +
+    "                    ng-mouseleave=\"$$dispatchEvent('mouseleave', $event, $$topRightData[$parent.$index][$index])\"\n" +
+    "                    ng-mouseenter=\"$$dispatchEvent('mouseenter', $event, $$topRightData[$parent.$index][$index])\"\n" +
+    "                    ng-mousemove=\"$$dispatchEvent('mousemove', $event, $$topRightData[$parent.$index][$index])\"\n" +
+    "                    ng-mouseover=\"$$dispatchEvent('mouseover', $event, $$topRightData[$parent.$index][$index])\"\n" +
+    "                    ng-mouseup=\"$$dispatchEvent('mouseup', $event, $$topRightData[$parent.$index][$index])\"\n" +
+    "                    ng-class=\"{first: $first, last: $last}\"\n" +
+    "                    class=\"ngc right header cell {{$$topRightData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
+    "                    style=\"{{$$topRightData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-html\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"!$$topRightData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ng-bind-html=\"$$topRightData[$parent.$parent.$index][$index].customHTML\"></div>\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-cell-template\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"$$topRightData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ext-include=\"$$topRightData[row.index][$index].customCellTemplate\"\n" +
+    "                         scope-extension=\"{'rawCellData': $$topRightData[row.index][$index]}\"></div>\n" +
+    "                </td>\n" +
+    "\n" +
+    "\n" +
+    "            </tr>\n" +
+    "\n" +
+    "            <!-- Middle -->\n" +
+    "            <tr class=\"ngc row middle\" ng-repeat=\"row in $$rows\" ng-class=\"{first: $first, last: $last}\">\n" +
+    "                <!-- Cells for row headers columns -->\n" +
+    "                <td ng-repeat=\"column in $$leftRowHeadersColumns\"\n" +
+    "                    ng-class=\"{first: $first, last: $last}\"\n" +
+    "                    class=\"ngc row-header middle cell {{$$middleLeftRowHeadersData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
+    "                    style=\"{{$$middleLeftRowHeadersData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
+    "                    <div class=\"ngc cell-content\" style=\"{{row.height}}; {{column.style}}\">{{$$middleLeftRowHeadersData[$parent.$index][$index].value}}</div>\n" +
+    "                </td>\n" +
+    "\n" +
+    "                <!-- Cells for left fixed columns -->\n" +
+    "                <td ng-repeat=\"column in $$leftFixedColumns\"\n" +
+    "                    ng-click=\"$$dispatchEvent('click', $event, $$middleLeftData[$parent.$index][$index])\"\n" +
+    "                    ng-dblclick=\"$$dispatchEvent('dblclick', $event, $$middleLeftData[$parent.$index][$index])\"\n" +
+    "                    ng-keydown=\"$$dispatchEvent('keydown', $event, $$middleLeftData[$parent.$index][$index])\"\n" +
+    "                    ng-keypress=\"$$dispatchEvent('keypress', $event, $$middleLeftData[$parent.$index][$index])\"\n" +
+    "                    ng-keyup=\"$$dispatchEvent('keyup', $event, $$middleLeftData[$parent.$index][$index])\"\n" +
+    "                    ng-mousedown=\"$$dispatchEvent('mousedown', $event, $$middleLeftData[$parent.$index][$index])\"\n" +
+    "                    ng-mouseleave=\"$$dispatchEvent('mouseleave', $event, $$middleLeftData[$parent.$index][$index])\"\n" +
+    "                    ng-mouseenter=\"$$dispatchEvent('mouseenter', $event, $$middleLeftData[$parent.$index][$index])\"\n" +
+    "                    ng-mousemove=\"$$dispatchEvent('mousemove', $event, $$middleLeftData[$parent.$index][$index])\"\n" +
+    "                    ng-mouseover=\"$$dispatchEvent('mouseover', $event, $$middleLeftData[$parent.$index][$index])\"\n" +
+    "                    ng-mouseup=\"$$dispatchEvent('mouseup', $event, $$middleLeftData[$parent.$index][$index])\"\n" +
+    "                    ng-class=\"{first: $first, last: $last}\"\n" +
+    "                    class=\"ngc left middle cell {{$$middleLeftData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
+    "                    style=\"{{$$middleLeftData[$parent.$index][$index].style}} ; {{row.height}}; {{column.style}}\">\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-html\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"!$$middleLeftData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ng-bind-html=\"$$middleLeftData[$parent.$parent.$index][$index].customHTML\"></div>\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-cell-template\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"$$middleLeftData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ext-include=\"$$middleLeftData[row.index][$index].customCellTemplate\"\n" +
+    "                         scope-extension=\"{'rawCellData': $$middleLeftData[row.index][$index]}\"></div>\n" +
+    "                </td>\n" +
+    "\n" +
+    "                <!-- Cells for middle variable columns -->\n" +
+    "                <td ng-repeat=\"column in $$variableCenterColumns\"\n" +
+    "                    ng-click=\"$$dispatchEvent('click', $event, $$middleCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-dblclick=\"$$dispatchEvent('dblclick', $event, $$middleCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-keydown=\"$$dispatchEvent('keydown', $event, $$middleCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-keypress=\"$$dispatchEvent('keypress', $event, $$middleCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-keyup=\"$$dispatchEvent('keyup', $event, $$middleCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-mousedown=\"$$dispatchEvent('mousedown', $event, $$middleCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-mouseleave=\"$$dispatchEvent('mouseleave', $event, $$middleCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-mouseenter=\"$$dispatchEvent('mouseenter', $event, $$middleCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-mousemove=\"$$dispatchEvent('mousemove', $event, $$middleCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-mouseover=\"$$dispatchEvent('mouseover', $event, $$middleCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-mouseup=\"$$dispatchEvent('mouseup', $event, $$middleCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-class=\"{first: $first, last: $last}\"\n" +
+    "                    class=\"ngc center cell middle {{$$middleCenterData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
+    "                    style=\"{{$$middleCenterData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-html\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"!$$middleCenterData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ng-bind-html=\"$$middleCenterData[$parent.$parent.$index][$index].customHTML\"></div>\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-cell-template\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"$$middleCenterData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ext-include=\"$$middleCenterData[row.index][$index].customCellTemplate\"\n" +
+    "                         scope-extension=\"{'rawCellData': $$middleCenterData[row.index][$index]}\"></div>\n" +
+    "                </td>\n" +
+    "\n" +
+    "                <!-- Cells for right fixed columns -->\n" +
+    "                <td ng-repeat=\"column in $$rightFixedColumns\"\n" +
+    "                    ng-click=\"$$dispatchEvent('click', $event, $$middleRightData[$parent.$index][$index])\"\n" +
+    "                    ng-dblclick=\"$$dispatchEvent('dblclick', $event, $$middleRightData[$parent.$index][$index])\"\n" +
+    "                    ng-keydown=\"$$dispatchEvent('keydown', $event, $$middleRightData[$parent.$index][$index])\"\n" +
+    "                    ng-keypress=\"$$dispatchEvent('keypress', $event, $$middleRightData[$parent.$index][$index])\"\n" +
+    "                    ng-keyup=\"$$dispatchEvent('keyup', $event, $$middleRightData[$parent.$index][$index])\"\n" +
+    "                    ng-mousedown=\"$$dispatchEvent('mousedown', $event, $$middleRightData[$parent.$index][$index])\"\n" +
+    "                    ng-mouseleave=\"$$dispatchEvent('mouseleave', $event, $$middleRightData[$parent.$index][$index])\"\n" +
+    "                    ng-mouseenter=\"$$dispatchEvent('mouseenter', $event, $$middleRightData[$parent.$index][$index])\"\n" +
+    "                    ng-mousemove=\"$$dispatchEvent('mousemove', $event, $$middleRightData[$parent.$index][$index])\"\n" +
+    "                    ng-mouseover=\"$$dispatchEvent('mouseover', $event, $$middleRightData[$parent.$index][$index])\"\n" +
+    "                    ng-mouseup=\"$$dispatchEvent('mouseup', $event, $$middleRightData[$parent.$index][$index])\"\n" +
+    "                    ng-class=\"{first: $first, last: $last}\"\n" +
+    "                    class=\"ngc right cell middle {{$$middleRightData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
+    "                    style=\"{{$$middleRightData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-html\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"!$$middleRightData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ng-bind-html=\"$$middleRightData[$parent.$parent.$index][$index].customHTML\"></div>\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-cell-template\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"$$middleRightData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ext-include=\"$$middleRightData[row.index][$index].customCellTemplate\"\n" +
+    "                         scope-extension=\"{'rawCellData': $$middleRightData[row.index][$index]}\"></div>\n" +
+    "                </td>\n" +
+    "\n" +
+    "            </tr>\n" +
+    "\n" +
+    "            <!-- Bottom -->\n" +
+    "            <tr class=\"ngc row footer\" ng-repeat=\"row in $$footerRows\" ng-class=\"{first: $first, last: $last}\">\n" +
+    "                <!-- Cells for row headers columns -->\n" +
+    "                <td ng-repeat=\"column in $$leftRowHeadersColumns\"\n" +
+    "                    ng-class=\"{first: $first, last: $last}\"\n" +
+    "                    class=\"ngc row-header footer cell {{$$bottomLeftRowHeadersData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
+    "                    style=\"{{$$bottomLeftRowHeadersData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
+    "                    <div class=\"ngc cell-content\" style=\"{{row.height}}; {{column.style}}\">{{$$bottomLeftRowHeadersData[$parent.$index][$index].value}}</div>\n" +
+    "                </td>\n" +
+    "\n" +
+    "                <!-- Cells for left fixed columns -->\n" +
+    "                <td  ng-repeat=\"column in $$leftFixedColumns\"\n" +
+    "                     ng-click=\"$$dispatchEvent('click', $event, $$bottomLeftData[$parent.$index][$index])\"\n" +
+    "                     ng-dblclick=\"$$dispatchEvent('dblclick', $event, $$bottomLeftData[$parent.$index][$index])\"\n" +
+    "                     ng-keydown=\"$$dispatchEvent('keydown', $event, $$bottomLeftData[$parent.$index][$index])\"\n" +
+    "                     ng-keypress=\"$$dispatchEvent('keypress', $event, $$bottomLeftData[$parent.$index][$index])\"\n" +
+    "                     ng-keyup=\"$$dispatchEvent('keyup', $event, $$bottomLeftData[$parent.$index][$index])\"\n" +
+    "                     ng-mousedown=\"$$dispatchEvent('mousedown', $event, $$bottomLeftData[$parent.$index][$index])\"\n" +
+    "                     ng-mouseleave=\"$$dispatchEvent('mouseleave', $event, $$bottomLeftData[$parent.$index][$index])\"\n" +
+    "                     ng-mouseenter=\"$$dispatchEvent('mouseenter', $event, $$bottomLeftData[$parent.$index][$index])\"\n" +
+    "                     ng-mousemove=\"$$dispatchEvent('mousemove', $event, $$bottomLeftData[$parent.$index][$index])\"\n" +
+    "                     ng-mouseover=\"$$dispatchEvent('mouseover', $event, $$bottomLeftData[$parent.$index][$index])\"\n" +
+    "                     ng-mouseup=\"$$dispatchEvent('mouseup', $event, $$bottomLeftData[$parent.$index][$index])\"\n" +
+    "                     ng-class=\"{first: $first, last: $last}\"\n" +
+    "                     class=\"ngc left footer cell {{$$bottomLeftData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
+    "                     style=\"{{$$bottomLeftData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-html\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"!$$bottomLeftData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ng-bind-html=\"$$bottomLeftData[$parent.$parent.$index][$index].customHTML\"></div>\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-cell-template\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"$$bottomLeftData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ext-include=\"$$bottomLeftData[row.index][$index].customCellTemplate\"\n" +
+    "                         scope-extension=\"{'rawCellData': $$bottomLeftData[row.index][$index]}\"></div>\n" +
+    "                </td>\n" +
+    "\n" +
+    "                <!-- Cells for middle variable columns -->\n" +
+    "                <td ng-repeat=\"column in $$variableCenterColumns\"\n" +
+    "                    ng-click=\"$$dispatchEvent('click', $event, $$bottomCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-dblclick=\"$$dispatchEvent('dblclick', $event, $$bottomCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-keydown=\"$$dispatchEvent('keydown', $event, $$bottomCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-keypress=\"$$dispatchEvent('keypress', $event, $$bottomCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-keyup=\"$$dispatchEvent('keyup', $event, $$bottomCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-mousedown=\"$$dispatchEvent('mousedown', $event, $$bottomCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-mouseleave=\"$$dispatchEvent('mouseleave', $event, $$bottomCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-mouseenter=\"$$dispatchEvent('mouseenter', $event, $$bottomCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-mousemove=\"$$dispatchEvent('mousemove', $event, $$bottomCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-mouseover=\"$$dispatchEvent('mouseover', $event, $$bottomCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-mouseup=\"$$dispatchEvent('mouseup', $event, $$bottomCenterData[$parent.$index][$index])\"\n" +
+    "                    ng-class=\"{first: $first, last: $last}\"\n" +
+    "                    class=\"ngc center footer cell {{$$bottomCenterData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
+    "                    style=\"{{$$bottomCenterData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-html\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"!$$bottomCenterData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ng-bind-html=\"$$bottomCenterData[$parent.$parent.$index][$index].customHTML\"></div>\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-cell-template\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"$$bottomCenterData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ext-include=\"$$bottomCenterData[row.index][$index].customCellTemplate\"\n" +
+    "                         scope-extension=\"{'rawCellData': $$bottomCenterData[row.index][$index]}\"></div>\n" +
+    "                </td>\n" +
+    "\n" +
+    "                <!-- Cells for right fixed columns -->\n" +
+    "                <td ng-repeat=\"column in $$rightFixedColumns\"\n" +
+    "                    ng-click=\"$$dispatchEvent('click', $event, $$bottomRightData[$parent.$index][$index])\"\n" +
+    "                    ng-dblclick=\"$$dispatchEvent('dblclick', $event, $$bottomRightData[$parent.$index][$index])\"\n" +
+    "                    ng-keydown=\"$$dispatchEvent('keydown', $event, $$bottomRightData[$parent.$index][$index])\"\n" +
+    "                    ng-keypress=\"$$dispatchEvent('keypress', $event, $$bottomRightData[$parent.$index][$index])\"\n" +
+    "                    ng-keyup=\"$$dispatchEvent('keyup', $event, $$bottomRightData[$parent.$index][$index])\"\n" +
+    "                    ng-mousedown=\"$$dispatchEvent('mousedown', $event, $$bottomRightData[$parent.$index][$index])\"\n" +
+    "                    ng-mouseleave=\"$$dispatchEvent('mouseleave', $event, $$bottomRightData[$parent.$index][$index])\"\n" +
+    "                    ng-mouseenter=\"$$dispatchEvent('mouseenter', $event, $$bottomRightData[$parent.$index][$index])\"\n" +
+    "                    ng-mousemove=\"$$dispatchEvent('mousemove', $event, $$bottomRightData[$parent.$index][$index])\"\n" +
+    "                    ng-mouseover=\"$$dispatchEvent('mouseover', $event, $$bottomRightData[$parent.$index][$index])\"\n" +
+    "                    ng-mouseup=\"$$dispatchEvent('mouseup', $event, $$bottomRightData[$parent.$index][$index])\"\n" +
+    "                    ng-class=\"{first: $first, last: $last}\"\n" +
+    "                    class=\"ngc right footer cell {{$$bottomRightData[$parent.$index][$index].clazz}} {{column.clazz}}\"\n" +
+    "                    style=\"{{$$bottomRightData[$parent.$index][$index].style}}; {{row.height}}; {{column.style}}\">\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-html\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"!$$bottomRightData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ng-bind-html=\"$$bottomRightData[$parent.$parent.$index][$index].customHTML\"></div>\n" +
+    "                    <div class=\"ngc cell-content ngc-custom-cell-template\" style=\"{{row.height}}; {{column.style}}\"\n" +
+    "                         ng-if=\"$$bottomRightData[$parent.$index][$index].customCellTemplate\"\n" +
+    "                         ext-include=\"$$bottomRightData[row.index][$index].customCellTemplate\"\n" +
+    "                         scope-extension=\"{'rawCellData': $$bottomRightData[row.index][$index]}\"></div>\n" +
+    "                </td>\n" +
+    "\n" +
+    "            </tr>\n" +
+    "        </table>\n" +
+    "    </div>\n" +
+    "</div>");
+}]);
