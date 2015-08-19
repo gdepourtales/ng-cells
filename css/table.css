@@ -5,35 +5,6 @@ table.ngc {
     table-layout: fixed;
 }
 
-.ngc.vertical.scroll-wrapper {
-    height: 100%;
-    width:16px;
-    overflow-x:hidden;
-    overflow-y:scroll;
-}
-
-.ngc.scrollbar.cell {
-    background: none;
-}
-
-.ngc.vscrollbar {
-    width:1px;
-}
-
-.ngc.horizontal.scroll-wrapper {
-    height:14px;
-    overflow-x:scroll;
-    overflow-y:hidden;
-    position: relative;
-    width: 100%;
-}
-
-.ngc.hscrollbar {
-    height:1px;
-    position: absolute;
-}
-
-.ngc.scroll-wrapper-cell {
-    vertical-align: middle;
-    padding: 0px;
+div.ngc.scroll-wrapper {
+    display: inline-table;
 }
