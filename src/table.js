@@ -16,15 +16,12 @@
 
 (function() {
 
-    var module = angular.module('ngcTableDirective', ['ngc-template', 'ngSanitize']);
+    var module = angular.module('ngcTableDirective', ['ngc-template', 'ngSanitize', 'ngScrollable']);
 
     // trigger this when the table's content are udpated
     module.constant('contentUpdatedEvent', 'contentUpdatedEvent');
 
     module.directive('ngcTable', ['$templateCache', '$sce', '$timeout', 'contentUpdatedEvent', function($templateCache, $sce, $timeout, contentUpdatedEvent) {
-
-        // Wait delay before refreshing the scrollbar
-        var scrollbarRefreshDelay = 10;
 
         /**
          * ngcTable Controller declaration. The format is given to be able to minify the directive. The scope is
@@ -48,7 +45,6 @@
             return {
 
                 pre: function preLink(scope /*, iElement, iAttrs, controller */) {
-                    var i;
 
                     /**
                      * Utility function to create a style declaration based on the value declaration
@@ -326,6 +322,7 @@
 
 
                 post: function postLink(scope , iElement /*, iAttrs, controller*/) {
+
 
                     /**
                      * Returns a letter combination for an index
@@ -664,67 +661,11 @@
                         }
                     };
 
-                    /**
-                     * Refresh the scrollbar height based on the table body height
-                     * @note Does not handle the horizontal scenario yet
-                     */
-                    scope.$$refreshScrollbars = function() {
-                        // Refresh the scrollbars
-                        var ratio;
-                        // This should be factorized with the scrollbar directive
-                        if (angular.isDefined(scope.data)) {
-                            ratio = (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length) / scope.$$rows.length * 100;
-                            scope.$$verticalScrollbarElement.css('height', ratio + '%');
-                            scope.$$verticalScrollbarElement.parent().css('display', (ratio <= 100)? 'none' : 'block');
-
-                            var elem = angular.element(scope.$$verticalScrollbarWrapperElement);
-                            // we need to clear the scrollbar wrapper fixed height,
-                            // otherwise it might cause the table size not to shrink to the minimum height properly
-                            /*
-                            elem.css('height', 'auto');
-                            var height = elem.parent()[0].offsetHeight;
-                            elem.css('height', height + 'px');
-                            */
-
-                        }
-
-                        if (angular.isDefined(scope.data[0])) {
-                            ratio = (scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length) / scope.$$variableCenterColumns.length * 100;
-                            scope.$$horizontalScrollbarElement.css('width', Math.ceil(ratio) + '%');
-                            scope.$$horizontalScrollbarElement.parent().css('display', (ratio <= 100)? 'none' : 'block');
-
-                            // @note Does not handle the 'horizontal' resize of the scrollbar case yet
-                            // because we haven't got a use case for it yet
-                        }
-                    };
-
-                    /**
-                     * Schedule a scrollbar refresh in `scrollbarRefreshDelay` milliseconds.
-                     * We need this delay to give enough time for the browser to stabilise its styles.
-                     * When used, it will check if we already a scheduled scrollbar refresh.
-                     * If so, it will cancel it and schedule a new one instead.
-                     */
-                    var $$scheduledScrollbarRefresh = function() {
-                        var previous = $$scheduledScrollbarRefresh.previous;
-                        if (previous) {
-                            $timeout.cancel(previous);
-                        }
-
-                        $$scheduledScrollbarRefresh.previous = $timeout(function () { // schedule refresh
-                            $$scheduledScrollbarRefresh.previous = null;
-                            scope.$$refreshScrollbars();
-                        }, scrollbarRefreshDelay);
-                    };
-                    scope.$$scheduledScrollbarRefresh = $$scheduledScrollbarRefresh;
-
                     scope.$watch(
                         'data',
                         function(newValue, oldValue) {
                             if (newValue !== oldValue ) {
                                 scope.$$updateScrollPositions(oldValue);
-
-                                // Refresh scrollbars
-                                scope.$$refreshScrollbars();
 
                                 // Update the data
                                 scope.$$updateData();
@@ -733,23 +674,28 @@
                         }
                     );
 
-                    scope.$$scrollDirty = false;
+
+
+                    scope.containerWidth = undefined;
+                    scope.containerHeight = undefined;
 
                     scope.$watch(
                         'scrollTopPosition',
                         function(newValue, oldValue) {
-                            if (angular.isDefined(newValue) && newValue !== oldValue) {
-                                scope.$$scrollDirty = true;
 
-                                if (scope.scrollTopPosition > (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length)) {
-                                    scope.scrollTopPosition = (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length);
+                            if (angular.isDefined(newValue) && newValue !== oldValue) {
+
+                                var totalRows = scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length ;
+                                var percentage = newValue / scope.contentHeight;
+                                var topPos = Math.ceil(totalRows * percentage);
+
+                                if (topPos > totalRows) {
+                                    topPos = totalRows;
                                 }
 
-                                scope.$$scrollPosition.top = scope.scrollTopPosition;
+                                scope.$$scrollPosition.top = topPos;
                                 scope.$$updateData();
-
-                                scope.$$verticalScrollbarWrapperElement.scrollTop =
-                                    scope.$$verticalScrollbarElement[0].offsetHeight * scope.scrollTopPosition / (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length);
+                                scope.$emit('content.reload');
                             }
                         }
                     );
@@ -757,49 +703,54 @@
                         'scrollLeftPosition',
                         function(newValue, oldValue) {
                             if (angular.isDefined(newValue) &&  newValue !== oldValue) {
-                                scope.$$scrollDirty = true;
 
-                                if (scope.scrollLeftPosition > (scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length)) {
-                                    scope.scrollLeftPosition = (scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length);
+                                var totalMiddleCols = scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length;
+                                var percentage = newValue / scope.contentWidth;
+                                var leftPos = Math.ceil(totalMiddleCols * percentage);
+
+                                if (leftPos > totalMiddleCols + scope.$$leftFixedColumns.length) {
+                                    leftPos = totalMiddleCols + scope.$$leftFixedColumns.length;
                                 }
 
-                                scope.$$scrollPosition.left = scope.scrollLeftPosition;
+                                scope.$$scrollPosition.left = leftPos;
                                 scope.$$updateData();
-
-                                scope.$$horizontalScrollbarWrapperElement.scrollLeft =
-                                    scope.$$horizontalScrollbarElement[0].offsetWidth * scope.scrollLeftPosition / (scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length);
+                                scope.$emit('content.reload');
                             }
                         }
                     );
 
 
-                    /**
-                     * Handle touch scrolling
-                     * Start event
-                     */
-                    iElement.find('table').on("touchstart", function(e) {
-                        scope.$$touchClientX = e.touches[0].clientX;
-                        scope.$$touchClientY = e.touches[0].clientY;
-                        e.preventDefault();
+                    scope.$on('scrollable.dimensions', function(event, containerWidth, containerHeight, contentWidth, contentHeight, id) {
+
+                        // If there's no change in the contentWidth and contentHeight
+                        if (contentWidth == scope.contentWidth
+                            && contentHeight == scope.contentHeight
+                            && containerWidth == scope.containerWidth
+                            && containerHeight == scope.containerHeight ) {
+                            return;
+                        }
+
+                        var totalRows = scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length ;
+                        var totalVisibleRows = scope.$$rows.length;
+
+                        var totalCols = scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length;
+                        var totalVisibleCols = scope.$$variableCenterColumns.length;
+
+                        var nVPages = totalRows / totalVisibleRows;
+                        var nHPages = totalCols / totalVisibleCols;
+
+                        scope.contentHeight = containerHeight * nVPages;
+                        scope.contentWidth = containerWidth * nHPages;
+                        scope.containerWidth = containerWidth;
+                        scope.containerHeight = containerHeight;
+
+                        // Update scrollbars size
+                        scope.$emit('content.changed');
+
+
                     });
 
-                    /**
-                     * Handle movement
-                     */
-                    iElement.find('table').on("touchmove", function(e) {
-                        var deltaX = e.touches[0].clientX - scope.$$touchClientX;
-                        var deltaY = e.touches[0].clientY - scope.$$touchClientY;
 
-                        scope.$$verticalScrollbarWrapperElement.scrollTop -= deltaY;
-                        scope.$$horizontalScrollbarWrapperElement.scrollLeft -= deltaX;
-
-                        scope.$$updateData();
-
-                        scope.$$touchClientX = e.touches[0].clientX;
-                        scope.$$touchClientY = e.touches[0].clientY;
-                        e.preventDefault();
-
-                    });
                 }
             }
         }
@@ -855,14 +806,8 @@
                 /* Let read or set the horizontal data position in the middle center part */
                 scrollLeftPosition: '=?',
 
-                /* The scroll delay for controlling the refresh behaviour when scrolling, a value of 0 means immediate scrolling */
-                scrollDelay: '=?',
-
-                /* The scroll wheel delay for controlling the refresh behaviour when scrolling with the wheel, a value of 0 means immediate scrolling */
-                wheelScrollDelay: '=?',
-
-                /* If false, disables the vertical scrollbar height resizing. This features sometimes triggers unwanted scroll events. Default is true */
-                verticalScrollbarAutoResize: '=?'
+                contentHeight: '=?',
+                contentWidth: '=?'
 
             },
             restrict:'AE',
@@ -960,285 +905,7 @@
             }
         };
     })
-    .directive('ngcScrollbar', ['$timeout', 'contentUpdatedEvent', function($timeout, contentUpdatedEvent) {
-        /**
-         * Handle the resizing of the table to refresh the scrollbars.
-         * When the height or width of the table body changes, then we'll try to refresh the scrollbars (width/height)
-         * The refresh is done asynchronously (after a 10ms delay) because multiple table contents layout changes may
-         * occur in a short time and we don't want to refresh the scrollbars each time.
-         * e.g. image, styles or inner templates are loaded
-         * @param {string} orientation Orientation to check. e.g. 'horizontal' or 'vertical'
-         * @param {object} scope Angular scope
-         * @param {DOMElement} domEl DOM element where we check its dimensions
-         * @returns {Function} Returns a unsubscribe function to cancel the scope.$watch()
-         */
-        var tableResizeHandler = function (orientation, scope, domEl) {
-            var watchGetter;
 
-            // generate the watch function in advance to make the watchGetter function run as fast as possible
-            if (orientation === 'vertical') {
-                watchGetter = function () { // watch for table height changes
-                    return domEl.offsetHeight;
-                };
-            } else {
-                watchGetter = function () { // watch for table width changes
-                    return domEl.offsetWidth;
-                };
-            }
-
-            return scope.$watch(watchGetter, function (newValue, oldValue) {
-                if (newValue !== oldValue) { // when it changes
-                    scope.$$scheduledScrollbarRefresh();
-                }
-            });
-        };
-
-        /**
-         * Get closest parent tag of a given tag name.
-         * @param {jqLite} el Element where to start looking for the tag
-         * @param {string} tagName Tag name. e.g. TBODY
-         * @returns {jqLite} Returns the found parent tag or null if not found in the whole DOM tree.
-         */
-        var getClosestParentTag = function(el, tagName) {
-            if (el.closest) { // if jQuery is available with Angular
-                return el.closest(tagName);
-            }
-
-            el = el.parent();
-            while (el.length) {
-                if (el[0].nodeName === tagName) {
-                    return el;
-                }
-                el = el.parent();
-            }
-            return null;
-        };
-
-        /* Internal directive for virtual horizontal and vertical scrollbars management */
-        return {
-            require:"^ngcTable",
-            restrict:'A',
-            replace:true,
-            template:'<div class="ngc"></div>',
-
-            compile: function(tElement, tAttrs) {
-
-
-                return {
-                   pre: function postLink(scope, iElement /*, iAttrs */) {
-                       var ratio = 100;
-
-                       if (angular.isDefined(tAttrs['horizontal'])) {
-                           // The horizontal ratio is the total data column length minus the left columns minus the right
-                           // columns divided by the number of visible center columns
-                           // The presence of the row numbers at the far right must be considered
-                           if (angular.isDefined(scope.data[0])) {
-                                ratio = (scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length) / scope.$$variableCenterColumns.length * 100;
-                           }
-                           iElement.addClass('hscrollbar');
-                           iElement.css('width', Math.ceil(ratio) + '%');
-                           if (ratio <= 100) iElement.parent().css('display', 'none');
-                           // Save the reference to the element in order to manage scroll position
-                           // after $apply force the redraw of DIVs
-                           scope.$$horizontalScrollbarElement = iElement;
-                           scope.$$horizontalScrollbarWrapperElement = iElement.parent()[0];
-                       } else
-                       if (angular.isDefined(tAttrs['vertical'])) {
-                           // The vertical ratio is the number of data rows minus headers and footers divided by the the number
-                           // of visible middle rows
-                           if (angular.isDefined(scope.data)) {
-                                ratio = (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length) / scope.$$rows.length * 100;
-                           }
-                           iElement.addClass('vscrollbar');
-                           iElement.css('height', ratio + '%');
-                           if (ratio <= 100) iElement.parent().css('display', 'none');
-                           // Save the reference to the element in order to manage scroll position
-                           // after $apply force the redraw of DIVs
-                           var rootDirectiveScope = scope.$parent.$parent;
-                           rootDirectiveScope.$$verticalScrollbarElement = iElement;
-                           rootDirectiveScope.$$verticalScrollbarWrapperElement = iElement.parent()[0];
-                       }
-                   },
-                    post: function postLink(scope, iElement /*, iAttrs*/) {
-
-                        var scheduledScrollProcess, // timeout id of the scheduled scroll event callback
-                            scheduledWheelProcess, // timeout id of the scheduled wheel event callback
-                            defaultScrollDelay = angular.isDefined(scope.scrollDelay) ? scope.scrollDelay : 120, // default scroll delay (ms)
-                            defaultWheelDelay = angular.isDefined(scope.wheelScrollDelay) ? scope.wheelScrollDelay : 500, // default wheel delay (ms)
-                            scrollDelay = defaultScrollDelay, // current scroll delay (ms)
-                            parentEl = iElement.parent(),
-                            shouldResizeVerticalScrollbar = angular.isDefined(scope.verticalScrollbarAutoResize) ? scope.verticalScrollbarAutoResize : true; // parent DOM element of this directive's DOM root
-
-
-
-                        /**
-                         * Handles the scroll event of the vertical scroll bar
-                         * @param {jQuery.Event} e
-                         */
-                        var processScrollEvent = function (e) {
-
-                            var scrollRatio;
-                                // Save scroll positions to set them after the call to $apply which
-                                // resets the DIVs scroll position
-                                // verticalScrollPos = scope.$$verticalScrollbarWrapperElement.scrollTop,
-                                // horizontalScrollPos = scope.$$horizontalScrollbarWrapperElement.scrollLeft;
-
-
-                            if (scope.$$scrollDirty) {
-                                scope.$$scrollDirty = false;
-                                return;
-                            }
-
-                            if (angular.isDefined(scope.$parent.$parent) && scope.$parent.$parent.$$scrollDirty) {
-                                scope.$parent.$parent.$$scrollDirty = false;
-                                return;
-                            }
-
-
-                            // Detect if horizontal according to the class
-                            if (angular.element(e.target).hasClass("horizontal")) {
-                                // add `0` value check to ensure that the ratio is not NaN.
-                                // If that happens, scope.$$setCenterColumnsData will not behave properly
-                                scrollRatio = e.target.scrollWidth && e.target.scrollLeft / e.target.scrollWidth;
-                                scope.$$scrollPosition.left = Math.round(scrollRatio * (scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length));
-
-                            } else
-                            // Detect if vertical according to the class
-                            if (angular.element(e.target).hasClass("vertical")) {
-                                // add `0` value check to ensure that the ratio is not NaN.
-                                // If that happens, scope.$$setCenterColumnsData will not behave properly
-                                scrollRatio = e.target.scrollHeight && e.target.scrollTop / e.target.scrollHeight;
-                                scope.$$scrollPosition.top = Math.round(scrollRatio * (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length));
-                            } else {
-                                // If other scroll event do not process data redraw
-                                return;
-                            }
-
-                            if (angular.isFunction(scope.scrollFn)) scope.scrollFn(e, {
-                                top: scope.$$scrollPosition.top +  scope.$$headerRows.length,
-                                left: scope.$$scrollPosition.left + scope.$$leftFixedColumns.length,
-                                direction: angular.element(e.target).hasClass('vertical') ? 'vertical' : angular.element(e.target).hasClass('horizontal') ? 'horizontal' : 'none'
-                            });
-
-                            scope.$$updateData();
-
-                            // $apply redraws the divs so they reset their position
-                            // WARNING: This is quite slow once the number of cells exceeds 300!
-                            scope.$apply();
-
-                            // verticalScrollPos = scope.$$verticalScrollbarWrapperElement.scrollTop;
-                            // horizontalScrollPos = scope.$$horizontalScrollbarWrapperElement.scrollLeft;
-
-                            // Therefore we must
-                            // reposition the elements with the saved position
-                            // scope.$$verticalScrollbarWrapperElement.scrollTop = verticalScrollPos;
-                            // scope.$$horizontalScrollbarWrapperElement.scrollLeft = horizontalScrollPos;
-
-                            if (shouldResizeVerticalScrollbar ) {
-                                updateVScrollBarHeight();
-                            }
-                            // rootDirectiveScope.$$scrolling = false;
-                        };
-
-                        parentEl.on('wheel', function(){
-                            //DEBUG
-                            //console.warn('wheel: ', e);
-                            if (scheduledWheelProcess) {
-                                clearTimeout(scheduledWheelProcess);
-                            }
-                            scrollDelay = defaultWheelDelay; // if the user wheel action triggers a scroll, it'll use this different delay value
-                            scheduledWheelProcess = setTimeout(function(){ // restore the default scroll delay later
-                                scrollDelay = defaultScrollDelay;
-                            }, defaultWheelDelay);
-                        });
-
-                        // Handle the scroll event on parent elements
-                        parentEl.on("scroll", function(e) {
-                            if (scheduledScrollProcess) {
-                                clearTimeout(scheduledScrollProcess);
-                            }
-                            scheduledScrollProcess = setTimeout(angular.bind(this, processScrollEvent, e), scrollDelay);
-                            // rootDirectiveScope.$$scrolling = true;
-                        });
-
-
-
-                        /*
-                         Firefox does not handle correctly divs with 100% height in a div of 100% height
-                         The timeout calculates the min-height after the actual rendering
-                         In some cases this method triggers additional unwanted scroll events
-                         in this case, you should set verticalScrollbarAutoResize to false
-                         */
-                        var updateVScrollBarHeight = function() {
-                            $timeout(function() {
-                                if (iElement.hasClass("vscrollbar")) {
-                                    var ratio = (scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length) / scope.$$rows.length,
-                                        elem = angular.element(scope.$$verticalScrollbarWrapperElement),
-                                        vscrollBarHeight = elem.parent()[0].offsetHeight;
-                                    elem.css('height', vscrollBarHeight + 'px');
-                                    iElement.css('height', (vscrollBarHeight * ratio) + 'px')
-                                }
-                            });
-                        };
-
-                        updateVScrollBarHeight();
-
-
-                        // vertical scrolling perks
-                        if (parentEl.hasClass('vertical')) {
-                            var tbodyEl = getClosestParentTag(parentEl, 'TBODY');
-                            if (!tbodyEl.length) {
-                                throw new Error("Unable to find TBODY tag from the scrollbar wrapper");
-                            }
-
-                            // Handle vertical scroll triggered by mouse wheel over the whole table area
-                            parentEl.parent().parent().parent().on('wheel', function(evt){
-                                var target = evt.target,
-                                    parentElDom = parentEl[0];
-                                if (target !== parentElDom) {
-                                    var scrollHeight = parentElDom.scrollHeight;
-                                    if (!scrollHeight) { // if scrolling vertically is not possible
-                                        return;
-                                    }
-
-                                    var initScrollTop = parentElDom.scrollTop,
-                                        originalEvent = evt.originalEvent || evt, // need this to make this code work with/without jQuery
-                                        lineScrollOffset = originalEvent.deltaY > 0 ? 3 : -3;
-
-                                    // if we can't scroll further in that direction
-                                    if ((initScrollTop === 0 && lineScrollOffset < 0) ||
-                                        (lineScrollOffset > 0 && (initScrollTop + parentElDom.offsetHeight) === scrollHeight)) {
-                                        return;
-                                    }
-
-                                    // if we can scroll more
-                                    if (parentElDom.scrollByLines) {
-                                        parentElDom.scrollByLines(lineScrollOffset);
-                                    } else if (parentElDom.doScroll) { // if scrollByLines is not available, try to use the IE similar function
-                                        parentElDom.doScroll(lineScrollOffset > 0 ? 'scrollbarDown' : 'scrollbarUp');
-                                    } else if (parentElDom.scrollBy) { // if scrollBy is available (an old DOM-0 method)
-                                        parentElDom.scrollBy(0, lineScrollOffset * 10);
-                                    } else { // last solution, try to do it manually
-                                        parentElDom.scrollTop += lineScrollOffset * 10;
-                                    }
-                                    evt.preventDefault();
-                                }
-                            });
-
-                            // target element is the scrollbar wrapper parent element
-                            tableResizeHandler('vertical', scope, tbodyEl[0]);
-
-                        // Does not handle the 'horizontal' case yet because we haven't got a use case for it yet
-                        // } else {
-                        //    // target element is the scrollbar wrapper parent element
-                        //    tableResizeHandler('horizontal', scope, tbodyEl[0]);
-                        }
-                    }
-                };
-            }
-
-        };
-    }])
     /**
      * @name extInclude
      * Extended version of ngInclude where we can also specify an additional scope variable as 'scopeExtension'.
