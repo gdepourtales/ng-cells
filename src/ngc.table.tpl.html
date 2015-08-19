@@ -1,7 +1,12 @@
 <div class="ngc table">
     <div ng-transclude style="display: hidden"></div>
 
-    <form>
+    <div class="ngc scroll-wrapper" ng-scrollable="{updateContentPosition:false}"
+         spy-x="scrollLeftPosition"
+         spy-y="scrollTopPosition"
+         spy-custom-content-width="contentWidth"
+         spy-custom-content-height="contentHeight"
+            >
         <table class="ngc">
             <!-- Column Names -->
             <tr class="ngc row column-names" ng-show="{{showColumnNames}}"  ng-class="{first: $first, last: $last}">
@@ -36,8 +41,7 @@
                     style="{{$$rightColumnNames[$index].style}}; {{column.style}}">
                     <div class="ngc cell-content" style="{{column.style}}">{{$$rightColumnNames[$index].value}}</div>
                 </td>
-                <!-- Placeholder for vertical scroll -->
-                <td></td>
+
             </tr>
 
             <!-- Headers -->
@@ -125,8 +129,7 @@
                          scope-extension="{'rawCellData': $$topRightData[row.index][$index]}"></div>
                 </td>
 
-                <!-- Placeholder for vertical scroll -->
-                <td></td>
+
             </tr>
 
             <!-- Middle -->
@@ -213,11 +216,7 @@
                          ext-include="$$middleRightData[row.index][$index].customCellTemplate"
                          scope-extension="{'rawCellData': $$middleRightData[row.index][$index]}"></div>
                 </td>
-                <td class="ngc scroll-wrapper-cell" ng-if="$first" rowspan="{{$$rows.length}}">
-                    <div class="ngc scroll-wrapper vertical">
-                        <div ngc-scrollbar vertical></div>
-                    </div>
-                </td>
+
             </tr>
 
             <!-- Bottom -->
@@ -305,40 +304,7 @@
                          scope-extension="{'rawCellData': $$bottomRightData[row.index][$index]}"></div>
                 </td>
 
-                <!-- Placeholder for vertical scroll -->
-                <td></td>
-            </tr>
-
-            <!-- Horizontal scroll -->
-            <tr class="ngc row scrollbar">
-                <!-- Cells for row headers columns -->
-                <td ng-repeat="column in $$leftRowHeadersColumns"
-                    class="ngc scrollbar cell {{column.clazz}}"
-                    style="{{column.style}}">
-                    <!--<div class="ngc row-header-content"></div>-->
-                </td>
-                <!-- Cells for left fixed columns -->
-                <td ng-repeat="column in $$leftFixedColumns" class="ngc scrollbar cell {{column.clazz}}" style="{{column.style}}">
-                    <!--<div class="ngc cell-content"></div>-->
-                </td>
-
-                <!-- Cells for middle variable columns -->
-                <td class="ngc scroll-wrapper-cell" colspan="{{$$variableCenterColumns.length}}">
-                    <div class="ngc scroll-wrapper horizontal {{column.clazz}}" >
-                        <div ngc-scrollbar horizontal></div>
-                    </div>
-                </td>
-
-                <!-- Cells for right fixed columns -->
-                <td ng-repeat="column in $$rightFixedColumns"
-                    class="ngc scrollbar cell {{$$middleRightData[$parent.$index][$index].clazz}} {{column.clazz}}"
-                    style="{{column.style}}">
-                    <!--<div class="ngc cell-content"></div>-->
-                </td>
-
-                <!-- Placeholder for vertical scroll -->
-                <td></td>
             </tr>
         </table>
-    </form>
+    </div>
 </div>
