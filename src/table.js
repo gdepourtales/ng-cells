@@ -711,7 +711,6 @@
                         var topPos = Math.ceil(totalRows * percentage);
 
                         scope.$$scrollPosition.top = topPos;
-                        scope.$$updateData();
 
                         if (angular.isNumber(contentPos)) {
                             $parse('scrollTopPosition').assign(scope, topPos);
@@ -719,7 +718,10 @@
                             scope.$$scrollTopPosition = percentage * scope.$$contentHeight;
                             scope.$emit('content.reload');
                         }
-                        $timeout(function() {scope.$$onVerticalScrollUpdate = false;});
+                        scope.$$updateData();
+                        $timeout(function() {
+                            scope.$$onVerticalScrollUpdate = false;
+                        });
                     }
 
 
@@ -760,7 +762,6 @@
 
 
                         scope.$$scrollPosition.left = leftPos;
-                        scope.$$updateData();
 
                         if (angular.isNumber(contentPos)) {
                             $parse('scrollLeftPosition').assign(scope, leftPos);
@@ -768,7 +769,10 @@
                             scope.$$scrollLeftPosition = percentage * scope.$$contentWidth;
                             scope.$emit('content.reload');
                         }
-                        $timeout(function() {scope.$$onHorizontalScrollUpdate = false;});
+                        scope.$$updateData();
+                        $timeout(function() {
+                            scope.$$onHorizontalScrollUpdate = false;
+                        });
                     }
 
 
