@@ -4,7 +4,13 @@
     <title>Fast scroll</title>
     <link href="../bower_components/ng-scrollable/min/ng-scrollable.min.css" rel="stylesheet" type="text/css">
     <link href="../dist/latest/ng-cells.css" rel="stylesheet" type="text/css">
-
+    <style>
+        .cell {
+            text-align: center;
+            vertical-align: middle;
+            width:60px;
+        }
+    </style>
     <script src="../bower_components/angular/angular.min.js"></script>
     <script src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
     <script src="../bower_components/ng-scrollable/src/ng-scrollable.js"></script>
@@ -29,10 +35,7 @@
 </head>
 <body>
 <div ng-controller="TestCtrl">
-    <div ngc-table data="data"
-         scroll-delay="0"
-         wheel-scroll-delay="0"
-            ></div>
+    <div ngc-table data="data"></div>
 </div>
 </body>
 </html>
