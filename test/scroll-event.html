@@ -2,11 +2,15 @@
 <html ng-app="ngcTableDirectiveTest">
 <head>
     <title>Test Template</title>
-    <link href="../dist/0.3.4/ng-cells-0.3.4.css" rel="stylesheet" type="text/css">
     <link href="test.css" rel="stylesheet" type="text/css">
-    <script src="../lib/angular-1.2.6.js"></script>
-    <script src="../lib/angular-sanitize-1.2.6.js"></script>
-    <script src="../dist/0.3.4/ng-cells-0.3.4.js"></script>
+    <link href="../bower_components/ng-scrollable/min/ng-scrollable.min.css" rel="stylesheet" type="text/css">
+    <link href="../dist/latest/ng-cells.css" rel="stylesheet" type="text/css">
+
+
+    <script src="../bower_components/angular/angular.min.js"></script>
+    <script src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="../bower_components/ng-scrollable/src/ng-scrollable.js"></script>
+    <script src="../dist/latest/ng-cells.js"></script>
     <script>
         angular.module('ngcTableDirectiveTest', ['ngcTableDirective'])
                 .controller('TestCtrl', function($scope) {
@@ -22,12 +26,13 @@
                         $scope.data.push(rowContent);
                     }
 
-                    $scope.scrollPos = {top:0 , left: 0};
+                    $scope.scrollLeftPosition = 0;
+                    $scope.scrollTopPosition = 0;
 
                     $scope.customDataFn = function(data, row, col) {
                         if (col == 39) {
                             var sum = 0;
-                            var subArray = data[row].slice($scope.scrollPos.left, $scope.scrollPos.left + 3);
+                            var subArray = data[row].slice($scope.scrollLeftPosition + 1, $scope.scrollLeftPosition + 4);
                             angular.forEach(subArray, function(val) {sum += val;});
 
                             return sum;
@@ -35,10 +40,6 @@
                         return data[row][col];
                     };
 
-
-                    $scope.onScroll = function(event, scrollPosition) {
-                        $scope.scrollPos = scrollPosition;
-                    };
 
                     $scope.resultFormatFn = function(data, row, col) {
                         return "Sum: "  + data;
@@ -50,12 +51,13 @@
 <body>
 <div ng-controller="TestCtrl">
     <div>
-        Scroll Position : [{{scrollPos.top}}, {{scrollPos.left}}]
+        Scroll Position : [{{scrollTopPosition}}, {{scrollLeftPosition}}]
     </div>
 
     <div ngc-table data="data"
          custom-data-value-fn="customDataFn"
-         scroll-fn="onScroll"
+         scroll-top-position="scrollTopPosition"
+         scroll-left-position="scrollLeftPosition"
          left-column-widths="'40px'"
          center-column-widths="'40px'"
          center-column-number="3"
