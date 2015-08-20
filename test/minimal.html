@@ -2,10 +2,19 @@
 <html ng-app="ngcTableDirectiveTest">
 <head>
     <title>Minimal</title>
-    <link href="../dist/0.3.4/ng-cells-0.3.4.css" rel="stylesheet" type="text/css">
-    <script src="../lib/angular-1.2.6.js"></script>
-    <script src="../lib/angular-sanitize-1.2.6.js"></script>
-    <script src="../dist/0.3.4/ng-cells-0.3.4.js"></script>
+    <link href="../bower_components/ng-scrollable/min/ng-scrollable.min.css" rel="stylesheet" type="text/css">
+    <link href="../dist/latest/ng-cells.css" rel="stylesheet" type="text/css">
+    <style>
+        .cell {
+            text-align: center;
+            vertical-align: middle;
+            width:60px;
+        }
+    </style>
+    <script src="../bower_components/angular/angular.min.js"></script>
+    <script src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="../bower_components/ng-scrollable/src/ng-scrollable.js"></script>
+    <script src="../dist/latest/ng-cells.js"></script>
     <script>
         angular.module('ngcTableDirectiveTest', ['ngcTableDirective'])
                 .controller('TestCtrl', function($scope) {
