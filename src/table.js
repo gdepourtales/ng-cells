@@ -373,16 +373,8 @@
                     scope.$$dispatchEvent = function(eventName, event, cellData) {
                         /* Only handle callbacks that are actually functions */
                         if (cellData && angular.isFunction(cellData.eventCallbacks[eventName])) {
-                            /* Save the scroll positions */
-                            var verticalScrollPos = this.$$verticalScrollbarWrapperElement.scrollTop;
-                            var horizontalScrollPos = this.$$horizontalScrollbarWrapperElement.scrollLeft;
-
                             /* apply the callback */
                             cellData.eventCallbacks[eventName](event, cellData);
-
-                            /* Restore the scroll positions */
-                            this.$$verticalScrollbarWrapperElement.scrollTop = verticalScrollPos;
-                            this.$$horizontalScrollbarWrapperElement.scrollLeft = horizontalScrollPos;
                         }
                     };
 
