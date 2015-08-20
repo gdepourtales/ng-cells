@@ -660,11 +660,9 @@
                         'data',
                         function(newValue, oldValue) {
                             if (newValue !== oldValue ) {
-                                scope.$$updateScrollPositions(oldValue);
-
+                                scope.$emit('content.reload');
                                 // Update the data
                                 scope.$$updateData();
-
                             }
                         }
                     );
