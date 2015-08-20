@@ -1,11 +1,11 @@
 <div class="ngc table">
     <div ng-transclude style="display: hidden"></div>
 
-    <div class="ngc scroll-wrapper" ng-scrollable="{updateContentPosition:false}"
-         spy-x="scrollLeftPosition"
-         spy-y="scrollTopPosition"
-         spy-custom-content-width="contentWidth"
-         spy-custom-content-height="contentHeight"
+    <div class="ngc scroll-wrapper" ng-scrollable="{updateContentPosition:false, enableKinetic:false, wheelSpeed:0.1}"
+         spy-x="$$scrollLeftPosition"
+         spy-y="$$scrollTopPosition"
+         spy-custom-content-width="$$contentWidth"
+         spy-custom-content-height="$$contentHeight"
             >
         <table class="ngc">
             <!-- Column Names -->

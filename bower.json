@@ -31,6 +31,6 @@
     "dependencies": {
         "angular": ">1.2.3",
         "angular-sanitize": ">1.2.3",
-      "ng-scrollable": "gdepourtales/ng-scrollable#aecea2d9e58121532c39dd2f1ac3efa2a1767625"
+      "ng-scrollable": "gdepourtales/ng-scrollable#831b6abb8d964315c22581338d00f03befb9a852"
     }
 }

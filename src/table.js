@@ -21,7 +21,7 @@
     // trigger this when the table's content are udpated
     module.constant('contentUpdatedEvent', 'contentUpdatedEvent');
 
-    module.directive('ngcTable', ['$templateCache', '$sce', '$timeout', 'contentUpdatedEvent', function($templateCache, $sce, $timeout, contentUpdatedEvent) {
+    module.directive('ngcTable', ['$templateCache', '$sce', '$timeout', 'contentUpdatedEvent', '$parse', function($templateCache, $sce, $timeout, contentUpdatedEvent, $parse) {
 
         /**
          * ngcTable Controller declaration. The format is given to be able to minify the directive. The scope is
@@ -134,6 +134,9 @@
                      */
                     scope.$$rightColumnNames = [];
 
+
+                    scope.$$scrollTopPosition = angular.isNumber(scope.$$scrollTopPosition) ? scope.$$scrollTopPosition : 0;
+                    scope.$$scrollLeftPosition = angular.isNumber(scope.$$scrollLeftPosition) ? scope.$$scrollLeftPosition : 0;
 
                     /*
                     Register the data function
@@ -321,7 +324,7 @@
                 },
 
 
-                post: function postLink(scope , iElement /*, iAttrs, controller*/) {
+                post: function postLink(scope , iElement , iAttrs, controller) {
 
 
                     /**
@@ -676,57 +679,116 @@
 
 
 
-                    scope.containerWidth = undefined;
-                    scope.containerHeight = undefined;
+                    scope.$$containerWidth = undefined;
+                    scope.$$containerHeight = undefined;
+                    scope.$$onVerticalScrollUpdate = false;
+                    scope.$$onHorizontalScrollUpdate = false;
 
-                    scope.$watch(
-                        'scrollTopPosition',
+                    /* Externally controlled scroll positions */
+                    scope.$watch( 'scrollTopPosition',
                         function(newValue, oldValue) {
-
-                            if (angular.isDefined(newValue) && newValue !== oldValue) {
-
-                                var totalRows = scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length ;
-                                var percentage = newValue / scope.contentHeight;
-                                var topPos = Math.ceil(totalRows * percentage);
-
-                                if (topPos > totalRows) {
-                                    topPos = totalRows;
-                                }
-
-                                scope.$$scrollPosition.top = topPos;
-                                scope.$$updateData();
-                                scope.$emit('content.reload');
+                            if (!scope.$$onVerticalScrollUpdate
+                                && angular.isNumber(newValue) && angular.isNumber(oldValue)
+                                && newValue !== oldValue && !isNaN(newValue) && newValue >= 0) {
+                                updateVerticalScroll(scope, null, newValue);
                             }
                         }
                     );
-                    scope.$watch(
-                        'scrollLeftPosition',
+
+
+                    /* Internally controlled scroll positions */
+                    scope.$watch('$$scrollTopPosition',
                         function(newValue, oldValue) {
-                            if (angular.isDefined(newValue) &&  newValue !== oldValue) {
-
-                                var totalMiddleCols = scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length;
-                                var percentage = newValue / scope.contentWidth;
-                                var leftPos = Math.ceil(totalMiddleCols * percentage);
-
-                                if (leftPos > totalMiddleCols + scope.$$leftFixedColumns.length) {
-                                    leftPos = totalMiddleCols + scope.$$leftFixedColumns.length;
-                                }
-
-                                scope.$$scrollPosition.left = leftPos;
-                                scope.$$updateData();
-                                scope.$emit('content.reload');
+                            if (angular.isNumber(newValue) && angular.isNumber(oldValue)
+                                && newValue !== oldValue && !isNaN(newValue) && newValue >= 0) {
+                                updateVerticalScroll(scope, newValue, null);
                             }
                         }
                     );
+
+
+                    function updateVerticalScroll(scope, contentPos, dataPos) {
+                        scope.$$onVerticalScrollUpdate = true;
+                        var totalRows = scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length;
+
+                        var percentage = 0;
+                        if (angular.isNumber(contentPos)) {
+                            percentage = contentPos / scope.$$contentHeight;
+                        } else if (angular.isNumber(dataPos)) {
+                            percentage =  dataPos / totalRows;
+                        }
+
+                        var topPos = Math.ceil(totalRows * percentage);
+
+                        scope.$$scrollPosition.top = topPos;
+                        scope.$$updateData();
+
+                        if (angular.isNumber(contentPos)) {
+                            $parse('scrollTopPosition').assign(scope, topPos);
+                        }  else if (angular.isNumber(dataPos)) {
+                            scope.$$scrollTopPosition = percentage * scope.$$contentHeight;
+                            scope.$emit('content.reload');
+                        }
+                        $timeout(function() {scope.$$onVerticalScrollUpdate = false;});
+                    }
+
+
+                    scope.$watch('scrollLeftPosition',
+                        function(newValue, oldValue) {
+                            if (!scope.$$onHorizontalScrollUpdate
+                                && angular.isNumber(newValue) && angular.isNumber(oldValue)
+                                && newValue !== oldValue && !isNaN(newValue) && newValue >= 0) {
+                                updateHorizontalScroll(scope, null, newValue);
+                            }
+
+                        }
+                    );
+
+                    scope.$watch(
+                        '$$scrollLeftPosition',
+                        function(newValue, oldValue) {
+                            if (angular.isNumber(newValue) && angular.isNumber(oldValue)
+                                && newValue !== oldValue && !isNaN(newValue) && newValue >= 0) {
+                                updateHorizontalScroll(scope, newValue, null);
+                            }
+                        }
+                    );
+
+                    function updateHorizontalScroll(scope, contentPos, dataPos) {
+                        scope.$$onHorizontalScrollUpdate = true;
+
+                        var totalMiddleCols = scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length;
+
+                        var percentage = 0;
+                        if (angular.isNumber(contentPos)) {
+                            percentage = contentPos / scope.$$contentWidth;
+                        } else if (angular.isNumber(dataPos)) {
+                            percentage =  dataPos / totalMiddleCols;
+                        }
+
+                        var leftPos = Math.ceil(totalMiddleCols * percentage);
+
+
+                        scope.$$scrollPosition.left = leftPos;
+                        scope.$$updateData();
+
+                        if (angular.isNumber(contentPos)) {
+                            $parse('scrollLeftPosition').assign(scope, leftPos);
+                        } else if (angular.isNumber(dataPos)) {
+                            scope.$$scrollLeftPosition = percentage * scope.$$contentWidth;
+                            scope.$emit('content.reload');
+                        }
+                        $timeout(function() {scope.$$onHorizontalScrollUpdate = false;});
+                    }
 
 
                     scope.$on('scrollable.dimensions', function(event, containerWidth, containerHeight, contentWidth, contentHeight, id) {
 
                         // If there's no change in the contentWidth and contentHeight
-                        if (contentWidth == scope.contentWidth
-                            && contentHeight == scope.contentHeight
-                            && containerWidth == scope.containerWidth
-                            && containerHeight == scope.containerHeight ) {
+                        if (contentWidth == scope.$$contentWidth
+                            && contentHeight == scope.$$contentHeight
+                            && containerWidth == scope.$$containerWidth
+                            && containerHeight == scope.$$containerHeight ) {
                             return;
                         }
 
@@ -739,15 +801,13 @@
                         var nVPages = totalRows / totalVisibleRows;
                         var nHPages = totalCols / totalVisibleCols;
 
-                        scope.contentHeight = containerHeight * nVPages;
-                        scope.contentWidth = containerWidth * nHPages;
-                        scope.containerWidth = containerWidth;
-                        scope.containerHeight = containerHeight;
+                        scope.$$contentHeight = containerHeight * nVPages;
+                        scope.$$contentWidth = containerWidth * nHPages;
+                        scope.$$containerWidth = containerWidth;
+                        scope.$$containerHeight = containerHeight;
 
                         // Update scrollbars size
                         scope.$emit('content.changed');
-
-
                     });
 
 
@@ -798,16 +858,18 @@
                 /* Heights of the footer rows (array or single value). No default (min-height:10px) */
                 footerRowHeights: '=?',
 
-                /* Scroll function to be called when a scroll event occurs */
-                scrollFn: '=?',
-
                 /* Let read or set the vertical data position in the middle center part */
                 scrollTopPosition: '=?',
                 /* Let read or set the horizontal data position in the middle center part */
                 scrollLeftPosition: '=?',
 
-                contentHeight: '=?',
-                contentWidth: '=?'
+                /* Let read or set the vertical data position in the middle center part */
+                $$scrollTopPosition: '=?',
+                /* Let read or set the horizontal data position in the middle center part */
+                $$scrollLeftPosition: '=?',
+
+                $$contentHeight: '=?',
+                $$contentWidth: '=?'
 
             },
             restrict:'AE',
