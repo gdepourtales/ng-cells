@@ -22,7 +22,7 @@ angular.module('ngcTableDirectiveTest', ['ngcTableDirective'])
         });
 
 
-            $scope.eventsTarget = {};
+        $scope.eventsTarget = {};
         $scope.eventsData = {};
         $scope.eventsValue = {};
 
@@ -36,12 +36,6 @@ angular.module('ngcTableDirectiveTest', ['ngcTableDirective'])
             }
         });
 
-        $scope.modifyInternals = function(event, cellData) {
-            var elem = angular.element(event.target);
-            elem.empty();
-            elem.append('<input type="text" value="' + cellData.value + '">');
-        }
-
 
         $scope.cellFormat = function(value, row, col) {
             var hex = (65536 * row  * 6 + 255 * 128 + col * 6).toString(16);
@@ -49,10 +43,7 @@ angular.module('ngcTableDirectiveTest', ['ngcTableDirective'])
             return hex;
         };
 
-        $scope.styleFn = function(value, row, col) {
-            var rgb = "background-color: rgb(" + (row  * 6)+ ", 128, " + (col * 6) + ")";
-            return rgb;
-        };
+
 
     });
 
