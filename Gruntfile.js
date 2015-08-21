@@ -22,12 +22,12 @@ module.exports = function(grunt) {
             },
 
             dist: {
-                src: ['generated/template.js', 'src/table.js'],
+                src: ['src/table.js', 'generated/template.js', 'bower_components/ng-scrollable/src/ng-scrollable.js' ],
                 dest: 'dist/<%= pkg.version %>/<%= pkg.name %>.js'
             },
 
             dist_latest: {
-                src: ['src/table.js','generated/template.js'],
+                src: ['src/table.js', 'generated/template.js', 'bower_components/ng-scrollable/src/ng-scrollable.js'],
                 dest: 'dist/latest/<%= pkg.name %>.js'
             }
         },
@@ -51,8 +51,8 @@ module.exports = function(grunt) {
         cssmin: {
             combine: {
                 files: {
-                    'dist/<%= pkg.version %>/<%= pkg.name %>.css': ['css/table.css'],
-                    'dist/latest/<%= pkg.name %>.css': ['css/table.css']
+                    'dist/<%= pkg.version %>/<%= pkg.name %>.css': ['css/table.css', 'bower_components/ng-scrollable/min/ng-scrollable.min.css'],
+                    'dist/latest/<%= pkg.name %>.css': ['css/table.css', 'bower_components/ng-scrollable/min/ng-scrollable.min.css']
                 }
             },
 
