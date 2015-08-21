@@ -1,10 +1,14 @@
 <html ng-app="ngcTableDirectiveTest">
 
 <head>
-    <script src="https://code.angularjs.org/1.3.15/angular.js"></script>
-    <script src="https://code.angularjs.org/1.3.15/angular-sanitize.js"></script>
-    <script src="../dist/0.3.11/ng-cells.js"></script>
+    <link href="../bower_components/ng-scrollable/min/ng-scrollable.min.css" rel="stylesheet" type="text/css">
+    <link href="../dist/latest/ng-cells.css" rel="stylesheet" type="text/css">
 
+
+    <script src="../bower_components/angular/angular.min.js"></script>
+    <script src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="../bower_components/ng-scrollable/src/ng-scrollable.js"></script>
+    <script src="../dist/latest/ng-cells.js"></script>
     <style>
         table.ngc{border-collapse:collapse;border-spacing:0;table-layout:fixed}.ngc.vertical.scroll-wrapper{height:100%;width:16px;overflow-x:hidden;overflow-y:scroll}.ngc.scrollbar.cell{background:0 0}.ngc.vscrollbar{width:1px}.ngc.horizontal.scroll-wrapper{height:14px;overflow-x:scroll;overflow-y:hidden;position:relative;width:100%}.ngc.hscrollbar{height:1px;position:absolute}.ngc.scroll-wrapper-cell{vertical-align:middle;padding:0}
         * {
@@ -123,7 +127,7 @@
 
                     $scope.customDataFn = function(data, row, col) {
                         return data[row][col];
-                    }
+                    };
                     $scope.customTrustedHTMLFn = function(value, row, col) {
                         return '<div style="color:red">' + value + '</div>';
                     };
