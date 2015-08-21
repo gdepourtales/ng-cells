@@ -5,11 +5,11 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
     "<div class=\"ngc table\">\n" +
     "    <div ng-transclude style=\"display: hidden\"></div>\n" +
     "\n" +
-    "    <div class=\"ngc scroll-wrapper\" ng-scrollable=\"{updateContentPosition:false}\"\n" +
-    "         spy-x=\"scrollLeftPosition\"\n" +
-    "         spy-y=\"scrollTopPosition\"\n" +
-    "         spy-custom-content-width=\"contentWidth\"\n" +
-    "         spy-custom-content-height=\"contentHeight\"\n" +
+    "    <div class=\"ngc scroll-wrapper\" ng-scrollable=\"{updateContentPosition:false, enableKinetic:false, wheelSpeed:1}\"\n" +
+    "         spy-x=\"$$scrollLeftPosition\"\n" +
+    "         spy-y=\"$$scrollTopPosition\"\n" +
+    "         spy-custom-content-width=\"$$contentWidth\"\n" +
+    "         spy-custom-content-height=\"$$contentHeight\"\n" +
     "            >\n" +
     "        <table class=\"ngc\">\n" +
     "            <!-- Column Names -->\n" +
@@ -329,26 +329,24 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
  limitations under the License.
  */
 
-(function() {
+(function () {
 
     var module = angular.module('ngcTableDirective', ['ngc-template', 'ngSanitize', 'ngScrollable']);
 
-    // trigger this when the table's content are udpated
-    module.constant('contentUpdatedEvent', 'contentUpdatedEvent');
 
-    module.directive('ngcTable', ['$templateCache', '$sce', '$timeout', 'contentUpdatedEvent', function($templateCache, $sce, $timeout, contentUpdatedEvent) {
+    module.directive('ngcTable', ['$templateCache', '$sce', '$timeout', '$parse', function ($templateCache, $sce, $timeout, $parse) {
 
         /**
          * ngcTable Controller declaration. The format is given to be able to minify the directive. The scope is
          * injected.
          * @type {*[]}
          */
-        var controllerDecl = ['$scope', function($scope) {
+        var controllerDecl = ['$scope', function ($scope) {
             /**
              * Registers a range declaration in the scope
              * @param range The new range declaration
              */
-            this.addRange = function(range) {
+            this.addRange = function (range) {
                 $scope.ranges.push(range);
             };
 
@@ -450,13 +448,16 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                     scope.$$rightColumnNames = [];
 
 
+                    scope.$$scrollTopPosition = angular.isNumber(scope.$$scrollTopPosition) ? scope.$$scrollTopPosition : 0;
+                    scope.$$scrollLeftPosition = angular.isNumber(scope.$$scrollLeftPosition) ? scope.$$scrollLeftPosition : 0;
+
                     /*
-                    Register the data function
+                     Register the data function
                      */
                     if (angular.isFunction(scope['customDataValueFn'])) {
                         scope.$$getDataValue = scope['customDataValueFn'];
                     } else {
-                        scope.$$getDataValue = function(data, row, col) {
+                        scope.$$getDataValue = function (data, row, col) {
                             return angular.isArray(data[row]) ? data[row][col] : undefined;
                         };
                     }
@@ -515,7 +516,8 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                      */
                     scope.$$scrollPosition = {
                         top: angular.isDefined(scope.scrollTopPosition) ? scope.scrollTopPosition : 0,
-                        left: angular.isDefined(scope.scrollLeftPosition) ? scope.scrollLeftPosition : 0};
+                        left: angular.isDefined(scope.scrollLeftPosition) ? scope.scrollLeftPosition : 0
+                    };
 
                     /**
                      * Ranges for events, styles, etc...
@@ -537,7 +539,7 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                     scope.showRowNumbers = angular.isDefined(scope.showRowNumbers) ? scope.showRowNumbers : true;
 
                     /*
-                    If the show row number flag is on, add the required column
+                     If the show row number flag is on, add the required column
                      */
                     if (scope.showRowNumbers) {
                         scope.$$leftRowHeadersColumns.push({
@@ -636,7 +638,7 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                 },
 
 
-                post: function postLink(scope , iElement /*, iAttrs, controller*/) {
+                post: function postLink(scope, iElement, iAttrs, controller) {
 
 
                     /**
@@ -659,21 +661,27 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                      * Default style function for the cells. Returns an empty string
                      * @returns {string}
                      */
-                    function defaultStyleFn(/*data, row, col*/) {return '';}
+                    function defaultStyleFn(/*data, row, col*/) {
+                        return '';
+                    }
 
                     /**
                      * Default format function for the cells content. Returns the raw data
                      * @param data
                      * @returns {*}
                      */
-                    function defaultFormatFn(data /*, row, col*/) {return angular.isDefined(data) ? data : '&nbsp;';}
+                    function defaultFormatFn(data /*, row, col*/) {
+                        return angular.isDefined(data) ? data : '&nbsp;';
+                    }
 
                     /**
                      * Default html content function
                      * @param data
                      * @returns {*}
                      */
-                    function defaultHtmlFn(data, row, col, formattedValue) {return angular.isDefined(formattedValue) ? String(formattedValue) : '&nbsp;';}
+                    function defaultHtmlFn(data, row, col, formattedValue) {
+                        return angular.isDefined(formattedValue) ? String(formattedValue) : '&nbsp;';
+                    }
 
 
                     /**
@@ -682,22 +690,13 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                      * @param event the event object as passed by the listener
                      * @param cellData the data registered for the cell
                      */
-                    scope.$$dispatchEvent = function(eventName, event, cellData) {
+                    scope.$$dispatchEvent = function (eventName, event, cellData) {
                         /* Only handle callbacks that are actually functions */
                         if (cellData && angular.isFunction(cellData.eventCallbacks[eventName])) {
-                            /* Save the scroll positions */
-                            var verticalScrollPos = this.$$verticalScrollbarWrapperElement.scrollTop;
-                            var horizontalScrollPos = this.$$horizontalScrollbarWrapperElement.scrollLeft;
-
                             /* apply the callback */
                             cellData.eventCallbacks[eventName](event, cellData);
-
-                            /* Restore the scroll positions */
-                            this.$$verticalScrollbarWrapperElement.scrollTop = verticalScrollPos;
-                            this.$$horizontalScrollbarWrapperElement.scrollLeft = horizontalScrollPos;
                         }
                     };
-
 
 
                     /**
@@ -741,7 +740,7 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                         ];
 
                         /* Check all ranges and apply the range attributes if the cell is enclosed */
-                        angular.forEach(scope.ranges, function(range){
+                        angular.forEach(scope.ranges, function (range) {
                             if (row >= range.top && row < range.bottom
                                 && col >= range.left && col < range.right) {
                                 /* Register the enclosing range */
@@ -760,7 +759,7 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                                 }
 
                                 /* Register available event callbacks */
-                                angular.forEach(events, function(event) {
+                                angular.forEach(events, function (event) {
                                     if (angular.isFunction(range[event])) eventCallbacks[event] = range[event];
                                 });
                             }
@@ -797,12 +796,12 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                      * @param centerData The center data part. may be top, middle or bottom
                      * @param dataRowStartIndex The row start index, related to the data part
                      */
-                    scope.$$setCenterColumnsData = function(nRows, centerData, dataRowStartIndex) {
+                    scope.$$setCenterColumnsData = function (nRows, centerData, dataRowStartIndex) {
                         var col;
                         /* Update the column names */
                         for (col = 0; col < this.$$variableCenterColumns.length; col++) {
                             this.$$centerColumnNames[col] = {
-                                value:getLettersForIndex(col + this.$$leftFixedColumns.length + this.$$scrollPosition.left)
+                                value: getLettersForIndex(col + this.$$leftFixedColumns.length + this.$$scrollPosition.left)
                             };
                         }
 
@@ -815,9 +814,9 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
 
                             for (col = 0; col < this.$$variableCenterColumns.length; col++) {
                                 /*
-                                the column is the current column index + the number of columns to the left + the left
-                                scroll position
-                                */
+                                 the column is the current column index + the number of columns to the left + the left
+                                 scroll position
+                                 */
                                 var c = col + this.$$leftFixedColumns.length + this.$$scrollPosition.left;
                                 centerData[row].push($$getCellData(scope, r, c));
                             }
@@ -832,7 +831,7 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                      * @param rightData The data for the right part (top, middle or bottom)
                      * @param dataRowStartIndex The row start index, related to the data part
                      */
-                    scope.$$setLeftAndRightColumnsData = function(nRows, rowHeadersData, leftData, rightData, dataRowStartIndex) {
+                    scope.$$setLeftAndRightColumnsData = function (nRows, rowHeadersData, leftData, rightData, dataRowStartIndex) {
                         var col;
                         /* Update the column names on the left */
                         for (col = 0; col < this.$$leftFixedColumns.length; col++) {
@@ -842,7 +841,7 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                         }
 
                         /* Update the column names on the right */
-                        var rowLength =  angular.isDefined(this.data[0]) ? this.data[0].length : 0;
+                        var rowLength = angular.isDefined(this.data[0]) ? this.data[0].length : 0;
                         var startColumnIndex = Math.max(rowLength - this.$$rightFixedColumns.length, this.$$leftFixedColumns.length + this.$$variableCenterColumns.length);
 
                         for (col = 0; col < this.$$rightFixedColumns.length; col++) {
@@ -860,7 +859,7 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                             rowHeadersData[row] = [];
                             /* add the row number */
                             rowHeadersData[row][this.$$leftRowHeadersColumns.length - 1] = {
-                                value:r + 1
+                                value: r + 1
                             };
 
                             /* Reset the left data array */
@@ -884,7 +883,7 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                     /**
                      * Updates data in all table parts
                      */
-                    scope.$$updateData = function() {
+                    scope.$$updateData = function () {
                         /* Initialize the header parts */
                         this.$$setCenterColumnsData(this.$$headerRows.length, this.$$topCenterData, 0);
                         this.$$setLeftAndRightColumnsData(this.$$headerRows.length, this.$$topLeftRowHeadersData, this.$$topLeftData, this.$$topRightData, 0);
@@ -899,153 +898,182 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                         this.$$setCenterColumnsData(this.$$footerRows.length, this.$$bottomCenterData, footerStartRow);
                         this.$$setLeftAndRightColumnsData(this.$$footerRows.length, this.$$bottomLeftRowHeadersData, this.$$bottomLeftData, this.$$bottomRightData, footerStartRow);
 
-                        this.$broadcast(contentUpdatedEvent);
                     };
 
                     // Send an initial callback to set the scroll position on correct values if required
 
                     if (angular.isFunction(scope.scrollFn)) scope.scrollFn(null, {
                         top: scope.$$headerRows.length,
-                        left:scope.$$leftFixedColumns.length,
-                        direction:'none'
+                        left: scope.$$leftFixedColumns.length,
+                        direction: 'none'
                     });
 
                     // Initialize the data
                     scope.$$updateData();
 
-                    // Update the scroll positions (top and left) for the new data object
-                    // It'll translate the old positions to the new ones proportionally
-                    scope.$$updateScrollPositions = function (oldData) {
-                        var scope = this,
-                            data = scope.data,
-                            scrollPosition = scope.$$scrollPosition,
-                            rowNumber = scope.rowNumber,
-                            centerColumnNumber = scope.centerColumnNumber,
-                            newRowCount = data && data.length || 0,
-                            newColumnCount = data && data[0] && data[0].length || 0,
-                            oldRowCount = oldData && oldData.length || 0,
-                            oldColumnCount = oldData && oldData[0] && oldData[0].length || 0;
 
-                        if (scrollPosition.top){
-                            if (newRowCount) {
-                                newRowCount -= (scope.$$headerRows.length + scope.$$footerRows.length);
-                                if (newRowCount < 0) {
-                                    newRowCount = 0;
-                                }
-                            }
-
-                            if (rowNumber >= newRowCount) {
-                                scrollPosition.top = 0;
-                            } else {
-                                if (oldRowCount) {
-                                    oldRowCount -= (scope.$$headerRows.length + scope.$$footerRows.length);
-                                    if (oldRowCount < rowNumber) {
-                                        oldRowCount = 0;
-                                    }
-                                }
-
-                                scrollPosition.top = oldRowCount &&
-                                    (Math.round((scrollPosition.top + 1) * (newRowCount - rowNumber) / (oldRowCount - rowNumber)) - 1);
-                                scrollPosition.top = Math.min(scrollPosition.top, newRowCount - rowNumber);
-                            }
-                        }
-
-                        if (scrollPosition.left) {
-                            if (newColumnCount) {
-                                newColumnCount -= (scope.$$leftFixedColumns.length + scope.$$rightFixedColumns.length);
-                                if (newColumnCount < 0) {
-                                    newColumnCount = 0;
-                                }
-                            }
-
-                            if (centerColumnNumber >= newColumnCount) {
-                                scrollPosition.left = 0;
-                            } else {
-                                if (oldColumnCount) {
-                                    oldColumnCount -= (scope.$$leftFixedColumns.length + scope.$$rightFixedColumns.length);
-                                    if (oldColumnCount < centerColumnNumber) {
-                                        oldColumnCount = 0;
-                                    }
-                                }
-
-                                scrollPosition.left = oldColumnCount &&
-                                    (Math.round((scrollPosition.left + 1) * (newColumnCount - centerColumnNumber) / (oldColumnCount - centerColumnNumber)) - 1);
-                                scrollPosition.left = Math.min(scrollPosition.left, newColumnCount - centerColumnNumber);
-
-                            }
-                        }
-                    };
+                    scope.dataTotalRows = 0;
+                    scope.dataTotalCols = 0;
 
                     scope.$watch(
                         'data',
-                        function(newValue, oldValue) {
-                            if (newValue !== oldValue ) {
-                                scope.$$updateScrollPositions(oldValue);
+                        function (newValue, oldValue) {
+                            if (newValue !== oldValue) {
 
-                                // Update the data
-                                scope.$$updateData();
+                                if (newValue.length !== scope.dataTotalRows ||
+                                    newValue[0].length !== scope.dataTotalCols) {
 
-                            }
-                        }
-                    );
+                                    scope.$emit('content.reload');
 
+                                    if (scope.$$scrollPosition.top > newValue.length - scope.$$headerRows.length - scope.$$middleCenterData.length - scope.$$footerRows.length) {
+                                        updateVerticalScroll(scope, null, newValue.length - scope.$$headerRows.length - scope.$$middleCenterData.length - scope.$$footerRows.length);
+                                    }
 
-
-                    scope.containerWidth = undefined;
-                    scope.containerHeight = undefined;
-
-                    scope.$watch(
-                        'scrollTopPosition',
-                        function(newValue, oldValue) {
-
-                            if (angular.isDefined(newValue) && newValue !== oldValue) {
-
-                                var totalRows = scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length ;
-                                var percentage = newValue / scope.contentHeight;
-                                var topPos = Math.ceil(totalRows * percentage);
-
-                                if (topPos > totalRows) {
-                                    topPos = totalRows;
+                                    if (scope.$$scrollPosition.left > scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$variableCenterColumns.length - scope.$$rightFixedColumns.length) {
+                                        updateHorizontalScroll(scope, null, newValue.length - scope.$$leftFixedColumns.length - scope.$$variableCenterColumns.length - scope.$$rightFixedColumns.length);
+                                    }
+                                    scope.$$updateData();
+                                } else {
+                                    // Update the data
+                                    $timeout(function() {scope.$$updateData();});
                                 }
 
-                                scope.$$scrollPosition.top = topPos;
-                                scope.$$updateData();
-                                scope.$emit('content.reload');
                             }
                         }
                     );
+
+
+                    scope.$$containerWidth = undefined;
+                    scope.$$containerHeight = undefined;
+                    scope.$$onVerticalScrollUpdate = false;
+                    scope.$$onHorizontalScrollUpdate = false;
+
+                    /* Externally controlled scroll positions */
+                    scope.$watch('scrollTopPosition',
+                        function (newValue, oldValue) {
+                            if (!scope.$$onVerticalScrollUpdate
+                                && angular.isNumber(newValue) && angular.isNumber(oldValue)
+                                && newValue !== oldValue && !isNaN(newValue) && newValue >= 0) {
+                                updateVerticalScroll(scope, null, newValue);
+                                scope.$$updateData();
+                            }
+                        }
+                    );
+
+
+                    /* Internally controlled scroll positions */
+                    scope.$watch('$$scrollTopPosition',
+                        function (newValue, oldValue) {
+                            if (angular.isNumber(newValue) && angular.isNumber(oldValue)
+                                && newValue !== oldValue && !isNaN(newValue) && newValue >= 0) {
+                                updateVerticalScroll(scope, newValue, null);
+                                scope.$$updateData();
+                            }
+                        }
+                    );
+
+
+                    function updateVerticalScroll(scope, contentPos, dataPos) {
+                        scope.$$onVerticalScrollUpdate = true;
+                        var totalRows = scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length;
+
+                        var maxTop = totalRows - scope.$$middleCenterData.length;
+
+                        var percentage = 0;
+                        if (angular.isNumber(contentPos)) {
+                            percentage = contentPos / scope.$$contentHeight;
+                        } else if (angular.isNumber(dataPos)) {
+                            percentage = dataPos / totalRows;
+                        }
+
+                        var topPos = Math.min(Math.ceil(totalRows * Math.min(percentage, 1)), maxTop);
+
+                        scope.$$scrollPosition.top = topPos;
+
+                        if (angular.isNumber(contentPos)) {
+                            $parse('scrollTopPosition').assign(scope, topPos);
+                        } else if (angular.isNumber(dataPos)) {
+                            scope.$$scrollTopPosition = percentage * scope.$$contentHeight;
+                            scope.$emit('content.reload');
+                        }
+
+
+                        $timeout(function () {
+                            scope.$$onVerticalScrollUpdate = false;
+                        });
+                    }
+
+
+                    scope.$watch('scrollLeftPosition',
+                        function (newValue, oldValue) {
+                            if (!scope.$$onHorizontalScrollUpdate
+                                && angular.isNumber(newValue) && angular.isNumber(oldValue)
+                                && newValue !== oldValue && !isNaN(newValue) && newValue >= 0) {
+                                updateHorizontalScroll(scope, null, newValue);
+                                scope.$$updateData();
+                            }
+
+                        }
+                    );
+
                     scope.$watch(
-                        'scrollLeftPosition',
-                        function(newValue, oldValue) {
-                            if (angular.isDefined(newValue) &&  newValue !== oldValue) {
-
-                                var totalMiddleCols = scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length;
-                                var percentage = newValue / scope.contentWidth;
-                                var leftPos = Math.ceil(totalMiddleCols * percentage);
-
-                                if (leftPos > totalMiddleCols + scope.$$leftFixedColumns.length) {
-                                    leftPos = totalMiddleCols + scope.$$leftFixedColumns.length;
-                                }
-
-                                scope.$$scrollPosition.left = leftPos;
+                        '$$scrollLeftPosition',
+                        function (newValue, oldValue) {
+                            if (angular.isNumber(newValue) && angular.isNumber(oldValue)
+                                && newValue !== oldValue && !isNaN(newValue) && newValue >= 0) {
+                                updateHorizontalScroll(scope, newValue, null);
                                 scope.$$updateData();
-                                scope.$emit('content.reload');
                             }
                         }
                     );
 
+                    function updateHorizontalScroll(scope, contentPos, dataPos) {
+                        scope.$$onHorizontalScrollUpdate = true;
 
-                    scope.$on('scrollable.dimensions', function(event, containerWidth, containerHeight, contentWidth, contentHeight, id) {
+                        var totalMiddleCols = scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length;
+
+                        var maxLeft = totalMiddleCols - scope.$$variableCenterColumns.length;
+
+                        var percentage = 0;
+                        if (angular.isNumber(contentPos)) {
+                            percentage = contentPos / scope.$$contentWidth;
+                        } else if (angular.isNumber(dataPos)) {
+                            percentage = dataPos / totalMiddleCols;
+                        }
+
+                        var leftPos = Math.min(Math.ceil(totalMiddleCols * Math.min(percentage, 1)), maxLeft);
+
+
+                        scope.$$scrollPosition.left = leftPos;
+
+                        if (angular.isNumber(contentPos)) {
+                            $parse('scrollLeftPosition').assign(scope, leftPos);
+                        } else if (angular.isNumber(dataPos)) {
+                            scope.$$scrollLeftPosition = percentage * scope.$$contentWidth;
+                            scope.$emit('content.reload');
+                        }
+
+                        $timeout(function () {
+                            scope.$$onHorizontalScrollUpdate = false;
+                        });
+                    }
+
+
+                    scope.$on('scrollable.dimensions', function (event, containerWidth, containerHeight, contentWidth, contentHeight, id) {
 
                         // If there's no change in the contentWidth and contentHeight
-                        if (contentWidth == scope.contentWidth
-                            && contentHeight == scope.contentHeight
-                            && containerWidth == scope.containerWidth
-                            && containerHeight == scope.containerHeight ) {
+                        if (contentWidth == scope.$$contentWidth
+                            && contentHeight == scope.$$contentHeight
+                            && containerWidth == scope.$$containerWidth
+                            && containerHeight == scope.$$containerHeight) {
                             return;
                         }
 
-                        var totalRows = scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length ;
+                        scope.dataTotalRows = scope.data.length;
+                        scope.dataTotalCols = scope.data[0].length;
+
+
+                        var totalRows = scope.data.length - scope.$$headerRows.length - scope.$$footerRows.length;
                         var totalVisibleRows = scope.$$rows.length;
 
                         var totalCols = scope.data[0].length - scope.$$leftFixedColumns.length - scope.$$rightFixedColumns.length;
@@ -1054,15 +1082,13 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                         var nVPages = totalRows / totalVisibleRows;
                         var nHPages = totalCols / totalVisibleCols;
 
-                        scope.contentHeight = containerHeight * nVPages;
-                        scope.contentWidth = containerWidth * nHPages;
-                        scope.containerWidth = containerWidth;
-                        scope.containerHeight = containerHeight;
+                        scope.$$contentHeight = containerHeight * nVPages;
+                        scope.$$contentWidth = containerWidth * nHPages;
+                        scope.$$containerWidth = containerWidth;
+                        scope.$$containerHeight = containerHeight;
 
                         // Update scrollbars size
                         scope.$emit('content.changed');
-
-
                     });
 
 
@@ -1073,19 +1099,19 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
         return {
             scope: {
                 /* Custom data function */
-                customDataValueFn:'=?',
+                customDataValueFn: '=?',
                 /* Data to display */
-                data:'=',
+                data: '=',
                 /* Flag to show/hide the column names. By default true */
-                showColumnNames:'=?',
+                showColumnNames: '=?',
                 /* Flag to show the row numbers. By default true */
-                showRowNumbers:'=?',
+                showRowNumbers: '=?',
                 /* Flag to show the header rows. By default true */
-                showHeader:'=?',
+                showHeader: '=?',
                 /* Unimplemented yet. By default false */
-                showFilter:'=?',
+                showFilter: '=?',
                 /* Flag to show the footer rows. By default true */
-                showFooter:'=?',
+                showFooter: '=?',
 
                 /* Number of left fixed columns. By default 1 */
                 leftColumnNumber: '=?',
@@ -1113,113 +1139,115 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
                 /* Heights of the footer rows (array or single value). No default (min-height:10px) */
                 footerRowHeights: '=?',
 
-                /* Scroll function to be called when a scroll event occurs */
-                scrollFn: '=?',
-
                 /* Let read or set the vertical data position in the middle center part */
                 scrollTopPosition: '=?',
                 /* Let read or set the horizontal data position in the middle center part */
                 scrollLeftPosition: '=?',
 
-                contentHeight: '=?',
-                contentWidth: '=?'
+                /* Let read or set the vertical data position in the middle center part */
+                $$scrollTopPosition: '=?',
+                /* Let read or set the horizontal data position in the middle center part */
+                $$scrollLeftPosition: '=?',
+
+                $$contentHeight: '=?',
+                $$contentWidth: '=?'
 
             },
-            restrict:'AE',
-            replace:true,
-            transclude:true,
+            restrict: 'AE',
+            replace: true,
+            transclude: true,
             template: $templateCache.get('ngc.table.tpl.html'),
             compile: compile,
-            controller:controllerDecl
+            controller: controllerDecl
         };
     }])
-    /* Internal directive for range declarations */
-    .directive('ngcRange', function() {
-        return {
-            require:"^ngcTable",
-            restrict:'AE',
-            scope:{
-                /* Top position of the range in data space */
-                top: '=',
-                /* Bottom position of the range in data space */
-                bottom: '=',
-                /* Left position of the range in data space */
-                left: '=',
-                /* Right position of the range in data space */
-                right: '=',
-                /* Format function for the cells enclosed in the range */
-                formatFn: '=?',
-                /* Function to insert custom sanitized HTML in the range */
-                customHtmlFn: '=?',
-                /* Function to insert custom trusted HTML in the range */
-                customTrustedHtmlFn: '=?',
-                /* URL string of a custom template to render the cell contents.
-                 Can also be a Function instead, with the following signature: function(rawData, row, col, formattedValue, scope) */
-                customCellTemplate: '=?',
-                /* CSS class to be added to the cells */
-                clazz: '=?',
-                /* Direct CSS styling to be injected in the cells */
-                style: '=?',
-                /* CSS style additional declaration to be added to the cell */
-                styleFn: '=?',
-                /* Callback for the 'click' event */
-                clickFn: '=?',
-                /* Callback for the 'dblclick' event */
-                dblclickFn: '=?',
-                /* Callback for the 'keydown' event */
-                keydownFn: '=?',
-                /* Callback for the 'keypress' event */
-                keypressFn: '=?',
-                /* Callback for the 'keyup' event */
-                keyupFn: '=?',
-                /* Callback for the 'mousedown' event */
-                mousedownFn: '=?',
-                /* Callback for the 'mouseenter' event */
-                mouseenterFn: '=?',
-                /* Callback for the 'mouseleave' event */
-                mouseleaveFn: '=?',
-                /* Callback for the 'mousemove' event */
-                mousemoveFn: '=?',
-                /* Callback for the 'mouseover' event */
-                mouseoverFn: '=?',
-                /* Callback for the 'mouseup' event */
-                mouseupFn: '=?'
-            },
-            link: function (scope, element, attrs, parentCtrl) {
-                /*
-                On the linking (post-compile) step, call the parent (ngc-table) controller to register the
-                current range
-                 */
-                parentCtrl.addRange({
-                    top: scope.top,
-                    bottom: scope.bottom,
-                    left: scope.left,
-                    right: scope.right,
-                    formatFn: scope.formatFn,
-                    clazz: scope.clazz,
-                    styleFn: scope.styleFn,
-                    style: scope.style,
-                    customHtmlFn: scope.customHtmlFn,
-                    customTrustedHtmlFn: scope.customTrustedHtmlFn,
-                    customCellTemplate: scope.customCellTemplate,
-                    click: scope.clickFn,
-                    dblclick: scope.dblclickFn,
-                    keydown: scope.keydownFn,
-                    keypress: scope.keypressFn,
-                    keyup: scope.keyupFn,
-                    mousedown: scope.mousedownFn,
-                    mouseenter: scope.mouseenterFn,
-                    mouseleave: scope.mouseleaveFn,
-                    mousemove: scope.mousemoveFn,
-                    mouseover: scope.mouseoverFn,
-                    mouseup: scope.mouseupFn,
-                    touchstart: scope.touchstartFn,
-                    touchmove: scope.touchmoveFn,
-                    touchend: scope.touchendFn
-                });
-            }
-        };
-    })
+        /* Internal directive for range declarations */
+        .directive('ngcRange', function () {
+            return {
+                require: "^ngcTable",
+                restrict: 'AE',
+                scope: {
+                    /* Top position of the range in data space */
+                    top: '=',
+                    /* Bottom position of the range in data space */
+                    bottom: '=',
+                    /* Left position of the range in data space */
+                    left: '=',
+                    /* Right position of the range in data space */
+                    right: '=',
+                    /* Format function for the cells enclosed in the range */
+                    formatFn: '=?',
+                    /* Function to insert custom sanitized HTML in the range */
+                    customHtmlFn: '=?',
+                    /* Function to insert custom trusted HTML in the range */
+                    customTrustedHtmlFn: '=?',
+                    /* URL string of a custom template to render the cell contents.
+                     Can also be a Function instead, with the following signature: function(rawData, row, col, formattedValue, scope) */
+                    customCellTemplate: '=?',
+                    /* CSS class to be added to the cells */
+                    clazz: '=?',
+                    /* Direct CSS styling to be injected in the cells */
+                    style: '=?',
+                    /* CSS style additional declaration to be added to the cell */
+                    styleFn: '=?',
+                    /* Callback for the 'click' event */
+                    clickFn: '=?',
+                    /* Callback for the 'dblclick' event */
+                    dblclickFn: '=?',
+                    /* Callback for the 'keydown' event */
+                    keydownFn: '=?',
+                    /* Callback for the 'keypress' event */
+                    keypressFn: '=?',
+                    /* Callback for the 'keyup' event */
+                    keyupFn: '=?',
+                    /* Callback for the 'mousedown' event */
+                    mousedownFn: '=?',
+                    /* Callback for the 'mouseenter' event */
+                    mouseenterFn: '=?',
+                    /* Callback for the 'mouseleave' event */
+                    mouseleaveFn: '=?',
+                    /* Callback for the 'mousemove' event */
+                    mousemoveFn: '=?',
+                    /* Callback for the 'mouseover' event */
+                    mouseoverFn: '=?',
+                    /* Callback for the 'mouseup' event */
+                    mouseupFn: '=?'
+                },
+                link: function (scope, element, attrs, parentCtrl) {
+                    /*
+                     On the linking (post-compile) step, call the parent (ngc-table) controller to register the
+                     current range
+                     */
+                    parentCtrl.addRange({
+                        top: scope.top,
+                        bottom: scope.bottom,
+                        left: scope.left,
+                        right: scope.right,
+                        formatFn: scope.formatFn,
+                        clazz: scope.clazz,
+                        styleFn: scope.styleFn,
+                        style: scope.style,
+                        customHtmlFn: scope.customHtmlFn,
+                        customTrustedHtmlFn: scope.customTrustedHtmlFn,
+                        customCellTemplate: scope.customCellTemplate,
+                        click: scope.clickFn,
+                        dblclick: scope.dblclickFn,
+                        keydown: scope.keydownFn,
+                        keypress: scope.keypressFn,
+                        keyup: scope.keyupFn,
+                        mousedown: scope.mousedownFn,
+                        mouseenter: scope.mouseenterFn,
+                        mouseleave: scope.mouseleaveFn,
+                        mousemove: scope.mousemoveFn,
+                        mouseover: scope.mouseoverFn,
+                        mouseup: scope.mouseupFn,
+                        touchstart: scope.touchstartFn,
+                        touchmove: scope.touchmoveFn,
+                        touchend: scope.touchendFn
+                    });
+                }
+            };
+        })
 
     /**
      * @name extInclude
@@ -1230,38 +1258,38 @@ angular.module("ngc.table.tpl.html", []).run(["$templateCache", function($templa
      * @param {string} scopeExtension Angular expression evaluating to an object. Its value will be available in the
      *                                inner scope of the directive.
      */
-    .directive('extInclude', [
-        function() {
-            // List of attributes to map to the scope
-            var attrToMap = ['extInclude', 'scopeExtension'];
+        .directive('extInclude', [
+            function () {
+                // List of attributes to map to the scope
+                var attrToMap = ['extInclude', 'scopeExtension'];
 
-            /**
-             * Sets a given attribute onto the scope after evaluating it and watch for future value changes
-             * @param {Object} scope
-             * @param {Object} attr
-             * @param {string} attrName
-             * @return {void}
-             */
-            var setupScopeVar = function(scope, attr, attrName) {
-                scope.$watch(attr[attrName], function(newValue, oldValue) {
-                    if (newValue === oldValue) {
-                        return;
-                    }
-                    scope[attrName] = newValue;
-                }, true);
-                scope[attrName] = scope.$eval(attr[attrName]);
-            };
+                /**
+                 * Sets a given attribute onto the scope after evaluating it and watch for future value changes
+                 * @param {Object} scope
+                 * @param {Object} attr
+                 * @param {string} attrName
+                 * @return {void}
+                 */
+                var setupScopeVar = function (scope, attr, attrName) {
+                    scope.$watch(attr[attrName], function (newValue, oldValue) {
+                        if (newValue === oldValue) {
+                            return;
+                        }
+                        scope[attrName] = newValue;
+                    }, true);
+                    scope[attrName] = scope.$eval(attr[attrName]);
+                };
 
-            return {
-                restrict: 'A',
-                template: '<ng-include src="extInclude"></ng-include>',
-                scope: true,
-                link: function(scope, element, attr) {
-                    for(var i= 0, len=attrToMap.length; i < len; i++) {
-                        setupScopeVar(scope, attr, attrToMap[i]);
+                return {
+                    restrict: 'A',
+                    template: '<ng-include src="extInclude"></ng-include>',
+                    scope: true,
+                    link: function (scope, element, attr) {
+                        for (var i = 0, len = attrToMap.length; i < len; i++) {
+                            setupScopeVar(scope, attr, attrToMap[i]);
+                        }
                     }
-                }
-            };
-        }
-    ]);
+                };
+            }
+        ]);
 })();
