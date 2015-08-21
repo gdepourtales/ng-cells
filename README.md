@@ -172,7 +172,6 @@ set the pen color and the background color of all cells of the right header part
 * `data` The 2D data matrix. The matrix can be of any dimension. By default, the displayed data is the data raw value
 * `custom-data-value-fn` A custom function to extract the data value from the data source. The provided function should
 have the form `function(data, row, col)`. Please remember that the initial data matrix IS required in order to define the data dimensions.
-* `scroll-fn`A custom function called when horizontal or vertical scroll occurs. The provided function should have the form
 `function(event, scrollPosition)` where event is the scroll event and scrollPosition is an object with `top` and `left` attributes. The
 `top` and `left` attributes are the row and column of the data value displayed in the top left corner of the middle center area.
 This function is called once when the table is firstly drawn to give the opportunity to store initial top left values.
@@ -195,9 +194,6 @@ string values. If the value is a single string, the same width is applied to all
 * `footer-row-heights` The height of the footer rows. See `header-row-heights` for value specification
 * `scroll-top-position` The vertical scroll position. This attribute can be set to scroll programmatically. The diagonalScroll.html test file shows how to bind horizontal and vertical scrollbars
 * `scroll-left-position` The horizontal scroll position. See `scroll-top-position`  
-* `scroll-delay` The scroll delay in ms after which the content is updated after dragging a scrollbar. If set to 0, the content is updated immediately
-* `wheel-scroll-delay` The scroll delay in ms after which the content is updated after using the mouse wheel. This value is strongly related to 'scroll-delay' option. If set to 0, the content is updated immediately
-* `vertical-scrollbar-auto-resize` In some rare contexts, the vertical scrollbar auto resizing features triggers unwanted scroll events leading to erratic scrollbar behaviour. Setting the feature to off solves the issue. Default value is true.
 
 
 ## Range
