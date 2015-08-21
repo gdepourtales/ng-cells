@@ -7,12 +7,12 @@
     <meta name="description" content="Ng-cells : " />
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="dist/ng-cells-0.3.3.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="dist/ng-cells.css">
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/samples.css">
 
       <script src="javascripts/angular-1.2.6.js"></script>
       <script src="javascripts/angular-sanitize-1.2.6.js"></script>
-      <script src="dist/ng-cells-0.3.3.min.js"></script>
+      <script src="dist/ng-cells.min.js"></script>
       <script src="javascripts/samples.js"></script>
 
     <title>Ng-cells</title>
@@ -75,6 +75,8 @@ template cache with the key <code>ngc.table.tpl.html</code></p>
 <h1>
     <a name="examples" class="anchor" href="#examples"><span class="octicon octicon-link"></span></a>Examples</h1>
 
+You can find many examples in the Github project. Please refere to the <code>test</code> folder. Additionally, here are live samples:
+
 <ul>
     <li><a href="custom-data.html">Custom data</a> shows how to use a custom function to change the cell data values</li>
     <li><a href="color-palette.html">Color palette</a> shows how to customize each cell style</li>
@@ -135,10 +137,10 @@ The behaviour is identical for the number of columns, the area between the left 
 <span class="nt">&lt;html</span> <span class="na">ng-app=</span><span class="s">"ngcTableDirectiveTest"</span><span class="nt">&gt;</span>
 <span class="nt">&lt;head&gt;</span>
     <span class="nt">&lt;title&gt;</span>Test Template<span class="nt">&lt;/title&gt;</span>
-    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"../dist/ng-cells-0.3.3.css"</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">type=</span><span class="s">"text/css"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"../dist/ng-cells.css"</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">type=</span><span class="s">"text/css"</span><span class="nt">&gt;</span>
     <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"../lib/angular-1.2.6.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
     <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"../lib/angular-sanitize-1.2.6.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
-    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"../dist/ng-cells-0.3.3.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"../dist/ng-cells.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
     <span class="nt">&lt;script&gt;</span>
         <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">'ngcTableDirectiveTest'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'ngcTableDirective'</span><span class="p">])</span>
                 <span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s1">'TestCtrl'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">)</span> <span class="p">{</span>
@@ -295,6 +297,12 @@ string values. If the value is a single string, the same width is applied to all
 <code>footer-row-number</code> The number of rows in the footer section of the table</li>
 <li>
 <code>footer-row-heights</code> The height of the footer rows. See <code>header-row-heights</code> for value specification</li>
+
+<code>scroll-top-position</code>The vertical scroll position. This attribute can be set to scroll programmatically. The diagonalScroll.html test file shows how to bind horizontal and vertical scrollbars</li>
+<code>scroll-left-position</code>The horizontal scroll position. See <code>scroll-top-position</code> for value specification</li>
+
+
+
 </ul><h2>
 <a name="range" class="anchor" href="#range"><span class="octicon octicon-link"></span></a>Range</h2>
 
@@ -316,19 +324,38 @@ must be of the form <code>function(value, row, col, formattedValue)</code> where
 <li>
 <code>style-fn</code> A custom style format function to be applied to the cells. Use it to apply sophisticated styling to the table. The function must be of the form <code>function(value, row, col)</code> where <code>value</code> is the value of the source data at the position <code>[row][col]</code>
 </li>
-<li>
+<>
 <code>&lt;event&gt;-fn</code> Custom event callbacks. The event can be any of <code>click</code>, <code>dblclick</code>, <code>mousedown</code>, <code>mouseenter</code>, <code>mouseleave</code>
-<code>mousemove</code>, <code>mouseover</code>, <code>mouseup</code> event types. The callback must be of the form <code>function(event, cellData)</code> where
-<code>event</code> is the initial Javascript event and the <code>cellData</code> an object with the following attributes :
-** <code>row</code> The row of the data value in original data space (not table space)
-** <code>col</code> The column of the data value in original data space (not table space)
-** <code>data</code> The original data value located at row and column
-** <code>value</code> The value of the cell as displayed
-** <code>clazz</code> The classes of the cell
-** <code>style</code> The style declaration of the cell
-** <code>eventCallbacks</code> An object with all registered callbacks identified the event type
+<code>mousemove</code>, <code>mouseover</code>, <code>mouseup</code> event types. The callback must be of the form <code>function(event, cellData)</code> where <br/>
+<code>event</code> is the initial Javascript event and the <code>cellData</code> an object with the following attributes : <br/>
+** <code>row</code> The row of the data value in original data space (not table space) <br/>
+** <code>col</code> The column of the data value in original data space (not table space)  <br/>
+** <code>data</code> The original data value located at row and column  <br/>
+** <code>value</code> The value of the cell as displayed  <br/>
+** <code>clazz</code> The classes of the cell  <br/>
+** <code>style</code> The style declaration of the cell  <br/>
+** <code>eventCallbacks</code> An object with all registered callbacks identified the event type  <br/>
 ** <code>enclosingRanges</code> An array of all ranges that enclose the current cell</li>
+
+
+    <li><code>custom-cell-template</code> Render a custom Angular template in the cell instead of using <code>custom-html-fn</code>.
+        Accepts types: <br/>
+
+** <code>string</code>: URL of an Angular template. E.g. <code>custom-cell-template="'template.html'"</code>
+** <code>Function</code>: function that returns the URL of an Angular template. E.g. <code>custom-cell-template="getTemplate"</code> <br/>
+        Function signature is `function(rawData, row, col, formattedValue, scope)` where <br/>
+*** <code>rawData</code> is an object that describes the table cell. <br/>
+        *** <code>rawData.data</code> points to the actual cell value. <br/><br/>
+
+        **Note:** The cell value is stored in <code>scopeExtension.rawCellData</code> and can be accessed in the Angular template as follow:
+       <code class="nocode ng-scope">&lt;span style="color: red">&#123;&#127;&#123;scopeExtension.rawCellData.data&#125;&#125;&lt;/span></code>.
+        See test case [./test/custom-cell-template.html](./test/custom-cell-template.html) for a full example.
+    </li>
+
 </ul><h2>
+
+
+
 <a name="css-reference" class="anchor" href="#css-reference"><span class="octicon octicon-link"></span></a>CSS Reference</h2>
 
 <p>Here's a list of the classes which can be used to select cells according to the table parts they belong to</p>

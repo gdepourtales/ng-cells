@@ -7,12 +7,12 @@
     <meta name="description" content="Ng-cells : " />
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="dist/ng-cells-0.3.3.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="dist/ng-cells.css">
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/samples.css">
 
     <script src="javascripts/angular-1.2.6.js"></script>
     <script src="javascripts/angular-sanitize-1.2.6.js"></script>
-    <script src="dist/ng-cells-0.3.3.min.js"></script>
+    <script src="dist/ng-cells.js"></script>
 
     <title>Ng-cells Scroll Event</title>
 
@@ -31,26 +31,16 @@
                         $scope.data.push(rowContent);
                     }
 
-                    $scope.scrollPos = {top:0 , left: 0};
+                    $scope.scrollTopPosition = 0;
+                    $scope.scrollLeftPosition = 0;
 
-                    $scope.customDataFn = function(data, row, col) {
-                        if (col == n - 1) {
-                            var sum = 0;
-                            var subArray = data[row].slice($scope.scrollPos.left, $scope.scrollPos.left + 3);
-                            angular.forEach(subArray, function(val) {sum += val;});
+                    $scope.$watch('scrollTopPosition', function(newValue) {
+                        $scope.scrollLeftPosition = (newValue) * 2;
+                    });
 
-                            return sum;
-                        }
-                        return data[row][col];
-                    };
-
-                    $scope.onScroll = function(event, scrollPosition) {
-                        $scope.scrollPos = scrollPosition;
-                    };
-
-                    $scope.resultFormatFn = function(data, row, col) {
-                        return "Sum: "  + data;
-                    };
+                    $scope.$watch('scrollLeftPosition', function(newValue) {
+                        $scope.scrollTopPosition = (newValue) / 2;
+                    });
 
                 });
     </script>
@@ -86,12 +76,13 @@
 
 <div ng-app="ngcTableDirectiveTest" ng-controller="TestCtrl">
     <div>
-        Scroll Position : [{{scrollPos.top}}, {{scrollPos.left}}]
+        Scroll Position : [{{scrollTopPosition}}, {{scrollLeftPosition}}]
     </div>
 
     <div ngc-table data="data"
+         scroll-top-position="scrollTopPosition"
+         scroll-left-position="scrollLeftPosition"
          custom-data-value-fn="customDataFn"
-         scroll-fn="onScroll"
          left-column-widths="'40px'"
          center-column-widths="'60px'"
          center-column-number="3"
@@ -137,27 +128,16 @@ column. This demonstrates how it is possible to combine the scroll position and 
             $scope.data.push(rowContent);
         }
 
-        $scope.scrollPos = {top:0 , left: 0};
+        $scope.scrollTopPosition = 0;
+        $scope.scrollLeftPosition = 0;
 
-        $scope.customDataFn = function(data, row, col) {
-            if (col == n - 1) {
-                var sum = 0;
-                var subArray = data[row].slice($scope.scrollPos.left, $scope.scrollPos.left + 3);
-                angular.forEach(subArray, function(val) {sum += val;});
+        $scope.$watch('scrollTopPosition', function(newValue) {
+            $scope.scrollLeftPosition = (newValue) * 2;
+        });
 
-                return sum;
-            }
-            return data[row][col];
-        };
-
-
-        $scope.onScroll = function(event, scrollPosition) {
-            $scope.scrollPos = scrollPosition;
-        };
-
-        $scope.resultFormatFn = function(data, row, col) {
-            return "Sum: "  + data;
-        };
+        $scope.$watch('scrollLeftPosition', function(newValue) {
+            $scope.scrollTopPosition = (newValue) / 2;
+        });
 
     });
 </code></pre>
