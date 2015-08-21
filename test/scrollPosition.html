@@ -2,10 +2,15 @@
 <html ng-app="ngcTableDirectiveTest">
 <head>
     <title>Set scroll positions</title>
-    <link href="../dist/0.3.6/ng-cells-0.3.6.css" rel="stylesheet" type="text/css">
-    <script src="../lib/angular-1.2.6.js"></script>
-    <script src="../lib/angular-sanitize-1.2.6.js"></script>
-    <script src="../dist/0.3.6/ng-cells-0.3.6.js"></script>
+    <link href="../bower_components/ng-scrollable/min/ng-scrollable.min.css" rel="stylesheet" type="text/css">
+    <link href="../dist/latest/ng-cells.css" rel="stylesheet" type="text/css">
+
+
+    <script src="../bower_components/angular/angular.js"></script>
+    <script src="../bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="../bower_components/ng-scrollable/src/ng-scrollable.js"></script>
+    <script src="../dist/latest/ng-cells.js"></script>
+
     <script>
         angular.module('ngcTableDirectiveTest', ['ngcTableDirective'])
                 .controller('TestCtrl', function($scope, $timeout) {
@@ -25,12 +30,13 @@
 
                     var increment = function() {
                         counter += 75;
-                        $scope.scrollTopPosition = counter;
-                        $scope.scrollLeftPosition = counter;
+                        $timeout(function() {$scope.scrollLeftPosition = counter});
+                        $timeout(function() {$scope.scrollTopPosition = counter});
+
                         if (counter < 500) {
                             $timeout(increment, 1000);
                         }
-                    }
+                    };
 
                     increment();
                 });
